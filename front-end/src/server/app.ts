@@ -31,8 +31,12 @@ export function createApp() {
   app.use("*", withUser);
 
   app.get("/health", async (c) => {
-    const products = await c.var.prisma.product.count();
-    return c.json({ status: "ok", products });
+    try {
+      const products = await c.var.prisma.product.count();
+      return c.json({ status: "ok", products });
+    } catch (err: unknown) {
+      return c.json({ status: "degraded", error: (err as Error)?.message || "db error" }, 200);
+    }
   });
 
   app.route("/auth", authRoutes);
