@@ -240,7 +240,18 @@ export async function productById(
   });
   if (!product || !product.active) throw new NotFoundError(NOT_FOUND_FR);
 
-  let cat = {
+  let cat: {
+    id: string;
+    slug: string;
+    name: string;
+    nameAr?: string | null;
+    description: string | null;
+    descriptionAr?: string | null;
+    imageUrl: string | null;
+    filterable: boolean;
+    sortOrder: number;
+    productCount: number;
+  } = {
     id: product.categoryId || "",
     slug: "",
     name: "Général",
