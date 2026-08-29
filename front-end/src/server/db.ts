@@ -12,7 +12,17 @@ export function getPrisma(connectionString: string): PrismaClient {
   const cached = clients.get(connectionString);
   if (cached) return cached;
 
-  const adapter = new PrismaPg({ connectionString });
+  const adapter = new PrismaPg(
+    { connectionString },
+    {
+      onPoolError: (err) => {
+        console.warn("[PrismaPg pool]", err.message);
+      },
+      onConnectionError: (err) => {
+        console.warn("[PrismaPg connection]", err.message);
+      },
+    },
+  );
   const client = new PrismaClient({ adapter });
   clients.set(connectionString, client);
   return client;

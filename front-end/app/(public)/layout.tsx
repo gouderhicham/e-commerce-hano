@@ -15,23 +15,13 @@ import { SiteHeader } from "@/components/storefront/navbar";
 export default async function PublicLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const repos = getRepos();
-  const user = await getSessionUser();
-  // Same resolver the root layout uses for <html lang dir>, so the provider and
-  // the document element can never disagree.
-  const initialLocale = await resolveLocale();
-
-  const [favoriteIds, cartLines] = user
-    ? await Promise.all([
-        repos.favorites.productIds(user.id),
-        repos.cart.lines(user.id),
-      ])
-    : [[], []];
+  const user = await getSessionUser().catch(() => null);
+  const initialLocale = await resolveLocale().catch(() => "fr" as const);
 
   return (
     <I18nProvider initialLocale={initialLocale}>
-      <FavoritesProvider initialIds={favoriteIds} loggedIn={!!user}>
-        <CartProvider loggedIn={!!user} initialLines={cartLines}>
+      <FavoritesProvider initialIds={[]} loggedIn={!!user}>
+        <CartProvider loggedIn={!!user} initialLines={[]}>
           <div className="flex min-h-screen flex-col bg-[#f8f7f2] text-[#17251f]">
             <SiteHeader />
             <main className="flex-1">{children}</main>
