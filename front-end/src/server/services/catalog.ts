@@ -72,14 +72,13 @@ export async function categories(
 export async function tagGroups(
   prisma: PrismaClient,
 ): Promise<TagGroupPublic[]> {
-  const [groups, allTags] = await Promise.all([
-    prisma.tagGroup.findMany({
-      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-    }),
-    prisma.filterTag.findMany({
-      orderBy: [{ sortOrder: "asc" }, { label: "asc" }],
-    }),
-  ]);
+  const groups = await prisma.tagGroup.findMany({
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+  });
+  const allTags = await prisma.filterTag.findMany({
+    orderBy: [{ sortOrder: "asc" }, { label: "asc" }],
+  });
+
   const tagsByGroup = new Map<string, typeof allTags>();
   for (const t of allTags) {
     let arr = tagsByGroup.get(t.groupId);
@@ -122,15 +121,13 @@ export async function products(
   const page = query.page ?? 1;
   const facets = parseFacets(query.attrs);
 
-  const [rows, images] = await Promise.all([
-    prisma.product.findMany({
-      where: buildWhere(query),
-      orderBy: orderBy(query.sort, query.locale),
-    }),
-    prisma.productImage.findMany({
-      orderBy: { sortOrder: "asc" },
-    }),
-  ]);
+  const rows = await prisma.product.findMany({
+    where: buildWhere(query),
+    orderBy: orderBy(query.sort, query.locale),
+  });
+  const images = await prisma.productImage.findMany({
+    orderBy: { sortOrder: "asc" },
+  });
 
   const imagesByProduct = new Map<number, typeof images>();
   for (const img of images) {
@@ -192,27 +189,25 @@ export async function productById(
   prisma: PrismaClient,
   id: number,
 ): Promise<ProductPublicWithRelations> {
-  const [product, images, categoryList] = await Promise.all([
-    prisma.product.findUnique({ where: { id } }),
-    prisma.productImage.findMany({
-      where: { productId: id },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.category.findMany(),
-  ]);
+  const product = await prisma.product.findUnique({ where: { id } });
   if (!product || !product.active) throw new NotFoundError(NOT_FOUND_FR);
+
+  const images = await prisma.productImage.findMany({
+    where: { productId: id },
+    orderBy: { sortOrder: "asc" },
+  });
+  const categoryList = await prisma.category.findMany();
   const cat = categoryList.find((c) => c.id === product.categoryId);
 
-  const [similarProducts, similarImages] = await Promise.all([
-    prisma.product.findMany({
-      where: { active: true, categoryId: product.categoryId, id: { not: id } },
-      orderBy: [{ sold: "desc" }, { id: "desc" }],
-      take: 4,
-    }),
-    prisma.productImage.findMany({
-      orderBy: { sortOrder: "asc" },
-    }),
-  ]);
+  const similarProducts = await prisma.product.findMany({
+    where: { active: true, categoryId: product.categoryId, id: { not: id } },
+    orderBy: [{ sold: "desc" }, { id: "desc" }],
+    take: 4,
+  });
+  const similarImages = await prisma.productImage.findMany({
+    orderBy: { sortOrder: "asc" },
+  });
+
   const simImgMap = new Map<number, typeof similarImages>();
   for (const img of similarImages) {
     let arr = simImgMap.get(img.productId);
@@ -234,27 +229,26 @@ export async function productById(
 }
 
 export async function wilayas(prisma: PrismaClient) {
-  const [wilayasList, communesList] = await Promise.all([
-    prisma.wilaya.findMany({
-      orderBy: { code: "asc" },
-      select: {
-        code: true,
-        name: true,
-        nameAr: true,
-        fee: true,
-      },
-    }),
-    prisma.commune.findMany({
-      orderBy: [{ wilayaCode: "asc" }, { name: "asc" }],
-      select: {
-        id: true,
-        wilayaCode: true,
-        name: true,
-        nameAr: true,
-        fee: true,
-      },
-    }),
-  ]);
+  const wilayasList = await prisma.wilaya.findMany({
+    orderBy: { code: "asc" },
+    select: {
+      code: true,
+      name: true,
+      nameAr: true,
+      fee: true,
+    },
+  });
+  const communesList = await prisma.commune.findMany({
+    orderBy: [{ wilayaCode: "asc" }, { name: "asc" }],
+    select: {
+      id: true,
+      wilayaCode: true,
+      name: true,
+      nameAr: true,
+      fee: true,
+    },
+  });
+
   const byWilaya = new Map<number, typeof communesList>();
   for (const c of communesList) {
     let arr = byWilaya.get(c.wilayaCode);
@@ -286,16 +280,14 @@ export async function publicSettings(prisma: PrismaClient) {
 
 /** Everything the home page renders, in one round trip. */
 export async function home(prisma: PrismaClient) {
-  const [content, cats, favEntries] = await Promise.all([
-    prisma.siteContent.findUnique({ where: { id: 1 } }),
-    prisma.category.findMany({
-      where: { filterable: true },
-      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-    }),
-    prisma.homeFavorite.findMany({
-      orderBy: { sortOrder: "asc" },
-    }),
-  ]);
+  const content = await prisma.siteContent.findUnique({ where: { id: 1 } });
+  const cats = await prisma.category.findMany({
+    where: { filterable: true },
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+  });
+  const favEntries = await prisma.homeFavorite.findMany({
+    orderBy: { sortOrder: "asc" },
+  });
 
   const productIds = favEntries.map((f) => f.productId);
   const products = productIds.length > 0
