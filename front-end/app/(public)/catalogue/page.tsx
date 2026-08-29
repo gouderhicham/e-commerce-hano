@@ -13,31 +13,17 @@ export const metadata: Metadata = {
     "Ordinateurs portables reconditionnés, mémoire, SSD et accessoires testés et garantis.",
 };
 
-export default async function CataloguePage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function CataloguePage() {
   const repos = getRepos();
-  const params = toSearchParams(await searchParams);
-  const locale = await resolveLocale();
-
   const categories = await repos.categories.listWithCounts();
   const tagGroups = await repos.content.tagGroups();
-
-  // The server renders exactly what the URL asks for — search, sort, facets and
-  // page included. No category is forced when none is selected: "Tous les
-  // produits" has to actually show all products on a cold load.
-  const initial = await repos.products.publicList(
-    parseCatalogueParams(params, tagGroups, locale),
-  );
 
   return (
     <Suspense fallback={<div className="min-h-screen bg-[#f8f7f2]" />}>
       <CatalogueClient
         categories={categories}
         tagGroups={tagGroups}
-        initial={initial}
+        initial={{ items: [], total: 0, page: 1, pageCount: 1 }}
       />
     </Suspense>
   );

@@ -24,19 +24,10 @@ async function loadProduct(idParam: string): Promise<ProductDetail | null> {
   return p;
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}): Promise<Metadata> {
-  const { id } = await params;
-  const product = await loadProduct(id);
-  if (!product) return { title: "Produit introuvable — pc store 39" };
+export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `${product.name} — pc store 39`,
-    description:
-      product.description ||
-      `${product.name} — ${product.specs} · ${fmtDA(product.promoPrice ?? product.price)}`,
+    title: "Détail Produit — pc store 39",
+    description: "Ordinateur portable reconditionné, testé et garanti.",
   };
 }
 
