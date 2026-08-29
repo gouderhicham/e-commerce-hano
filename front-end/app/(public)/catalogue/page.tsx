@@ -22,10 +22,8 @@ export default async function CataloguePage({
   const params = toSearchParams(await searchParams);
   const locale = await resolveLocale();
 
-  const [categories, tagGroups] = await Promise.all([
-    repos.categories.listWithCounts(),
-    repos.content.tagGroups(),
-  ]);
+  const categories = await repos.categories.listWithCounts();
+  const tagGroups = await repos.content.tagGroups();
 
   // The server renders exactly what the URL asks for — search, sort, facets and
   // page included. No category is forced when none is selected: "Tous les

@@ -153,9 +153,14 @@ export async function products(
     where: buildWhere(query),
     orderBy: orderBy(query.sort, query.locale),
   });
-  const images = await prisma.productImage.findMany({
-    orderBy: { sortOrder: "asc" },
-  });
+  const productIds = rows.map((p) => p.id);
+  const images =
+    productIds.length > 0
+      ? await prisma.productImage.findMany({
+          where: { productId: { in: productIds } },
+          orderBy: { sortOrder: "asc" },
+        })
+      : [];
 
   const imagesByProduct = new Map<number, typeof images>();
   for (const img of images) {
@@ -224,7 +229,7 @@ export async function productById(
     where: { productId: id },
     orderBy: { sortOrder: "asc" },
   });
-  const categoryList = await prisma.category.findMany();
+  const categoryList = await categories(prisma);
   const cat = categoryList.find((c) => c.id === product.categoryId);
 
   const similarProducts = await prisma.product.findMany({
@@ -232,9 +237,14 @@ export async function productById(
     orderBy: [{ sold: "desc" }, { id: "desc" }],
     take: 4,
   });
-  const similarImages = await prisma.productImage.findMany({
-    orderBy: { sortOrder: "asc" },
-  });
+  const similarIds = similarProducts.map((p) => p.id);
+  const similarImages =
+    similarIds.length > 0
+      ? await prisma.productImage.findMany({
+          where: { productId: { in: similarIds } },
+          orderBy: { sortOrder: "asc" },
+        })
+      : [];
 
   const simImgMap = new Map<number, typeof similarImages>();
   for (const img of similarImages) {
