@@ -302,7 +302,7 @@ export function ProductDetailClient({
 
         <div className="w-full min-w-0 lg:pt-7">
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[.19em] text-[#728078]">
-            {pick(locale, product.category.name, product.category.nameAr)}
+            {pick(locale, product.category?.name, product.category?.nameAr)}
             {(pick(locale, product.condition, product.conditionAr)) ? ` / ${pick(locale, product.condition, product.conditionAr)}` : ""}
           </p>
 

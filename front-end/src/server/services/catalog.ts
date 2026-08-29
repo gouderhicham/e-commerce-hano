@@ -232,47 +232,42 @@ export async function productById(
     return cached.data;
   }
 
-  const product = await prisma.product.findUnique({ where: { id } });
+  const product = await prisma.product.findUnique({
+    where: { id },
+    include: {
+      images: { orderBy: { sortOrder: "asc" } },
+    },
+  });
   if (!product || !product.active) throw new NotFoundError(NOT_FOUND_FR);
 
-  const images = await prisma.productImage.findMany({
-    where: { productId: id },
-    orderBy: { sortOrder: "asc" },
-  });
   const categoryList = await categories(prisma);
-  const cat = categoryList.find((c) => c.id === product.categoryId);
+  const cat = categoryList.find((c) => c.id === product.categoryId) ?? {
+    id: product.categoryId,
+    slug: "",
+    name: "Général",
+    nameAr: "عام",
+    description: "",
+    descriptionAr: "",
+    imageUrl: null,
+    filterable: false,
+    sortOrder: 0,
+    productCount: 0,
+  };
 
   const similarProducts = await prisma.product.findMany({
     where: { active: true, categoryId: product.categoryId, id: { not: id } },
     orderBy: [{ sold: "desc" }, { id: "desc" }],
     take: 4,
   });
-  const similarIds = similarProducts.map((p) => p.id);
-  const similarImages =
-    similarIds.length > 0
-      ? await prisma.productImage.findMany({
-          where: { productId: { in: similarIds } },
-          orderBy: { sortOrder: "asc" },
-        })
-      : [];
 
-  const simImgMap = new Map<number, typeof similarImages>();
-  for (const img of similarImages) {
-    let arr = simImgMap.get(img.productId);
-    if (!arr) {
-      arr = [];
-      simImgMap.set(img.productId, arr);
-    }
-    arr.push(img);
-  }
   const similar = similarProducts.map((p) => ({
     ...p,
-    images: simImgMap.get(p.id) ?? [],
+    images: [],
   }));
 
   const res = toProductPublic(
-    { ...product, images },
-    { category: cat ?? undefined, similar },
+    product,
+    { category: cat, similar },
   );
   cachedProductsById.set(id, { data: res, timestamp: Date.now() });
   return res;
