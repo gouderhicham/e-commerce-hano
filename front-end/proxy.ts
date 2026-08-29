@@ -56,6 +56,9 @@ export async function proxy(req: NextRequest) {
   return NextResponse.next({ request: { headers } });
 }
 
+export const middleware = proxy;
+export default proxy;
+
 export const config = {
   // Everything except Next internals and static assets: the storefront needs the
   // pathname header on every page; the /admin guard runs inside the handler.
