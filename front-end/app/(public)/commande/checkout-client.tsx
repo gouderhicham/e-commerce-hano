@@ -31,6 +31,7 @@ export function CheckoutClient({ wilayas }: { wilayas: Wilaya[] }) {
   const { products, missing } = useProductsById(lines.map((l) => l.id));
   const { locale, t, isRTL } = useI18n();
 
+  const [allWilayas, setAllWilayas] = useState<Wilaya[]>(wilayas);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
@@ -46,6 +47,14 @@ export function CheckoutClient({ wilayas }: { wilayas: Wilaya[] }) {
     for (const id of missing) remove(id);
   }, [missing, remove]);
 
+  useEffect(() => {
+    if (allWilayas.some((w) => w.communes && w.communes.length > 0)) return;
+    fetch("/api/shipping/wilayas")
+      .then((r) => r.json())
+      .then((data: Wilaya[]) => setAllWilayas(data))
+      .catch(() => {});
+  }, [allWilayas]);
+
   const rows = useMemo(() => {
     return lines
       .map((line) => ({
@@ -59,8 +68,8 @@ export function CheckoutClient({ wilayas }: { wilayas: Wilaya[] }) {
   }, [lines, products]);
 
   const communes = useMemo(
-    () => wilayas.find((w) => w.code === wilayaCode)?.communes ?? [],
-    [wilayas, wilayaCode],
+    () => allWilayas.find((w) => w.code === wilayaCode)?.communes ?? [],
+    [allWilayas, wilayaCode],
   );
 
   const totalItems = rows.reduce((sum, r) => sum + r.line.qty, 0);
@@ -71,7 +80,7 @@ export function CheckoutClient({ wilayas }: { wilayas: Wilaya[] }) {
   const freeShipping =
     SHIPPING.freeThreshold > 0 && subtotal > SHIPPING.freeThreshold;
   const selectedCommune = communes.find((c) => c.id === communeId);
-  const selectedWilaya = wilayas.find((w) => w.code === wilayaCode);
+  const selectedWilaya = allWilayas.find((w) => w.code === wilayaCode);
   const shipping = computeShipping({
     subtotal,
     wilayaFee: selectedWilaya?.fee ?? null,

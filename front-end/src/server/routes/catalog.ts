@@ -59,7 +59,12 @@ export const catalogRoutes = new Hono<AppBindings>()
   .get("/shipping/wilayas", async (c) => {
     // The 58 wilayas and their communes change about once a decade.
     c.header("Cache-Control", cacheable(3600));
-    return c.json(await catalog.wilayas(c.var.prisma));
+    const isLight = c.req.query("light") === "true";
+    return c.json(
+      isLight
+        ? await catalog.wilayasLight(c.var.prisma)
+        : await catalog.wilayas(c.var.prisma),
+    );
   })
 
   .get("/settings/public", async (c) => c.json(await catalog.publicSettings(c.var.prisma)));

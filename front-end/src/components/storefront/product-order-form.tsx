@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { apiFetch, mediaSrc } from "@/lib/api-client";
 import { fmtDA } from "@/lib/format";
@@ -45,6 +45,7 @@ export function ProductOrderForm({
 }) {
   const { locale, t } = useI18n();
 
+  const [allWilayas, setAllWilayas] = useState<Wilaya[]>(wilayas);
   const [qty, setQty] = useState(1);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -57,14 +58,22 @@ export function ProductOrderForm({
   const [serverError, setServerError] = useState("");
   const [placed, setPlaced] = useState<Order | null>(null);
 
+  useEffect(() => {
+    if (allWilayas.some((w) => w.communes && w.communes.length > 0)) return;
+    fetch("/api/shipping/wilayas")
+      .then((r) => r.json())
+      .then((data: Wilaya[]) => setAllWilayas(data))
+      .catch(() => {});
+  }, [allWilayas]);
+
   const communes = useMemo(
-    () => wilayas.find((w) => w.code === wilayaCode)?.communes ?? [],
-    [wilayas, wilayaCode],
+    () => allWilayas.find((w) => w.code === wilayaCode)?.communes ?? [],
+    [allWilayas, wilayaCode],
   );
 
   const subtotal = unitPrice * qty;
   const selectedCommune = communes.find((c) => c.id === communeId);
-  const selectedWilaya = wilayas.find((w) => w.code === wilayaCode);
+  const selectedWilaya = allWilayas.find((w) => w.code === wilayaCode);
   const addressPicked = communeId !== "";
   const shipping = computeShipping({
     subtotal,

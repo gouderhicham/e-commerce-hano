@@ -305,6 +305,17 @@ export async function wilayas(prisma: PrismaClient) {
   return cachedWilayas;
 }
 
+export async function wilayasLight(prisma: PrismaClient) {
+  const list = await wilayas(prisma);
+  return list.map((w) => ({
+    code: w.code,
+    name: w.name,
+    nameAr: w.nameAr,
+    fee: w.fee,
+    communes: [],
+  }));
+}
+
 /**
  * The only shop settings still read at runtime: the Telegram relay, because the
  * contact form posts to Telegram from the browser (mock-up parity). Everything

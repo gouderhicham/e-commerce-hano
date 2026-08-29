@@ -379,7 +379,7 @@ const dashboard = repo<DashboardRepo>(
 const misc = repo<MiscRepo>(
   {
     async wilayas(): Promise<Wilaya[]> {
-      return backendGet<Wilaya[]>("/api/shipping/wilayas");
+      return backendGet<Wilaya[]>("/api/shipping/wilayas?light=true");
     },
     // Admin layout SSR seed; the shell re-fetches via the proxy on navigation.
     async adminBadges(): Promise<AdminBadges> {
