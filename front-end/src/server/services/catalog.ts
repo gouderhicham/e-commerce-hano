@@ -46,19 +46,44 @@ export interface TagGroupPublic {
 
 export type ProductListResult = Paginated<ProductPublicWithRelations>;
 
-/** Categories with a count of ACTIVE products only, in display order. */
+let cachedWilayas: Array<{
+  code: number;
+  name: string;
+  nameAr: string | null;
+  fee: number;
+  communes: Array<{
+    id: number;
+    wilayaCode: number;
+    name: string;
+    nameAr: string | null;
+    fee: number | null;
+  }>;
+}> | null = null;
+
+let cachedTagGroups: TagGroupPublic[] | null = null;
+let cachedCategories: CategoryPublic[] | null = null;
+
+export function invalidateCatalogCache() {
+  cachedWilayas = null;
+  cachedTagGroups = null;
+  cachedCategories = null;
+}
+
+/** Active categories with active product count. */
 export async function categories(
   prisma: PrismaClient,
 ): Promise<CategoryPublic[]> {
+  if (cachedCategories) return cachedCategories;
   const rows = await prisma.category.findMany({
+    where: { filterable: true },
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
     include: { _count: { select: { products: { where: { active: true } } } } },
   });
-  return rows.map((c) => ({
+  cachedCategories = rows.map((c) => ({
     id: c.id,
-    slug: c.slug,
     name: c.name,
     nameAr: c.nameAr,
+    slug: c.slug,
     description: c.description,
     descriptionAr: c.descriptionAr,
     imageUrl: c.imageUrl,
@@ -66,12 +91,14 @@ export async function categories(
     sortOrder: c.sortOrder,
     productCount: c._count.products,
   }));
+  return cachedCategories;
 }
 
 /** Sidebar filter blocks ("Affiner la selection"). */
 export async function tagGroups(
   prisma: PrismaClient,
 ): Promise<TagGroupPublic[]> {
+  if (cachedTagGroups) return cachedTagGroups;
   const groups = await prisma.tagGroup.findMany({
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
   });
@@ -88,7 +115,7 @@ export async function tagGroups(
     }
     arr.push(t);
   }
-  return groups.map((g) => ({
+  cachedTagGroups = groups.map((g) => ({
     id: g.id,
     name: g.name,
     nameAr: g.nameAr,
@@ -101,6 +128,7 @@ export async function tagGroups(
       labelAr: t.labelAr,
     })),
   }));
+  return cachedTagGroups;
 }
 
 /**
@@ -229,6 +257,8 @@ export async function productById(
 }
 
 export async function wilayas(prisma: PrismaClient) {
+  if (cachedWilayas) return cachedWilayas;
+
   const wilayasList = await prisma.wilaya.findMany({
     orderBy: { code: "asc" },
     select: {
@@ -258,10 +288,11 @@ export async function wilayas(prisma: PrismaClient) {
     }
     arr.push(c);
   }
-  return wilayasList.map((w) => ({
+  cachedWilayas = wilayasList.map((w) => ({
     ...w,
     communes: byWilaya.get(w.code) ?? [],
   }));
+  return cachedWilayas;
 }
 
 /**
