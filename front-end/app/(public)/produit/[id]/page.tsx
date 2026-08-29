@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getRepos } from "@/lib/data/repos";
 import type { ProductDetail } from "@/lib/data/types";
