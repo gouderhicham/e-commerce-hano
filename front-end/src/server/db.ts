@@ -2,22 +2,15 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client/wasm";
 
 /**
- * Prisma on Cloudflare Workers.
+ * Prisma on Cloudflare Workers with Hyperdrive.
  *
- * Workers connect to Hyperdrive, which handles pooling natively on Cloudflare's edge.
+ * Hyperdrive provides native connection pooling at Cloudflare's Edge.
+ * Creating the Prisma client per request ensures no frozen TCP sockets
+ * or hanging event loops between isolate lifecycles.
  */
-const clients = new Map<string, PrismaClient>();
-
 export function getPrisma(connectionString: string): PrismaClient {
-  const cached = clients.get(connectionString);
-  if (cached) return cached;
-
   const adapter = new PrismaPg(
-    {
-      connectionString,
-      max: 5,
-      idleTimeoutMillis: 5000,
-    },
+    { connectionString },
     {
       onPoolError: (err) => {
         console.warn("[PrismaPg pool]", err.message);
@@ -27,9 +20,7 @@ export function getPrisma(connectionString: string): PrismaClient {
       },
     },
   );
-  const client = new PrismaClient({ adapter });
-  clients.set(connectionString, client);
-  return client;
+  return new PrismaClient({ adapter });
 }
 
 export type { PrismaClient };
