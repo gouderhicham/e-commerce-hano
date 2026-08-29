@@ -37,13 +37,23 @@ jobs:
       - run: npm test
       - name: Build OpenNext Worker
         run: |
-          npm run cf:build 2>&1 | tee build_output.log || (echo "=== OPENNEXT BUILD LOG ===" && cat build_output.log && exit 1)
+          npm run cf:build
+          echo "=== .open-next directory structure ==="
+          find .open-next -maxdepth 4 || true
+          if [ -f .open-next/server-functions/default/front-end/handler.mjs ] && [ ! -f .open-next/server-functions/default/handler.mjs ]; then
+            echo "Fixing nested front-end/handler.mjs path"
+            cp .open-next/server-functions/default/front-end/handler.mjs .open-next/server-functions/default/handler.mjs
+          fi
+          if [ -f .open-next/server-functions/default/index.mjs ] && [ ! -f .open-next/server-functions/default/handler.mjs ]; then
+            echo "Fixing missing handler.mjs from index.mjs"
+            cp .open-next/server-functions/default/index.mjs .open-next/server-functions/default/handler.mjs
+          fi
 
       - name: Deploy to Cloudflare
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
           npx wrangler whoami
-          npx wrangler deploy
+          npm run cf:deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
