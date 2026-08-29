@@ -67,4 +67,7 @@ export const catalogRoutes = new Hono<AppBindings>()
     );
   })
 
-  .get("/settings/public", async (c) => c.json(await catalog.publicSettings(c.var.prisma)));
+  .get("/settings/public", async (c) => {
+    c.header("Cache-Control", cacheable(3600));
+    return c.json(await catalog.publicSettings(c.var.prisma));
+  });

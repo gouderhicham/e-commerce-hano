@@ -1,19 +1,7 @@
 import type { Metadata } from "next";
-import { getRepos } from "@/lib/data/repos";
-import type { ProductDetail } from "@/lib/data/types";
 import { ProductDetailClient } from "./product-detail-client";
 
 export const dynamic = "force-dynamic";
-
-async function loadProduct(idParam: string): Promise<ProductDetail | null> {
-  const id = Number(idParam);
-  if (!Number.isInteger(id) || id <= 0) return null;
-  try {
-    return await getRepos().products.publicDetail(id);
-  } catch {
-    return null;
-  }
-}
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -29,7 +17,6 @@ export default async function ProductPage({
 }) {
   const { id } = await params;
   const numId = Number(id);
-  const product = Number.isInteger(numId) && numId > 0 ? await loadProduct(id) : null;
 
-  return <ProductDetailClient initialProduct={product} productId={numId || 1} />;
+  return <ProductDetailClient productId={Number.isInteger(numId) && numId > 0 ? numId : 1} />;
 }
