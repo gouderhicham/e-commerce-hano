@@ -50,7 +50,7 @@ export function ProductDetailClient({
   const { pushToast } = useToast();
   const { locale, t, isRTL } = useI18n();
 
-  const gallery = product.images.length
+  const gallery = product.images?.length
     ? product.images.map((i) => i.url)
     : product.imageUrl
       ? [product.imageUrl]
@@ -336,7 +336,7 @@ export function ProductDetailClient({
             )}
           </div>
 
-          {product.configurations.length > 0 && (
+          {product.configurations && product.configurations.length > 0 && (
             <div className="mt-7">
               <p className="font-mono text-[9px] font-bold uppercase tracking-[.15em] text-[#7b8981]">
                 {t.product.configTitle}
@@ -435,7 +435,7 @@ export function ProductDetailClient({
             </p>
           )}
 
-          {product.promises.length > 0 && (
+          {product.promises && product.promises.length > 0 && (
             <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
               {product.promises.map((promise, index) => {
                 const Icon = PROMISE_ICONS[promise.icon] ?? PROMISE_ICONS.check;
@@ -479,7 +479,7 @@ export function ProductDetailClient({
         />
       )}
 
-      {product.similar.length > 0 && (
+      {product.similar && product.similar.length > 0 && (
         <section className="mx-auto max-w-[1360px] px-5 pb-20 sm:px-8">
           <div className="border-t border-[#17251f]/10 pt-10">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[.18em] text-[#718078]">

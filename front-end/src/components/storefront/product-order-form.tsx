@@ -280,7 +280,7 @@ export function ProductOrderForm({
                   className={inputCls}
                 >
                   <option value="">{t.checkout.wilayaPlaceholder}</option>
-                  {wilayas.map((w) => (
+                  {allWilayas.map((w) => (
                     <option key={w.code} value={w.code}>
                       {w.code} - {pick(locale, w.name, w.nameAr)}
                     </option>
