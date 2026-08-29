@@ -148,11 +148,13 @@ export async function serveObject(
   const object = await prisma.mediaObject.findUnique({ where: { key } });
   if (!object) throw new NotFoundError("Fichier introuvable.");
 
-  // Prisma hands `Bytes` back as a Uint8Array; copy into a fresh ArrayBuffer so
-  // the response body never aliases a pooled buffer.
-  const body = new Uint8Array(object.data);
+  const bytes = new Uint8Array(object.data);
+  const buffer = bytes.buffer.slice(
+    bytes.byteOffset,
+    bytes.byteOffset + bytes.byteLength,
+  );
 
-  return new Response(body, {
+  return new Response(buffer, {
     headers: {
       "Content-Type": object.contentType,
       "Content-Length": String(object.size),

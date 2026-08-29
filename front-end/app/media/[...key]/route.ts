@@ -28,3 +28,5 @@ export async function GET(
     return Response.json({ error: "Fichier introuvable." }, { status: 404 });
   }
 }
+
+export const HEAD = GET;
