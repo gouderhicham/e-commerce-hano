@@ -35,6 +35,7 @@ if (process.env.NODE_ENV === "development" && process.env.CLOUDFLARE_DEV === "1"
  * old split deployment paid on a page render is gone.
  */
 const nextConfig: NextConfig = {
+  compress: false,
   serverExternalPackages: ["pg-cloudflare"],
 };
 
