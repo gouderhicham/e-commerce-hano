@@ -12,7 +12,8 @@ generator client {
   // Driver adapters (GA since 6.6) let Prisma reach Postgres through `pg` over
   // Cloudflare Hyperdrive instead of opening its own TCP socket, which Workers
   // forbid. No preview flag is needed any more.
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
+  engineType = "wasm"
 }
 
 datasource db {
