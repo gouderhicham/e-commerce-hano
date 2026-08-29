@@ -29,8 +29,8 @@ export default async function ProductPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const product = await loadProduct(id);
-  if (!product) notFound();
+  const numId = Number(id);
+  const product = Number.isInteger(numId) && numId > 0 ? await loadProduct(id) : null;
 
-  return <ProductDetailClient product={product} />;
+  return <ProductDetailClient initialProduct={product} productId={numId || 1} />;
 }

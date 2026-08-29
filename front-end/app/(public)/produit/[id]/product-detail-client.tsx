@@ -38,21 +38,46 @@ const PROMISE_TONES = ["bg-[#dbe7dc]", "bg-[#e8eee4]", "bg-[#e3eae1]"];
 const MIN_SWIPE = 40;
 
 export function ProductDetailClient({
-  product,
+  initialProduct = null,
+  productId,
   wilayas = [],
 }: {
-  product: ProductDetail;
+  initialProduct?: ProductDetail | null;
+  productId: number;
   wilayas?: Wilaya[];
 }) {
+  const [product, setProduct] = useState<ProductDetail | null>(initialProduct);
+  const [loading, setLoading] = useState(!initialProduct);
+  const [notFoundState, setNotFoundState] = useState(false);
+
+  useEffect(() => {
+    if (product) return;
+    fetch(`/api/products/${productId}`)
+      .then((r) => {
+        if (!r.ok) {
+          if (r.status === 404) setNotFoundState(true);
+          throw new Error("Failed");
+        }
+        return r.json();
+      })
+      .then((p: ProductDetail) => {
+        setProduct(p);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  }, [productId, product]);
+
   const mounted = useSyncExternalStore(subscribe, () => true, () => false);
   const { add } = useCart();
   const { has, toggle } = useFavorites();
   const { pushToast } = useToast();
   const { locale, t, isRTL } = useI18n();
 
-  const gallery = product.images?.length
+  const gallery = product?.images?.length
     ? product.images.map((i) => i.url)
-    : product.imageUrl
+    : product?.imageUrl
       ? [product.imageUrl]
       : [];
 
@@ -66,10 +91,10 @@ export function ProductDetailClient({
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const selectedConfig = product.configurations?.[configIndex];
-  const price = selectedConfig?.price ?? product.promoPrice ?? product.price;
-  const outOfStock = product.availability === "indisponible";
-  const onRequest = product.price === null;
+  const selectedConfig = product?.configurations?.[configIndex];
+  const price = selectedConfig?.price ?? product?.promoPrice ?? product?.price;
+  const outOfStock = product?.availability === "indisponible";
+  const onRequest = product?.price === null;
 
   const nextSlide = useCallback(
     () => setActive((prev) => (gallery.length ? (prev + 1) % gallery.length : 0)),
@@ -110,6 +135,7 @@ export function ProductDetailClient({
   };
 
   const handleAddToCart = () => {
+    if (!product) return;
     if (outOfStock) {
       pushToast(t.product.outOfStockNotice, "error");
       return;
@@ -139,10 +165,51 @@ export function ProductDetailClient({
   };
 
   const handleFavorite = () => {
+    if (!product) return;
     toggle(product.id);
     setAnimatingFav(true);
     window.setTimeout(() => setAnimatingFav(false), 450);
   };
+
+  if (notFoundState) {
+    return (
+      <div className="mx-auto max-w-[1360px] px-6 py-28 text-center sm:px-12">
+        <h1 className="text-3xl sm:text-4xl font-medium tracking-tight text-[#17251f]">
+          {t.common.errorGeneric}
+        </h1>
+        <p className="mt-4 text-sm text-[#617068]">
+          {t.product.outOfStockNotice}
+        </p>
+        <div className="mt-8">
+          <Link
+            href="/catalogue"
+            className="inline-flex items-center gap-2 rounded-full bg-[#1d4538] px-7 py-3.5 text-xs font-bold uppercase tracking-[.1em] text-white transition hover:bg-[#14352b]"
+          >
+            <Arrow left /> {t.product.backToCatalog}
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading || !product) {
+    return (
+      <div className="mx-auto max-w-[1360px] px-6 py-20 sm:px-12">
+        <div className="animate-pulse space-y-8">
+          <div className="h-4 w-32 rounded bg-[#17251f]/10" />
+          <div className="grid gap-10 lg:grid-cols-2">
+            <div className="h-[340px] sm:h-[420px] rounded-2xl bg-[#17251f]/10" />
+            <div className="space-y-4">
+              <div className="h-8 w-3/4 rounded bg-[#17251f]/10" />
+              <div className="h-4 w-1/2 rounded bg-[#17251f]/10" />
+              <div className="h-12 w-1/3 rounded bg-[#17251f]/10" />
+              <div className="h-24 rounded bg-[#17251f]/10" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const STOCK_LABEL = {
     disponible: t.product.inStock,
