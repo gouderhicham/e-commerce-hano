@@ -31,7 +31,7 @@
 	"hyperdrive": [
 		{
 			"binding": "HYPERDRIVE",
-			"id": "44b36b0eca61842af93881b15417ed4b4",
+			"id": "4b36b0eca61842af93881b15417ed4b4",
 			"localConnectionString": "postgresql://pcstore39:pcstore39@localhost:5435/pcstore39"
 		}
 	],
