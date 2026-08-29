@@ -15,9 +15,8 @@ export function getPrisma(connectionString: string): PrismaClient {
   const adapter = new PrismaPg(
     {
       connectionString,
-      max: 1,
-      connectionTimeoutMillis: 5000,
-      idleTimeoutMillis: 30000,
+      max: 5,
+      idleTimeoutMillis: 5000,
     },
     {
       onPoolError: (err) => {
