@@ -1,4 +1,3 @@
-import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client/wasm";
 
@@ -13,13 +12,7 @@ export function getPrisma(connectionString: string): PrismaClient {
   const cached = clients.get(connectionString);
   if (cached) return cached;
 
-  const pool = new Pool({
-    connectionString,
-    max: 5,
-    connectionTimeoutMillis: 5000,
-    idleTimeoutMillis: 30000,
-  });
-  const adapter = new PrismaPg(pool);
+  const adapter = new PrismaPg({ connectionString });
   const client = new PrismaClient({ adapter });
   clients.set(connectionString, client);
   return client;

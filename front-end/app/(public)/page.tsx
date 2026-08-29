@@ -19,13 +19,20 @@ export const dynamic = "force-dynamic";
  * install renders the same copy in French and in Arabic.
  */
 export default async function HomePage() {
-  const { showcase, categoryCards, favorites } =
-    await getRepos().content.home();
+  const content = await getRepos().content.home().catch(() => ({
+    showcase: null,
+    categoryCards: [],
+    favorites: { items: [] },
+  }));
+
+  const showcase = content?.showcase ?? null;
+  const categoryCards = content?.categoryCards ?? [];
+  const favorites = content?.favorites ?? { items: [] };
 
   return (
     <>
       <HeroSection />
-      <HeroShowcase showcase={showcase} />
+      {showcase && <HeroShowcase showcase={showcase} />}
       <CategoriesSection cards={categoryCards} />
       <FavoritesSection favorites={favorites} />
       <PromiseSection />
