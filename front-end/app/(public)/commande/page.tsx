@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { getRepos } from "@/lib/data/repos";
 import { CheckoutClient } from "./checkout-client";
 
 export const dynamic = "force-dynamic";

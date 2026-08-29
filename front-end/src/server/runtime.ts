@@ -59,9 +59,7 @@ function envFromProcess(): CloudflareEnv {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var __GLOBAL_CF_ENV__: CloudflareEnv | undefined;
-  // eslint-disable-next-line no-var
   var __GLOBAL_CF_CTX__: Runtime["ctx"] | undefined;
 }
 

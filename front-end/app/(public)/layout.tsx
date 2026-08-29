@@ -1,5 +1,4 @@
 import { getSessionUser } from "@/lib/auth/session";
-import { getRepos } from "@/lib/data/repos";
 import { CartProvider } from "@/components/storefront/cart-context";
 import { FavoritesProvider } from "@/components/storefront/favorites-context";
 import { I18nProvider } from "@/lib/i18n/context";
