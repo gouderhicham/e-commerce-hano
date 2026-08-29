@@ -2,7 +2,9 @@ import type { Prisma, PrismaClient } from "@prisma/client";
 import {
   toAttributes,
   toProductPublic,
+  type ProductImageRow,
   type ProductPublicWithRelations,
+  type ProductScalar,
 } from "../domain/availability";
 import { PAGE_SIZE_CATALOGUE, type Paginated } from "../domain/pagination";
 import { PRODUCT_SEARCH_FIELDS } from "../domain/product-search";
@@ -234,11 +236,15 @@ export async function productById(
 
   const product = await prisma.product.findUnique({
     where: { id },
-    include: {
-      images: { orderBy: { sortOrder: "asc" } },
-    },
   });
   if (!product || !product.active) throw new NotFoundError(NOT_FOUND_FR);
+
+  const images = await prisma.productImage
+    .findMany({
+      where: { productId: id },
+      orderBy: { sortOrder: "asc" },
+    })
+    .catch(() => []);
 
   let cat: {
     id: string;
@@ -272,7 +278,7 @@ export async function productById(
     /* ignore category fetch failure */
   }
 
-  let similar: ProductPublicWithRelations["similar"] = [];
+  let similar: (ProductScalar & { images?: ProductImageRow[] })[] = [];
   try {
     if (product.categoryId) {
       const similarProducts = await prisma.product.findMany({
@@ -280,15 +286,13 @@ export async function productById(
         orderBy: [{ sold: "desc" }, { id: "desc" }],
         take: 4,
       });
-      similar = similarProducts.map((p) =>
-        toProductPublic({ ...p, images: [] }),
-      );
+      similar = similarProducts.map((p) => ({ ...p, images: [] }));
     }
   } catch {
     /* ignore similar fetch failure */
   }
 
-  const res = toProductPublic(product, { category: cat, similar });
+  const res = toProductPublic({ ...product, images }, { category: cat, similar });
   cachedProductsById.set(id, { data: res, timestamp: Date.now() });
   return res;
 }
