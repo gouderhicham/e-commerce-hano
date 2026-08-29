@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronRight, MapPin, Phone, Search, Wallet, X } from "lucide-react";
 import { apiFetch, mediaSrc } from "@/lib/api-client";
 import { fmtDA, frDateTime } from "@/lib/format";
@@ -94,10 +94,10 @@ export function CommandesClient({
   const [selected, setSelected] = useState<Order | null>(null);
   const [closedFocus, setClosedFocus] = useState(false);
 
-  const activeOrder = useMemo(() => {
+  const activeOrder: Order | null = useMemo<Order | null>(() => {
     if (selected) return selected;
     if (focusOrderId && !closedFocus) {
-      return data.items.find((o) => o.id === focusOrderId) ?? null;
+      return data.items.find((o: Order) => o.id === focusOrderId) ?? null;
     }
     return null;
   }, [selected, focusOrderId, closedFocus, data.items]);

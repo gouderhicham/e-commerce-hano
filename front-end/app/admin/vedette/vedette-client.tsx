@@ -47,10 +47,7 @@ export function VedetteClient({ initial = defaultShowcase }: { initial?: Showcas
           setShowcase(data.showcase);
         }
       })
-      .catch(() => {})
-      .finally(() => {
-        if (alive) setLoading(false);
-      });
+      .catch(() => {});
     return () => {
       alive = false;
     };

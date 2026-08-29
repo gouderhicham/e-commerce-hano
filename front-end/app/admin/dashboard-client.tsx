@@ -100,8 +100,6 @@ export function DashboardClient({
         }
       } catch {
         /* ignore fetch errors */
-      } finally {
-        if (alive) setLoading(false);
       }
     }
     void load();
