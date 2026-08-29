@@ -13,9 +13,12 @@ defaults:
     working-directory: front-end
 
 jobs:
-  check:
-    name: Typecheck, lint, test & build
+  build-and-deploy:
+    name: Build, Test & Deploy
     runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: "--max-old-space-size=4096"
+      NEXT_TELEMETRY_DISABLED: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,32 +35,11 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
-      - run: npm run build
-
-  deploy:
-    name: Deploy to Cloudflare
-    # Only from main, and only once the checks above are green.
-    needs: check
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    env:
-      NODE_OPTIONS: "--max-old-space-size=4096"
-      NEXT_TELEMETRY_DISABLED: "1"
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: front-end/package-lock.json
-
-      - run: npm ci
-      - run: npx prisma generate
-
-      # Building here also sidesteps the symlinks OpenNext's bundler creates,
-      # which Windows refuses without developer mode — Linux has no such issue.
       - run: npm run cf:build
-      - run: npm run cf:deploy
+
+      - name: Deploy to Cloudflare
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: npm run cf:deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
