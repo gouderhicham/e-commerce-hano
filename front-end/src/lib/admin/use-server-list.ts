@@ -34,13 +34,14 @@ export function useServerList<E extends ListEnvelope<unknown>>(
 } {
   // Seed from the envelope, not from 1: a deep link (e.g. a bell notification
   // pointing at a message on page 3) is served pre-paginated by the server.
+  const hasInitialData = (initial.items?.length ?? 0) > 0 || initial.total > 0;
   const [page, setPage] = useState(initial.page || 1);
   const [data, setData] = useState<E>(initial);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(!hasInitialData);
   const [error, setError] = useState<unknown>(null);
   const paramsKey = JSON.stringify(params);
-  // The server already provided page 1 with default params — skip the first run.
-  const skipFirst = useRef(true);
+  // The server already provided page 1 with default params — skip first run ONLY if data was present.
+  const skipFirst = useRef(hasInitialData);
 
   const load = useCallback(async () => {
     const qs = new URLSearchParams();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Trash2, X, Upload, Edit3, Image as ImageIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { apiFetch, mediaSrc } from "@/lib/api-client";
@@ -224,9 +224,9 @@ function CategoryFormModal({
 }
 
 export function CategoriesClient({
-  initialCategories,
+  initialCategories = [],
 }: {
-  initialCategories: CategoryWithCount[];
+  initialCategories?: CategoryWithCount[];
 }) {
   const router = useRouter();
   const [categories, setCategories] = useState<CategoryWithCount[]>(initialCategories);
@@ -234,6 +234,26 @@ export function CategoriesClient({
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (initialCategories.length > 0) return;
+    let alive = true;
+    const fetchAll = async () => {
+      try {
+        const res = await apiFetch("/api/categories");
+        if (alive && res.ok) {
+          const data = (await res.json()) as CategoryWithCount[];
+          setCategories(data);
+        }
+      } catch {
+        /* ignore fetch errors */
+      }
+    };
+    void fetchAll();
+    return () => {
+      alive = false;
+    };
+  }, [initialCategories.length]);
 
   const flash = (message: string) => {
     setSaved(message);

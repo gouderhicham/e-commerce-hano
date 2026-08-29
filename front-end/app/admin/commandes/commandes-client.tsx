@@ -39,21 +39,51 @@ interface Envelope {
   counts: Record<OrderStatus | "toutes", number>;
 }
 
+const defaultEnvelope: Envelope = {
+  items: [],
+  total: 0,
+  page: 1,
+  pageCount: 1,
+  counts: {
+    toutes: 0,
+    NOUVELLE: 0,
+    PRETE_A_LIVRER: 0,
+    EN_LIVRAISON: 0,
+    LIVREE: 0,
+    ANNULEE: 0,
+  },
+};
+
 export function CommandesClient({
-  initial,
-  wilayas,
+  initial = defaultEnvelope,
+  wilayas: initialWilayas = [],
   focusOrderId,
 }: {
-  initial: Envelope;
-  wilayas: Wilaya[];
+  initial?: Envelope;
+  wilayas?: Wilaya[];
   /** `?order=CMD-…` — a bell notification asking for this order sheet. */
   focusOrderId?: string | null;
 }) {
+  const [wilayas, setWilayas] = useState<Wilaya[]>(initialWilayas);
   const [status, setStatus] = useState<OrderStatus | "">("");
   // The server already filtered on the deep-linked order; keep the box in sync
   // so clearing it is how the admin gets back to the full list.
   const [search, setSearch] = useState(focusOrderId ?? "");
   const debouncedSearch = useDebounce(search, 250);
+
+  useEffect(() => {
+    if (initialWilayas.length > 0) return;
+    let alive = true;
+    apiFetch("/api/shipping/wilayas")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (alive && Array.isArray(data)) setWilayas(data);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [initialWilayas.length]);
 
   const { data, loading, page, setPage, reload } = useServerList<Envelope>(
     "/api/admin/orders",
@@ -62,18 +92,16 @@ export function CommandesClient({
   );
 
   const [selected, setSelected] = useState<Order | null>(null);
+  const [closedFocus, setClosedFocus] = useState(false);
 
-  // The server already narrowed the list to `focusOrderId`; open its sheet once
-  // mounted. It cannot be the initial state: Modal portals to document.body and
-  // must stay closed during SSR.
-  useEffect(() => {
-    if (!focusOrderId) return;
-    const found = initial.items.find((o) => o.id === focusOrderId);
-    // Opening a portal-backed modal is a client-only side effect, not the
-    // render-derived state this rule guards against.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (found) setSelected(found);
-  }, [focusOrderId, initial.items]);
+  const activeOrder = useMemo(() => {
+    if (selected) return selected;
+    if (focusOrderId && !closedFocus) {
+      return data.items.find((o) => o.id === focusOrderId) ?? null;
+    }
+    return null;
+  }, [selected, focusOrderId, closedFocus, data.items]);
+
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState("");
   const [error, setError] = useState("");
@@ -282,8 +310,15 @@ export function CommandesClient({
         </Card>
       )}
 
-      <Modal open={!!selected} onClose={() => setSelected(null)} maxWidth={560}>
-        {selected && (
+      <Modal
+        open={!!activeOrder}
+        onClose={() => {
+          setSelected(null);
+          setClosedFocus(true);
+        }}
+        maxWidth={560}
+      >
+        {activeOrder && (
           <>
             <div className="mb-4 flex items-center justify-between border-b border-[#17251f]/10 pb-4">
               <div>
@@ -291,12 +326,15 @@ export function CommandesClient({
                   Fiche de commande
                 </span>
                 <h2 className="text-xl font-bold text-[#17251f]">
-                  {selected.id}
+                  {activeOrder.id}
                 </h2>
               </div>
               <button
                 type="button"
-                onClick={() => setSelected(null)}
+                onClick={() => {
+                  setSelected(null);
+                  setClosedFocus(true);
+                }}
                 aria-label="Fermer"
                 className="cursor-pointer"
               >
@@ -310,13 +348,13 @@ export function CommandesClient({
                   01 · Coordonnées
                 </span>
                 <p className="text-sm font-bold text-[#17251f]">
-                  {selected.customerName}
+                  {activeOrder.customerName}
                 </p>
                 <p className="flex items-center gap-1.5 text-[#627269]">
-                  <Phone className="h-3.5 w-3.5" /> {selected.phone}
+                  <Phone className="h-3.5 w-3.5" /> {activeOrder.phone}
                 </p>
-                {selected.email && (
-                  <p className="text-[#627269]">{selected.email}</p>
+                {activeOrder.email && (
+                  <p className="text-[#627269]">{activeOrder.email}</p>
                 )}
               </div>
 
@@ -327,24 +365,24 @@ export function CommandesClient({
                 <p className="flex items-start gap-1.5 font-medium text-[#4f5d55]">
                   <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                   <span>
-                    {communeLabel(selected.wilayaCode, selected.communeId)} —{" "}
-                    {wilayaLabel(selected.wilayaCode)}
+                    {communeLabel(activeOrder.wilayaCode, activeOrder.communeId)} —{" "}
+                    {wilayaLabel(activeOrder.wilayaCode)}
                   </span>
                 </p>
                 <p className="text-[11px] text-[#78827b]">
                   Appeler le client pour convenir du point de livraison.
                 </p>
                 <p className="pt-1 font-mono text-[10px] text-[#78827b]">
-                  Reçue le {frDateTime(selected.createdAt)}
+                  Reçue le {frDateTime(activeOrder.createdAt)}
                 </p>
               </div>
 
               <div>
                 <h3 className="mb-2 font-mono text-[10px] font-bold uppercase text-[#1d4538]">
-                  Panier ({itemCount(selected)} articles)
+                  Panier ({itemCount(activeOrder)} articles)
                 </h3>
                 <div className="divide-y divide-[#17251f]/10 border-y border-[#17251f]/10">
-                  {selected.lines.map((line) => (
+                  {activeOrder.lines.map((line) => (
                     <div key={line.id} className="flex items-center gap-3 py-2.5">
                       <span className="h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-[#17251f]/10 bg-[#e0ebe1]">
                         {line.imageUrl && (
@@ -378,13 +416,13 @@ export function CommandesClient({
                 <p className="flex justify-between font-medium text-[#627269]">
                   <span>Sous-total</span>
                   <span className="font-mono font-semibold text-[#17251f]">
-                    {fmtDA(selected.subtotal)}
+                    {fmtDA(activeOrder.subtotal)}
                   </span>
                 </p>
                 <p className="flex justify-between font-medium text-[#627269]">
                   <span>Livraison</span>
                   <span className="font-mono font-semibold text-[#17251f]">
-                    {fmtDA(selected.shippingFee)}
+                    {fmtDA(activeOrder.shippingFee)}
                   </span>
                 </p>
                 <div className="flex items-baseline justify-between border-t border-[#17251f]/10 pt-2.5">
@@ -392,17 +430,17 @@ export function CommandesClient({
                     Total à percevoir
                   </span>
                   <span className="font-mono text-xl font-extrabold text-[#1d4538]">
-                    {fmtDA(selected.total)}
+                    {fmtDA(activeOrder.total)}
                   </span>
                 </div>
                 <p className="flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase text-[#1d4538]">
                   <Wallet className="h-3.5 w-3.5" />{" "}
-                  {PAYMENT_METHOD_LABELS[selected.method]}
+                  {PAYMENT_METHOD_LABELS[activeOrder.method]}
                 </p>
                 <div className="flex items-center gap-2 pt-1">
                   <Pill
-                    label={ORDER_STATUS_LABELS[selected.status]}
-                    colors={ORDER_STATUS_PILLS[selected.status]}
+                    label={ORDER_STATUS_LABELS[activeOrder.status]}
+                    colors={ORDER_STATUS_PILLS[activeOrder.status]}
                   />
                 </div>
               </div>
@@ -416,10 +454,10 @@ export function CommandesClient({
                     <button
                       key={s}
                       type="button"
-                      disabled={busy || selected.status === "ANNULEE"}
-                      onClick={() => applyStatus(selected, s)}
+                      disabled={busy || activeOrder.status === "ANNULEE"}
+                      onClick={() => applyStatus(activeOrder, s)}
                       className={`cursor-pointer rounded-lg px-2.5 py-1.5 font-mono text-[9px] font-bold uppercase transition disabled:cursor-not-allowed disabled:opacity-50 ${
-                        selected.status === s
+                        activeOrder.status === s
                           ? "bg-[#1d4538] text-white"
                           : "border border-[#17251f]/15 bg-white text-[#17251f] hover:bg-gray-50"
                       }`}
@@ -428,7 +466,7 @@ export function CommandesClient({
                     </button>
                   ))}
                 </div>
-                {selected.status !== "ANNULEE" && (
+                {activeOrder.status !== "ANNULEE" && (
                   <button
                     type="button"
                     disabled={busy}
@@ -438,7 +476,7 @@ export function CommandesClient({
                           "Annuler cette commande ? Le stock de chaque ligne sera réapprovisionné.",
                         )
                       )
-                        void applyStatus(selected, "ANNULEE");
+                        void applyStatus(activeOrder, "ANNULEE");
                     }}
                     className={`${dangerBtn} mt-3 w-full justify-center py-2`}
                   >

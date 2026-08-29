@@ -42,7 +42,20 @@ const TAB_AVAILABILITY: Record<Tab, Availability | undefined> = {
   rupture: "indisponible",
 };
 
-export function StockClient({ initial }: { initial: StockEnvelope }) {
+const defaultStockEnvelope: StockEnvelope = {
+  items: [],
+  total: 0,
+  page: 1,
+  pageCount: 1,
+  stockCounts: {
+    total: 0,
+    disponible: 0,
+    stock_limite: 0,
+    indisponible: 0,
+  },
+};
+
+export function StockClient({ initial = defaultStockEnvelope }: { initial?: StockEnvelope }) {
   const { pushToast } = useToast();
   const [tab, setTab] = useState<Tab>("tous");
   const [search, setSearch] = useState("");

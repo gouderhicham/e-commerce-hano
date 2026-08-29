@@ -16,7 +16,7 @@ export const ar: Dictionary = {
     titleLead: "الأداة المثالية",
     titleAccent: "لأداء يدوم",
     text: "حواسيب مختارة ومفحوصة بعناية لترافق إبداعك وأعمالك — جودة تدوم وسعر عادل مع ضمان ورشة معتمد.",
-    ctaCatalog: "اكتشف إيليت بوك",
+    ctaCatalog: "اكتشف المجموعة",
     imageAlt: "حاسوب محمول إتش بي إيليت بوك 845 G8 مجدد",
     statGuaranteeVal: "شهر كامل",
     statGuaranteeLabel: "ضمان ورشة معتمد",

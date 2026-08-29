@@ -40,21 +40,50 @@ const GUARANTEES_AR = [
 ];
 
 export function TagsClient({
-  initialGroups,
-  categories,
-  products,
+  initialGroups = [],
+  categories: initialCategories = [],
+  products: initialProducts = [],
 }: {
-  initialGroups: TagGroup[];
-  categories: CategoryWithCount[];
-  products: ProductPublic[];
+  initialGroups?: TagGroup[];
+  categories?: CategoryWithCount[];
+  products?: ProductPublic[];
 }) {
   const mounted = useSyncExternalStore(subscribe, () => true, () => false);
 
   const [groups, setGroups] = useState<TagGroup[]>(initialGroups);
+  const [categories, setCategories] = useState<CategoryWithCount[]>(initialCategories);
+  const [products, setProducts] = useState<ProductPublic[]>(initialProducts);
   const [newTagInputs, setNewTagInputs] = useState<Record<string, TagInputState>>({});
   const [busyId, setBusyId] = useState<string | null>(null);
   const [saved, setSaved] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (initialGroups.length > 0) return;
+    let alive = true;
+    const fetchAll = async () => {
+      try {
+        const [tRes, cRes, pRes] = await Promise.all([
+          apiFetch("/api/tag-groups"),
+          apiFetch("/api/categories"),
+          apiFetch("/api/admin/products?page=1"),
+        ]);
+        if (!alive) return;
+        if (tRes.ok) setGroups((await tRes.json()) as TagGroup[]);
+        if (alive && cRes.ok) setCategories((await cRes.json()) as CategoryWithCount[]);
+        if (alive && pRes.ok) {
+          const prodData = (await pRes.json()) as { items: ProductPublic[] };
+          setProducts(prodData.items);
+        }
+      } catch {
+        /* ignore fetch errors */
+      }
+    };
+    void fetchAll();
+    return () => {
+      alive = false;
+    };
+  }, [initialGroups.length]);
 
   // Group creation modal state
   const [showAddModal, setShowAddModal] = useState(false);

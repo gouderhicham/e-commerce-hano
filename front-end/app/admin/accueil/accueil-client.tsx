@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api-client";
 import {
   ErrorBanner,
@@ -18,16 +18,45 @@ import type {
  * Admin → Page d'accueil (Sélection « Nos favoris »).
  */
 export function AccueilClient({
-  initialFavorites,
-  products,
+  initialFavorites = [],
+  products: initialProducts = [],
 }: {
-  initialFavorites: HomeFavoriteItem[];
-  products: ProductPublic[];
+  initialFavorites?: HomeFavoriteItem[];
+  products?: ProductPublic[];
 }) {
   const [items, setItems] = useState<HomeFavoriteItem[]>(initialFavorites);
+  const [products, setProducts] = useState<ProductPublic[]>(initialProducts);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (initialProducts.length > 0) return;
+    let alive = true;
+    const fetchAll = async () => {
+      try {
+        const [favRes, prodRes] = await Promise.all([
+          apiFetch("/api/admin/content/home/favorites"),
+          apiFetch("/api/admin/products?page=1"),
+        ]);
+        if (!alive) return;
+        if (favRes.ok) {
+          const data = (await favRes.json()) as { items: HomeFavoriteItem[] };
+          setItems(data.items);
+        }
+        if (prodRes.ok) {
+          const prodData = (await prodRes.json()) as { items: ProductPublic[] };
+          setProducts(prodData.items);
+        }
+      } catch {
+        /* ignore fetch errors */
+      }
+    };
+    void fetchAll();
+    return () => {
+      alive = false;
+    };
+  }, [initialProducts.length]);
 
   const readError = async (res: Response, fallback: string) => {
     const body = (await res.json().catch(() => null)) as {

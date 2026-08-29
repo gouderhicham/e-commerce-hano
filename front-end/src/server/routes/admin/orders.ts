@@ -24,8 +24,18 @@ const ORDER_STATUSES = [
 const idParam = z.object({ id: z.string().min(1) });
 
 const listQuery = z.object({
-  status: z.enum(ORDER_STATUSES).optional(),
-  q: z.string().optional(),
+  status: z
+    .preprocess(
+      (val) => (typeof val === "string" && val.trim() === "" ? undefined : val),
+      z.enum(ORDER_STATUSES).optional(),
+    )
+    .optional(),
+  q: z
+    .preprocess(
+      (val) => (typeof val === "string" && val.trim() === "" ? undefined : val),
+      z.string().optional(),
+    )
+    .optional(),
   page: z.coerce.number().int().min(1).default(1),
 });
 
@@ -45,6 +55,8 @@ export const adminOrderRoutes = new Hono<AppBindings>()
         OR: [
           { id: { contains: term, mode: "insensitive" } },
           { customerName: { contains: term, mode: "insensitive" } },
+          { phone: { contains: term, mode: "insensitive" } },
+          { email: { contains: term, mode: "insensitive" } },
         ],
       });
     }

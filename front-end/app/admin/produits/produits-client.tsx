@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Edit3, Eye, Plus, Search, Trash2, X } from "lucide-react";
 
@@ -123,19 +123,21 @@ async function toFormData(draft: ProductDraft): Promise<FormData> {
 }
 
 export function ProduitsClient({
-  initialProducts,
-  categories,
-  tagGroups,
+  initialProducts = [],
+  categories: initialCategories = [],
+  tagGroups: initialTagGroups = [],
   focusProductId,
 }: {
-  initialProducts: ProductPublic[];
-  categories: CategoryWithCount[];
-  tagGroups: TagGroup[];
+  initialProducts?: ProductPublic[];
+  categories?: CategoryWithCount[];
+  tagGroups?: TagGroup[];
   /** `?product=<id>` — a stock notification asking for this fiche. */
   focusProductId?: number | null;
 }) {
   const router = useRouter();
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState<ProductPublic[]>(initialProducts);
+  const [categories, setCategories] = useState<CategoryWithCount[]>(initialCategories);
+  const [tagGroups, setTagGroups] = useState<TagGroup[]>(initialTagGroups);
   const [search, setSearch] = useState("");
   const [catFilter, setCatFilter] = useState<"Tous" | string>("Tous");
   const [creating, setCreating] = useState<ProductDraft | null>(null);
@@ -147,6 +149,93 @@ export function ProduitsClient({
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState("");
   const [error, setError] = useState("");
+
+  const reload = async () => {
+    try {
+      const [pRes, cRes, tRes] = await Promise.all([
+        apiFetch("/api/admin/products?page=1"),
+        apiFetch("/api/categories"),
+        apiFetch("/api/tag-groups"),
+      ]);
+      if (pRes.ok) {
+        const first = (await pRes.json()) as {
+          items: ProductPublic[];
+          pageCount: number;
+        };
+        const all = [...first.items];
+        for (let page = 2; page <= first.pageCount; page++) {
+          const next = await apiFetch(`/api/admin/products?page=${page}`);
+          if (!next.ok) break;
+          const body = (await next.json()) as { items: ProductPublic[] };
+          all.push(...body.items);
+        }
+        setProducts(all);
+        if (focusProductId) {
+          const found = all.find((p) => p.id === focusProductId);
+          if (found) setPreview(found);
+        }
+      }
+      if (cRes.ok) {
+        const cats = (await cRes.json()) as CategoryWithCount[];
+        setCategories(cats);
+      }
+      if (tRes.ok) {
+        const tags = (await tRes.json()) as TagGroup[];
+        setTagGroups(tags);
+      }
+    } catch {
+      /* ignore fetch errors */
+    }
+  };
+
+  useEffect(() => {
+    if (initialProducts.length > 0) return;
+    let alive = true;
+    const fetchAll = async () => {
+      try {
+        const [pRes, cRes, tRes] = await Promise.all([
+          apiFetch("/api/admin/products?page=1"),
+          apiFetch("/api/categories"),
+          apiFetch("/api/tag-groups"),
+        ]);
+        if (!alive) return;
+        if (pRes.ok) {
+          const first = (await pRes.json()) as {
+            items: ProductPublic[];
+            pageCount: number;
+          };
+          const all = [...first.items];
+          for (let page = 2; page <= first.pageCount; page++) {
+            const next = await apiFetch(`/api/admin/products?page=${page}`);
+            if (!next.ok || !alive) break;
+            const body = (await next.json()) as { items: ProductPublic[] };
+            all.push(...body.items);
+          }
+          if (alive) {
+            setProducts(all);
+            if (focusProductId) {
+              const found = all.find((p) => p.id === focusProductId);
+              if (found) setPreview(found);
+            }
+          }
+        }
+        if (alive && cRes.ok) {
+          const cats = (await cRes.json()) as CategoryWithCount[];
+          setCategories(cats);
+        }
+        if (alive && tRes.ok) {
+          const tags = (await tRes.json()) as TagGroup[];
+          setTagGroups(tags);
+        }
+      } catch {
+        /* ignore fetch errors */
+      }
+    };
+    void fetchAll();
+    return () => {
+      alive = false;
+    };
+  }, [initialProducts.length, focusProductId]);
 
   const categoryName = (id: string) =>
     categories.find((c) => c.id === id)?.name ?? id;
@@ -173,23 +262,6 @@ export function ProduitsClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [products, catFilter, search],
   );
-
-  const reload = async () => {
-    const res = await apiFetch("/api/admin/products?page=1");
-    if (!res.ok) return;
-    const first = (await res.json()) as {
-      items: ProductPublic[];
-      pageCount: number;
-    };
-    const all = [...first.items];
-    for (let page = 2; page <= first.pageCount; page++) {
-      const next = await apiFetch(`/api/admin/products?page=${page}`);
-      if (!next.ok) break;
-      const body = (await next.json()) as { items: ProductPublic[] };
-      all.push(...body.items);
-    }
-    setProducts(all);
-  };
 
   const submit = async (draft: ProductDraft, isNew: boolean) => {
     setBusy(true);

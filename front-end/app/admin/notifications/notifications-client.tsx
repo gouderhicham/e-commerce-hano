@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Bell,
@@ -61,14 +61,14 @@ const ICONS = {
 } as const;
 
 export function NotificationsClient({
-  initial,
+  initial = { items: [], unreadCount: 0 },
 }: {
-  initial: { items: Notification[]; unreadCount: number };
+  initial?: { items: Notification[]; unreadCount: number };
 }) {
   const router = useRouter();
   const { pushToast } = useToast();
   const { refresh: refreshBadges } = useAdminBadges();
-  const [items, setItems] = useState(initial.items);
+  const [items, setItems] = useState<Notification[]>(initial.items);
   const [unread, setUnread] = useState(initial.unreadCount);
   const [busy, setBusy] = useState(false);
 
@@ -84,6 +84,31 @@ export function NotificationsClient({
     // The bell in the top bar reads its own counter — keep it in step.
     await refreshBadges();
   };
+
+  useEffect(() => {
+    if (initial.items.length > 0) return;
+    let alive = true;
+    const fetchNotifications = async () => {
+      try {
+        const res = await apiFetch("/api/admin/notifications");
+        if (alive && res.ok) {
+          const data = (await res.json()) as {
+            items: Notification[];
+            unreadCount: number;
+          };
+          setItems(data.items);
+          setUnread(data.unreadCount);
+          await refreshBadges();
+        }
+      } catch {
+        /* ignore fetch errors */
+      }
+    };
+    void fetchNotifications();
+    return () => {
+      alive = false;
+    };
+  }, [initial.items.length, refreshBadges]);
 
   const markRead = async (id: string): Promise<boolean> => {
     const res = await apiFetch(`/api/admin/notifications/${id}/read`, {

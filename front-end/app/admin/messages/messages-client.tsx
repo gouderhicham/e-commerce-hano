@@ -13,11 +13,19 @@ import type { MessagesEnvelope } from "./page";
 
 const PAGE_SIZE = 8;
 
+const defaultMessagesEnvelope: MessagesEnvelope = {
+  items: [],
+  total: 0,
+  page: 1,
+  pageCount: 1,
+  unreadCount: 0,
+};
+
 export function MessagesClient({
-  initial,
+  initial = defaultMessagesEnvelope,
   focusId,
 }: {
-  initial: MessagesEnvelope;
+  initial?: MessagesEnvelope;
   /** `?message=<id>` — a bell notification asking for this message. */
   focusId?: string | null;
 }) {

@@ -42,20 +42,41 @@ interface Row {
 }
 
 export function LivraisonClient({
-  initialWilayas,
+  initialWilayas = [],
 }: {
-  initialWilayas: Wilaya[];
+  initialWilayas?: Wilaya[];
 }) {
   const { pushToast } = useToast();
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const [wilayas, setWilayas] = useState(initialWilayas);
-  const [selected, setSelected] = useState(initialWilayas[0]?.code ?? 0);
+  const [wilayas, setWilayas] = useState<Wilaya[]>(initialWilayas);
+  const [selected, setSelected] = useState(initialWilayas[0]?.code ?? 1);
   const [search, setSearch] = useState("");
   const [wilayaDrafts, setWilayaDrafts] = useState<FeeDrafts>({});
   const [communeDrafts, setCommuneDrafts] = useState<FeeDrafts>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (initialWilayas.length > 0) return;
+    let alive = true;
+    const fetchAll = async () => {
+      try {
+        const res = await apiFetch("/api/shipping/wilayas");
+        if (alive && res.ok) {
+          const data = (await res.json()) as Wilaya[];
+          setWilayas(data);
+          if (data.length > 0) setSelected(data[0].code);
+        }
+      } catch {
+        /* ignore fetch errors */
+      }
+    };
+    void fetchAll();
+    return () => {
+      alive = false;
+    };
+  }, [initialWilayas.length]);
 
   const current = wilayas.find((w) => w.code === selected) ?? wilayas[0];
 

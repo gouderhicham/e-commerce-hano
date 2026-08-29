@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Trash2, Upload, Image as ImageIcon } from "lucide-react";
 import { apiFetch, mediaSrc } from "@/lib/api-client";
 import {
@@ -19,26 +19,42 @@ import { compressImage } from "@/lib/image-compress";
 
 /* eslint-disable @next/next/no-img-element -- see accueil-client.tsx. */
 
-export function VedetteClient({ initial }: { initial: Showcase }) {
-  const [showcase, setShowcase] = useState<Showcase>({
-    eyebrow: initial.eyebrow || "",
-    eyebrowAr: initial.eyebrowAr || "",
-    title: initial.title || "",
-    titleAr: initial.titleAr || "",
-    subtitle: initial.subtitle || "",
-    subtitleAr: initial.subtitleAr || "",
-    description: initial.description || "",
-    descriptionAr: initial.descriptionAr || "",
-    image: initial.image || "",
-    imageAlt: initial.imageAlt || "",
-    imageAltAr: initial.imageAltAr || "",
-    specs: (initial.specs || []).map((s) => ({
-      label: s.label || "",
-      labelAr: s.labelAr || "",
-      val: s.val || "",
-      valAr: s.valAr || "",
-    })),
-  });
+const defaultShowcase: Showcase = {
+  eyebrow: "",
+  eyebrowAr: "",
+  title: "",
+  titleAr: "",
+  subtitle: "",
+  subtitleAr: "",
+  description: "",
+  descriptionAr: "",
+  image: "",
+  imageAlt: "",
+  imageAltAr: "",
+  specs: [],
+};
+
+export function VedetteClient({ initial = defaultShowcase }: { initial?: Showcase }) {
+  const [showcase, setShowcase] = useState<Showcase>(initial);
+
+  useEffect(() => {
+    if (initial.title) return;
+    let alive = true;
+    apiFetch("/api/home")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (alive && data?.showcase) {
+          setShowcase(data.showcase);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (alive) setLoading(false);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [initial.title]);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
   const [previewLang, setPreviewLang] = useState<"fr" | "ar">("fr");

@@ -1,7 +1,7 @@
 "use client";
 
 import { apiFetch } from "@/lib/api-client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ADMIN_TABLE_HEAD,
   ADMIN_TABLE_ROW,
@@ -19,18 +19,47 @@ import type { ClientAggregate, Order, Wilaya } from "@/lib/data/types";
 const GRID = "grid-cols-[1.5fr_1.8fr_1.3fr_0.9fr_0.9fr_0.8fr_1.1fr_1.1fr]";
 const PAGE_SIZE = 8;
 
+const defaultClientsEnvelope: ListEnvelope<ClientAggregate> = {
+  items: [],
+  total: 0,
+  page: 1,
+  pageCount: 1,
+};
+
 export function ClientsClient({
-  initial,
-  wilayas,
+  initial = defaultClientsEnvelope,
+  wilayas: initialWilayas = [],
 }: {
-  initial: ListEnvelope<ClientAggregate>;
-  wilayas: Wilaya[];
+  initial?: ListEnvelope<ClientAggregate>;
+  wilayas?: Wilaya[];
 }) {
+  const [wilayas, setWilayas] = useState<Wilaya[]>(initialWilayas);
   const { data, loading, setPage } = useServerList<ListEnvelope<ClientAggregate>>(
     "/api/admin/clients",
     initial,
     {},
   );
+
+  useEffect(() => {
+    if (initialWilayas.length > 0) return;
+    let alive = true;
+    const fetchWilayas = async () => {
+      try {
+        const res = await apiFetch("/api/shipping/wilayas");
+        if (alive && res.ok) {
+          const w = (await res.json()) as Wilaya[];
+          if (Array.isArray(w)) setWilayas(w);
+        }
+      } catch {
+        /* ignore fetch errors */
+      }
+    };
+    void fetchWilayas();
+    return () => {
+      alive = false;
+    };
+  }, [initialWilayas.length]);
+
   const [drawer, setDrawer] = useState<{
     open: boolean;
     client: ClientAggregate | null;

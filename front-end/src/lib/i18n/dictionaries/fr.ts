@@ -16,7 +16,7 @@ export const fr: Dictionary = {
     titleLead: "L'outil parfait",
     titleAccent: "Pour durer",
     text: "Des machines sélectionnées et fiabilisées pour accompagner vos idées — un matériel sobre, durable et garanti 1 mois en atelier.",
-    ctaCatalog: "Découvrir l'EliteBook",
+    ctaCatalog: "Découvrir la collection",
     imageAlt: "Ordinateur portable HP EliteBook 845 G8 reconditionné",
     statGuaranteeVal: "1 mois",
     statGuaranteeLabel: "Garantie atelier",

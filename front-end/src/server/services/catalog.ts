@@ -150,12 +150,66 @@ export async function products(
 ): Promise<ProductListResult> {
   const page = query.page ?? 1;
   const facets = parseFacets(query.attrs);
+  const where = buildWhere(query);
+  const order = orderBy(query.sort, query.locale);
 
+  // When no attribute facets are active, paginate directly in SQL for O(1) edge efficiency.
+  if (facets.size === 0) {
+    const start = (page - 1) * PAGE_SIZE_CATALOGUE;
+    const [rows, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        orderBy: order,
+        skip: start,
+        take: PAGE_SIZE_CATALOGUE,
+      }),
+      prisma.product.count({ where }),
+    ]);
+
+    const productIds = rows.map((p) => p.id);
+    const images =
+      productIds.length > 0
+        ? await prisma.productImage.findMany({
+            where: { productId: { in: productIds } },
+            orderBy: { sortOrder: "asc" },
+          })
+        : [];
+
+    const imagesByProduct = new Map<number, typeof images>();
+    for (const img of images) {
+      let arr = imagesByProduct.get(img.productId);
+      if (!arr) {
+        arr = [];
+        imagesByProduct.set(img.productId, arr);
+      }
+      arr.push(img);
+    }
+
+    const fullRows = rows.map((p) => ({
+      ...p,
+      images: imagesByProduct.get(p.id) ?? [],
+    }));
+
+    return {
+      items: fullRows.map((p) => toProductPublic(p)),
+      total,
+      page,
+      pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE_CATALOGUE)),
+    };
+  }
+
+  // When attribute facets are active, filter in JS and fetch images ONLY for the active page slice.
   const rows = await prisma.product.findMany({
-    where: buildWhere(query),
-    orderBy: orderBy(query.sort, query.locale),
+    where,
+    orderBy: order,
   });
-  const productIds = rows.map((p) => p.id);
+
+  const matching = rows.filter((p) => matchesFacets(p.attributes, facets));
+  const total = matching.length;
+  const start = (page - 1) * PAGE_SIZE_CATALOGUE;
+  const pageSlice = matching.slice(start, start + PAGE_SIZE_CATALOGUE);
+
+  const productIds = pageSlice.map((p) => p.id);
   const images =
     productIds.length > 0
       ? await prisma.productImage.findMany({
@@ -173,19 +227,14 @@ export async function products(
     }
     arr.push(img);
   }
-  const fullRows = rows.map((p) => ({
+
+  const fullPageRows = pageSlice.map((p) => ({
     ...p,
     images: imagesByProduct.get(p.id) ?? [],
   }));
 
-  const matching = fullRows.filter((p) => matchesFacets(p.attributes, facets));
-  const total = matching.length;
-  const start = (page - 1) * PAGE_SIZE_CATALOGUE;
-
   return {
-    items: matching
-      .slice(start, start + PAGE_SIZE_CATALOGUE)
-      .map((p) => toProductPublic(p)),
+    items: fullPageRows.map((p) => toProductPublic(p)),
     total,
     page,
     pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE_CATALOGUE)),

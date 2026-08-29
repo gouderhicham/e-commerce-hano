@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   AlertTriangle,
@@ -14,6 +15,7 @@ import {
   Sparkles,
   Tag,
 } from "lucide-react";
+import { apiFetch } from "@/lib/api-client";
 import { fmtDA, frDateTime } from "@/lib/format";
 import { ORDER_STATUS_LABELS, ORDER_STATUS_PILLS } from "@/lib/labels";
 import { Card, PageHeader, Pill, ProductThumb } from "@/components/admin/ui";
@@ -32,20 +34,81 @@ interface Alert {
   href: string;
 }
 
+const defaultData: DashboardData = {
+  kpis: {
+    caTotal: 0,
+    ordersTotal: 0,
+    newOrders: 0,
+    activeProducts: 0,
+    clients: 0,
+  },
+  salesSeries: [],
+  latestOrders: [],
+  topProducts: [],
+  stockAlerts: [],
+};
+
 export function DashboardClient({
-  data,
-  categories,
-  tagGroups,
-  products,
-  categoryCardCount,
+  data: initialData,
+  categories: initialCategories = [],
+  tagGroups: initialTagGroups = [],
+  products: initialProducts = [],
+  categoryCardCount: initialCategoryCardCount = 0,
 }: {
-  data: DashboardData;
-  categories: CategoryWithCount[];
-  tagGroups: TagGroup[];
-  products: ProductPublic[];
+  data?: DashboardData;
+  categories?: CategoryWithCount[];
+  tagGroups?: TagGroup[];
+  products?: ProductPublic[];
   /** Tiles the landing page actually renders (filterable categories only). */
-  categoryCardCount: number;
+  categoryCardCount?: number;
 }) {
+  const [data, setData] = useState<DashboardData>(initialData ?? defaultData);
+  const [categories, setCategories] = useState<CategoryWithCount[]>(initialCategories);
+  const [tagGroups, setTagGroups] = useState<TagGroup[]>(initialTagGroups);
+  const [products, setProducts] = useState<ProductPublic[]>(initialProducts);
+  const [categoryCardCount, setCategoryCardCount] = useState(initialCategoryCardCount);
+
+  useEffect(() => {
+    if (initialData) return;
+    let alive = true;
+    async function load() {
+      try {
+        const [dashRes, catRes, tagRes, prodRes] = await Promise.all([
+          apiFetch("/api/admin/dashboard"),
+          apiFetch("/api/categories"),
+          apiFetch("/api/tag-groups"),
+          apiFetch("/api/admin/products?page=1"),
+        ]);
+        if (!alive) return;
+        if (dashRes.ok) {
+          const d = (await dashRes.json()) as DashboardData;
+          setData(d);
+        }
+        if (catRes.ok) {
+          const c = (await catRes.json()) as CategoryWithCount[];
+          setCategories(c);
+          const filterable = c.filter((cat) => cat.filterable);
+          setCategoryCardCount(filterable.length);
+        }
+        if (tagRes.ok) {
+          const t = (await tagRes.json()) as TagGroup[];
+          setTagGroups(t);
+        }
+        if (prodRes.ok) {
+          const p = (await prodRes.json()) as { items: ProductPublic[] };
+          setProducts(p.items);
+        }
+      } catch {
+        /* ignore fetch errors */
+      } finally {
+        if (alive) setLoading(false);
+      }
+    }
+    void load();
+    return () => {
+      alive = false;
+    };
+  }, [initialData]);
   const filterableIds = new Set(
     categories.filter((c) => c.filterable).map((c) => c.id),
   );
