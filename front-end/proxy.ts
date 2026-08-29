@@ -53,6 +53,11 @@ export async function proxy(req: NextRequest) {
 
   const headers = new Headers(req.headers);
   headers.set(PATHNAME_HEADER, pathname);
+  // Strip accept-encoding for NextServer: Cloudflare CDN handles brotli/gzip
+  // at the edge. Preventing Next.js from spawning node:zlib streams avoids
+  // worker hanging on un-flushed chunk buffers.
+  headers.delete("accept-encoding");
+  headers.set("accept-encoding", "identity");
   return NextResponse.next({ request: { headers } });
 }
 
