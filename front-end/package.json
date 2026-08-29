@@ -14,7 +14,7 @@
     "prisma:deploy": "prisma migrate deploy",
     "prisma:seed": "prisma db seed",
     "prisma:studio": "prisma studio",
-    "cf:build": "opennextjs-cloudflare build",
+    "cf:build": "opennextjs-cloudflare build --dangerouslyUseUnsupportedNextVersion",
     "cf:preview": "opennextjs-cloudflare preview",
     "cf:deploy": "opennextjs-cloudflare deploy"
   },
