@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api-client";
 import {
   Card,
@@ -20,11 +20,30 @@ import type { Settings } from "@/lib/data/types";
  * the database; the shop identity, the delivery numbers and every piece of
  * storefront copy are static (`src/lib/shop-config.ts`).
  */
-export function ParametresClient({ initial }: { initial: Settings }) {
-  const [settings, setSettings] = useState<Settings>(initial);
+const DEFAULT_SETTINGS: Settings = {
+  telegramBotToken: "",
+  telegramChatId: "",
+};
+
+export function ParametresClient({ initial }: { initial?: Settings }) {
+  const [settings, setSettings] = useState<Settings>(initial ?? DEFAULT_SETTINGS);
+  const [loading, setLoading] = useState(!initial);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (initial) return;
+    apiFetch("/api/admin/settings")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { settings?: Settings } | null) => {
+        if (data?.settings) {
+          setSettings(data.settings);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [initial]);
 
   const set = <K extends keyof Settings>(key: K, value: Settings[K]) =>
     setSettings((prev) => ({ ...prev, [key]: value }));
@@ -58,6 +77,25 @@ export function ParametresClient({ initial }: { initial: Settings }) {
       setSaving(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="max-w-3xl animate-fade-in space-y-6">
+        <PageHeader
+          eyebrow="Configuration globale"
+          title="Paramètres Boutique"
+          hint="Le relais Telegram du formulaire de contact. Les frais de livraison se gèrent dans « Livraison & Tarifs »."
+        />
+        <Card className="space-y-6 p-6">
+          <div className="animate-pulse space-y-4">
+            <div className="h-4 w-48 rounded bg-[#17251f]/10" />
+            <div className="h-10 rounded bg-[#17251f]/10" />
+            <div className="h-10 rounded bg-[#17251f]/10" />
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-3xl animate-fade-in space-y-6">
