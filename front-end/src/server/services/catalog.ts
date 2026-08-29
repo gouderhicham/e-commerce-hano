@@ -217,11 +217,21 @@ export async function suggest(
   });
 }
 
+const cachedProductsById = new Map<
+  number,
+  { data: ProductPublicWithRelations; timestamp: number }
+>();
+
 /** Product detail with gallery, category and similar products. 404 if hidden. */
 export async function productById(
   prisma: PrismaClient,
   id: number,
 ): Promise<ProductPublicWithRelations> {
+  const cached = cachedProductsById.get(id);
+  if (cached && Date.now() - cached.timestamp < 60000) {
+    return cached.data;
+  }
+
   const product = await prisma.product.findUnique({ where: { id } });
   if (!product || !product.active) throw new NotFoundError(NOT_FOUND_FR);
 
@@ -260,10 +270,12 @@ export async function productById(
     images: simImgMap.get(p.id) ?? [],
   }));
 
-  return toProductPublic(
+  const res = toProductPublic(
     { ...product, images },
     { category: cat ?? undefined, similar },
   );
+  cachedProductsById.set(id, { data: res, timestamp: Date.now() });
+  return res;
 }
 
 export async function wilayas(prisma: PrismaClient) {
