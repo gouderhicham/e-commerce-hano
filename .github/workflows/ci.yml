@@ -37,17 +37,7 @@ jobs:
       - run: npm test
       - name: Build OpenNext Worker
         run: |
-          npm run cf:build
-          echo "=== .open-next directory structure ==="
-          find .open-next -maxdepth 4 || true
-          if [ -f .open-next/server-functions/default/front-end/handler.mjs ] && [ ! -f .open-next/server-functions/default/handler.mjs ]; then
-            echo "Fixing nested front-end/handler.mjs path"
-            cp .open-next/server-functions/default/front-end/handler.mjs .open-next/server-functions/default/handler.mjs
-          fi
-          if [ -f .open-next/server-functions/default/index.mjs ] && [ ! -f .open-next/server-functions/default/handler.mjs ]; then
-            echo "Fixing missing handler.mjs from index.mjs"
-            cp .open-next/server-functions/default/index.mjs .open-next/server-functions/default/handler.mjs
-          fi
+          npx opennextjs-cloudflare build --dangerouslyUseUnsupportedNextVersion --debug
 
       - name: Deploy to Cloudflare
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
