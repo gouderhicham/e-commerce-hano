@@ -53,6 +53,7 @@ jobs:
 
       # Building here also sidesteps the symlinks OpenNext's bundler creates,
       # which Windows refuses without developer mode — Linux has no such issue.
+      - run: npm run cf:build
       - run: npm run cf:deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
