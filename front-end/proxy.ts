@@ -40,6 +40,8 @@ async function sessionRole(req: NextRequest): Promise<string | null> {
 }
 
 export async function proxy(req: NextRequest) {
+  // Ensure global context is hydrated
+  getRuntime();
   const { pathname } = req.nextUrl;
 
   if (pathname === "/admin" || pathname.startsWith("/admin/")) {

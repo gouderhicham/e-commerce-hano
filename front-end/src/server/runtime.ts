@@ -58,6 +58,13 @@ function envFromProcess(): CloudflareEnv {
   };
 }
 
+declare global {
+  // eslint-disable-next-line no-var
+  var __GLOBAL_CF_ENV__: CloudflareEnv | undefined;
+  // eslint-disable-next-line no-var
+  var __GLOBAL_CF_CTX__: Runtime["ctx"] | undefined;
+}
+
 /**
  * Resolve the runtime for this request: the real Cloudflare context when there
  * is one, else a process.env-backed stand-in. In a deployed Worker the first
@@ -71,10 +78,20 @@ export function getRuntime(): Runtime {
     // that failed to boot), which would surface as an unreadable connection
     // string deep inside Prisma rather than here.
     if (bindings?.HYPERDRIVE?.connectionString) {
+      globalThis.__GLOBAL_CF_ENV__ = bindings;
+      globalThis.__GLOBAL_CF_CTX__ = ctx as Runtime["ctx"];
       return { env: bindings, ctx: ctx as Runtime["ctx"] };
     }
   } catch {
-    // No Cloudflare context at all — plain `next dev`.
+    // No Cloudflare context in current async scope (e.g. detached RSC stream)
   }
+
+  if (globalThis.__GLOBAL_CF_ENV__?.HYPERDRIVE?.connectionString) {
+    return {
+      env: globalThis.__GLOBAL_CF_ENV__,
+      ctx: globalThis.__GLOBAL_CF_CTX__,
+    };
+  }
+
   return { env: envFromProcess() };
 }
