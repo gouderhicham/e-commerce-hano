@@ -8,20 +8,10 @@ import { ProductDetailClient } from "./product-detail-client";
 
 export const dynamic = "force-dynamic";
 
-const inFlight = new Map<string, Promise<ProductDetail | null>>();
-
 async function loadProduct(idParam: string): Promise<ProductDetail | null> {
   const id = Number(idParam);
   if (!Number.isInteger(id) || id <= 0) return null;
-  const existing = inFlight.get(idParam);
-  if (existing) return existing;
-  const p = getRepos()
-    .products.publicDetail(id)
-    .finally(() => {
-      inFlight.delete(idParam);
-    });
-  inFlight.set(idParam, p);
-  return p;
+  return getRepos().products.publicDetail(id);
 }
 
 export async function generateMetadata(): Promise<Metadata> {
