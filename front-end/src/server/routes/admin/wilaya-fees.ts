@@ -54,11 +54,26 @@ const communeFeeSchema = z.object({
 const wilayaBatchSchema = z.array(wilayaFeeSchema);
 const communeBatchSchema = z.array(communeFeeSchema);
 
-function list(prisma: PrismaClient) {
-  return prisma.wilaya.findMany({
-    include: { communes: { orderBy: { name: "asc" } } },
-    orderBy: { code: "asc" },
-  });
+async function list(prisma: PrismaClient) {
+  const [wilayasList, communesList] = await Promise.all([
+    prisma.wilaya.findMany({ orderBy: { code: "asc" } }),
+    prisma.commune.findMany({
+      orderBy: [{ wilayaCode: "asc" }, { name: "asc" }],
+    }),
+  ]);
+  const byWilaya = new Map<number, typeof communesList>();
+  for (const c of communesList) {
+    let arr = byWilaya.get(c.wilayaCode);
+    if (!arr) {
+      arr = [];
+      byWilaya.set(c.wilayaCode, arr);
+    }
+    arr.push(c);
+  }
+  return wilayasList.map((w) => ({
+    ...w,
+    communes: byWilaya.get(w.code) ?? [],
+  }));
 }
 
 /** An empty batch is a client bug, not a no-op worth a round trip. */

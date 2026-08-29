@@ -178,10 +178,25 @@ export async function productById(
 }
 
 export async function wilayas(prisma: PrismaClient) {
-  return prisma.wilaya.findMany({
-    include: { communes: { orderBy: { name: "asc" } } },
-    orderBy: { code: "asc" },
-  });
+  const [wilayasList, communesList] = await Promise.all([
+    prisma.wilaya.findMany({ orderBy: { code: "asc" } }),
+    prisma.commune.findMany({
+      orderBy: [{ wilayaCode: "asc" }, { name: "asc" }],
+    }),
+  ]);
+  const byWilaya = new Map<number, typeof communesList>();
+  for (const c of communesList) {
+    let arr = byWilaya.get(c.wilayaCode);
+    if (!arr) {
+      arr = [];
+      byWilaya.set(c.wilayaCode, arr);
+    }
+    arr.push(c);
+  }
+  return wilayasList.map((w) => ({
+    ...w,
+    communes: byWilaya.get(w.code) ?? [],
+  }));
 }
 
 /**
