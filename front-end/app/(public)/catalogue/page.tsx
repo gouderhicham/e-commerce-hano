@@ -13,18 +13,10 @@ export const metadata: Metadata = {
     "Ordinateurs portables reconditionnés, mémoire, SSD et accessoires testés et garantis.",
 };
 
-export default async function CataloguePage() {
-  const repos = getRepos();
-  const categories = await repos.categories.listWithCounts();
-  const tagGroups = await repos.content.tagGroups();
-
+export default function CataloguePage() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-[#f8f7f2]" />}>
-      <CatalogueClient
-        categories={categories}
-        tagGroups={tagGroups}
-        initial={{ items: [], total: 0, page: 1, pageCount: 1 }}
-      />
+      <CatalogueClient />
     </Suspense>
   );
 }

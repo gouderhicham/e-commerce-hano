@@ -47,15 +47,22 @@ function tagsFromParams(
   return map;
 }
 
+const DEFAULT_PAGINATION: Paginated<ProductPublic> = {
+  items: [],
+  total: 0,
+  page: 1,
+  pageCount: 1,
+};
+
 export function CatalogueClient({
-  initial,
-  categories,
-  tagGroups,
+  initial = DEFAULT_PAGINATION,
+  categories: initialCategories = [],
+  tagGroups: initialTagGroups = [],
 }: {
-  initial: Paginated<ProductPublic>;
-  categories: CategoryWithCount[];
-  tagGroups: TagGroup[];
-}) {
+  initial?: Paginated<ProductPublic>;
+  categories?: CategoryWithCount[];
+  tagGroups?: TagGroup[];
+} = {}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { add } = useCart();
@@ -63,10 +70,27 @@ export function CatalogueClient({
   const { pushToast } = useToast();
   const { locale, t } = useI18n();
 
+  const [categories, setCategories] = useState<CategoryWithCount[]>(initialCategories);
+  const [tagGroups, setTagGroups] = useState<TagGroup[]>(initialTagGroups);
   const [result, setResult] = useState<Paginated<ProductPublic>>(initial);
   const [animatingId, setAnimatingId] = useState<number | null>(null);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (categories.length === 0) {
+      apiFetch("/api/categories")
+        .then((r) => r.json())
+        .then((data: CategoryWithCount[]) => setCategories(data))
+        .catch(() => {});
+    }
+    if (tagGroups.length === 0) {
+      apiFetch("/api/tag-groups")
+        .then((r) => r.json())
+        .then((data: TagGroup[]) => setTagGroups(data))
+        .catch(() => {});
+    }
+  }, [categories.length, tagGroups.length]);
 
   const searchCategory = searchParams.get("category") ?? "";
   const currentSort = searchParams.get("sort") ?? "";
