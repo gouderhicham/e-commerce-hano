@@ -40,6 +40,9 @@ jobs:
     needs: check
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: "--max-old-space-size=4096"
+      NEXT_TELEMETRY_DISABLED: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
