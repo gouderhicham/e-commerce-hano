@@ -8,4 +8,7 @@ import { defineCloudflareConfig } from "@opennextjs/cloudflare";
  * here to share the ISR payload across the edge — that is the single biggest
  * remaining win for cold-cache page loads.
  */
-export default defineCloudflareConfig();
+const config = defineCloudflareConfig();
+config.edgeExternals = [...(config.edgeExternals ?? []), "pg-cloudflare"];
+
+export default config;

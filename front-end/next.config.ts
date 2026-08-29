@@ -34,6 +34,8 @@ if (process.env.NODE_ENV === "development" && process.env.CLOUDFLARE_DEV === "1"
  * is forwarded to another origin any more — which is the point: every hop the
  * old split deployment paid on a page render is gone.
  */
-const nextConfig: NextConfig = {};
+const nextConfig: NextConfig = {
+  serverExternalPackages: ["pg-cloudflare"],
+};
 
 export default nextConfig;
