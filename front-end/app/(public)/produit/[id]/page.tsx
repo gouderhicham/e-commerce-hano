@@ -2,16 +2,27 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getRepos } from "@/lib/data/repos";
+import type { ProductDetail } from "@/lib/data/types";
 import { fmtDA } from "@/lib/format";
 import { ProductDetailClient } from "./product-detail-client";
 
 export const dynamic = "force-dynamic";
 
-const loadProduct = cache(async (idParam: string) => {
+const inFlight = new Map<string, Promise<ProductDetail | null>>();
+
+async function loadProduct(idParam: string): Promise<ProductDetail | null> {
   const id = Number(idParam);
   if (!Number.isInteger(id) || id <= 0) return null;
-  return getRepos().products.publicDetail(id);
-});
+  const existing = inFlight.get(idParam);
+  if (existing) return existing;
+  const p = getRepos()
+    .products.publicDetail(id)
+    .finally(() => {
+      inFlight.delete(idParam);
+    });
+  inFlight.set(idParam, p);
+  return p;
+}
 
 export async function generateMetadata({
   params,
