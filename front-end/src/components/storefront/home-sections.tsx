@@ -87,9 +87,11 @@ export function HeroSection() {
   );
 }
 
-export function HeroShowcase({ showcase }: { showcase: Showcase }) {
+export function HeroShowcase({ showcase }: { showcase?: Showcase | null }) {
   const { locale } = useI18n();
+  if (!showcase) return null;
   const s = localizeShowcase(showcase, locale) ?? showcase;
+  if (!s) return null;
 
   return (
     <section
@@ -152,8 +154,9 @@ export function HeroShowcase({ showcase }: { showcase: Showcase }) {
   );
 }
 
-export function CategoriesSection({ cards }: { cards: HomeCategoryCard[] }) {
+export function CategoriesSection({ cards = [] }: { cards?: HomeCategoryCard[] }) {
   const { locale, t } = useI18n();
+  const list = cards ?? [];
 
   return (
     <section
@@ -182,7 +185,7 @@ export function CategoriesSection({ cards }: { cards: HomeCategoryCard[] }) {
         </div>
       </div>
       <div className="mt-8 sm:mt-12 grid grid-cols-2 gap-px border border-[#17251f]/10 bg-[#17251f]/10 lg:grid-cols-4">
-        {cards.map((card) => (
+        {list.map((card) => (
           <Link
             href={`/catalogue?category=${encodeURIComponent(card.slug)}`}
             key={card.id}
@@ -216,9 +219,10 @@ export function CategoriesSection({ cards }: { cards: HomeCategoryCard[] }) {
   );
 }
 
-export function FavoritesSection({ favorites }: { favorites: HomeFavorites }) {
+export function FavoritesSection({ favorites }: { favorites?: HomeFavorites | null }) {
   // `isRTL` flips the affordance arrow: in Arabic "forward" points left.
   const { locale, t, isRTL } = useI18n();
+  const items = favorites?.items ?? [];
 
   return (
     <section id="boutique" className="bg-[#e9eee7] py-16 sm:py-28">
@@ -242,7 +246,7 @@ export function FavoritesSection({ favorites }: { favorites: HomeFavorites }) {
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
-            {favorites.items.map((item) => (
+            {items.map((item) => (
               <Link
                 key={item.id}
                 href={
