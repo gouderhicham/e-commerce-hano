@@ -280,7 +280,9 @@ export async function productById(
         orderBy: [{ sold: "desc" }, { id: "desc" }],
         take: 4,
       });
-      similar = similarProducts.map((p) => ({ ...p, images: [] }));
+      similar = similarProducts.map((p) =>
+        toProductPublic({ ...p, images: [] }),
+      );
     }
   } catch {
     /* ignore similar fetch failure */
