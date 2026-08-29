@@ -39,10 +39,10 @@ const MIN_SWIPE = 40;
 
 export function ProductDetailClient({
   product,
-  wilayas,
+  wilayas = [],
 }: {
   product: ProductDetail;
-  wilayas: Wilaya[];
+  wilayas?: Wilaya[];
 }) {
   const mounted = useSyncExternalStore(subscribe, () => true, () => false);
   const { add } = useCart();

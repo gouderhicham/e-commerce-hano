@@ -26,7 +26,7 @@ type Errors = Partial<
   Record<"firstName" | "lastName" | "phone" | "wilaya" | "commune", string>
 >;
 
-export function CheckoutClient({ wilayas }: { wilayas: Wilaya[] }) {
+export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
   const { lines, setQty, remove, clear } = useCart();
   const { products, missing } = useProductsById(lines.map((l) => l.id));
   const { locale, t, isRTL } = useI18n();

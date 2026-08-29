@@ -8,7 +8,6 @@ export const metadata: Metadata = {
   title: "Commande — pc store 39",
 };
 
-export default async function CommandePage() {
-  const wilayas = await getRepos().misc.wilayas();
-  return <CheckoutClient wilayas={wilayas} />;
+export default function CommandePage() {
+  return <CheckoutClient />;
 }

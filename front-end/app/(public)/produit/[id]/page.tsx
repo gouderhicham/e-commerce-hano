@@ -40,9 +40,5 @@ export default async function ProductPage({
   const product = await loadProduct(id);
   if (!product) notFound();
 
-  // Wilayas + communes feed the on-page quick-order form (and its live
-  // delivery-fee preview), so the visitor never has to reach the cart.
-  const wilayas = await getRepos().misc.wilayas();
-
-  return <ProductDetailClient product={product} wilayas={wilayas} />;
+  return <ProductDetailClient product={product} />;
 }
