@@ -35,7 +35,9 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
-      - run: npm run cf:build
+      - name: Build OpenNext Worker
+        run: |
+          npm run cf:build 2>&1 | tee build_output.log || (echo "=== OPENNEXT BUILD LOG ===" && cat build_output.log && exit 1)
 
       - name: Deploy to Cloudflare
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
