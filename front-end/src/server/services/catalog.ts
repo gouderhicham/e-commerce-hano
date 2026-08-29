@@ -215,18 +215,30 @@ export async function publicSettings(prisma: PrismaClient) {
 
 /** Everything the home page renders, in one round trip. */
 export async function home(prisma: PrismaClient) {
-  const [content, cats, favorites] = await Promise.all([
+  const [content, cats, favEntries] = await Promise.all([
     prisma.siteContent.findUnique({ where: { id: 1 } }),
     prisma.category.findMany({
       where: { filterable: true },
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
     }),
     prisma.homeFavorite.findMany({
-      where: { product: { active: true } },
       orderBy: { sortOrder: "asc" },
-      include: { product: true },
     }),
   ]);
+
+  const productIds = favEntries.map((f) => f.productId);
+  const products = productIds.length > 0
+    ? await prisma.product.findMany({
+        where: { id: { in: productIds }, active: true },
+      })
+    : [];
+  const productMap = new Map(products.map((p) => [p.id, p]));
+  const favorites = favEntries
+    .map((f) => {
+      const p = productMap.get(f.productId);
+      return p ? { ...f, product: p } : null;
+    })
+    .filter((f): f is NonNullable<typeof f> => f !== null);
 
   return {
     showcase: content?.showcase ?? null,
