@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  # Manual trigger, so a deploy can be run without pushing to main.
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: front-end
+
+jobs:
+  check:
+    name: Typecheck, lint, test & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: front-end/package-lock.json
+
+      - run: npm ci
+      # The Prisma client is generated, not committed: every later step imports
+      # types that do not exist until this runs.
+      - run: npx prisma generate
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+
+  deploy:
+    name: Deploy to Cloudflare
+    # Only from main, and only once the checks above are green.
+    needs: check
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: front-end/package-lock.json
+
+      - run: npm ci
+      - run: npx prisma generate
+
+      # Building here also sidesteps the symlinks OpenNext's bundler creates,
+      # which Windows refuses without developer mode — Linux has no such issue.
+      - run: npm run cf:deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

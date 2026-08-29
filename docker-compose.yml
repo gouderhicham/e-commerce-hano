@@ -1,0 +1,41 @@
+# Local infrastructure for pc store .39 (Hono / Cloudflare Workers version).
+#
+# Docker runs the database only — the app itself runs from your terminal:
+#
+#   docker compose up -d          # Postgres on :5435
+#   cd front-end && npm run dev   # site + API on http://localhost:3000
+#
+# The project name AND the published port are both distinct from the old NestJS
+# stack, so the two can run side by side: containers and volumes are namespaced
+# under `pcstore39_hono_ver`, and nothing competes for port 5434.
+#
+# MinIO is gone: uploaded images live in Postgres (the `MediaObject` table), so
+# Postgres is the only stateful service this project has.
+
+name: pcstore39_hono_ver
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: pcstore39_hono_ver_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pcstore39
+      POSTGRES_PASSWORD: pcstore39
+      POSTGRES_DB: pcstore39
+    ports:
+      # 5435 on the host: 5432 is usually a local Postgres and 5434 belongs to
+      # the NestJS stack. This is the port `DATABASE_URL` and wrangler's
+      # localConnectionString both point at.
+      - '5435:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U pcstore39 -d pcstore39']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  # Becomes `pcstore39_hono_ver_pgdata` — separate from the NestJS stack's data.
+  pgdata:

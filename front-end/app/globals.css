@@ -1,0 +1,247 @@
+@import "tailwindcss";
+
+@theme {
+  /* ===== pc store .39 design tokens =====
+     The storefront markup mostly spells these out as arbitrary values
+     (bg-[#f8f7f2]) to stay pixel-identical to the reference design; the tokens
+     below exist so shared chrome and future work have a single source. */
+  --color-paper: #f8f7f2; /* page background */
+  --color-paper-2: #fdfcf8; /* raised cards */
+  --color-sage: #e7eee5; /* section tint */
+  --color-sage-2: #edf3ee; /* brand tint */
+  --color-mist: #e9eee7; /* "Nos favoris" band */
+
+  --color-ink: #17251f; /* body text */
+  --color-ink-2: #1d2c26; /* stat numbers */
+  --color-muted: #58675f;
+  --color-faint: #78827b;
+
+  --color-brand: #1d4538; /* primary green */
+  --color-brand-dark: #14352b; /* hover */
+  --color-brand-soft: #789a89; /* accent line of two-line titles */
+  --color-brand-mid: #2c5b48;
+
+  --color-line: #17251f1a; /* 10% ink — every hairline border */
+
+  --color-success: #2a624b;
+  --color-success-bg: #dcebdd;
+  --color-warning: #a06b1f;
+  --color-warning-bg: #fef3c7;
+  --color-danger: #dc2626;
+  --color-danger-bg: #fef2f2;
+
+  /* All three faces are loaded via next/font in app/layout.tsx. Never name a
+     family here that layout.tsx does not actually fetch. */
+  --font-sans: var(--font-dm-sans), "DM Sans", "Segoe UI", Tahoma, Arial, sans-serif;
+  --font-mono: var(--font-dm-mono), "DM Mono", ui-monospace, monospace;
+  --font-arabic: var(--font-cairo), "Cairo", "Segoe UI", Tahoma, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #f8f7f2;
+  color: #17251f;
+  font-family: var(--font-sans);
+  overflow-x: clip;
+}
+
+/* Bidirectional & Arabic / French input support */
+input, textarea, select {
+  unicode-bidi: plaintext;
+}
+
+[dir="auto"], .bidi-auto {
+  unicode-bidi: plaintext;
+  text-align: start;
+}
+
+:focus-visible {
+  outline: 2px solid #1d4538;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+
+/* ===== Animations ===== */
+
+@keyframes heroFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-11px) rotate(1deg);
+  }
+}
+
+.hero-image-animate {
+  animation: heroFloat 5.5s ease-in-out infinite;
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-slide-down {
+  animation: slideDownFade 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Heart pop on like */
+@keyframes heartPop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.4) rotate(-8deg);
+  }
+  70% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-heart-pop {
+  animation: heartPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -460px 0;
+  }
+  100% {
+    background-position: 460px 0;
+  }
+}
+
+/* Skeleton shimmer block */
+.skeleton {
+  background: linear-gradient(90deg, #e9eee7 0%, #f8f7f2 40%, #e9eee7 80%);
+  background-size: 460px 100%;
+  animation: shimmer 1.1s linear infinite;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .hero-image-animate,
+  .animate-heart-pop,
+  .skeleton {
+    animation: none;
+  }
+}
+
+/* ===== Scrollbars ===== */
+
+/* Light, for the catalogue sidebar and admin modals */
+.light-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(29, 69, 56, 0.25) transparent;
+}
+.light-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.light-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.light-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(29, 69, 56, 0.25);
+  border-radius: 9999px;
+}
+.light-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(29, 69, 56, 0.5);
+}
+
+/* Brand-coloured, for the cart / checkout recap */
+.cart-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #1d4538 #e7eee5;
+}
+.cart-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.cart-scrollbar::-webkit-scrollbar-track {
+  background: #e7eee5;
+  border-radius: 9999px;
+}
+.cart-scrollbar::-webkit-scrollbar-thumb {
+  background: #1d4538;
+  border-radius: 9999px;
+}
+.cart-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #14352b;
+}
+
+/* Arabic text inside an otherwise French, LTR page — the back office's Arabic
+   inputs and previews. Referenced by the bilingual admin fields. */
+.font-arabic {
+  font-family: var(--font-arabic);
+  letter-spacing: normal;
+}
+
+/* ===== Arabic & RTL Typography ===== */
+[dir="rtl"], html[dir="rtl"] body {
+  font-family: var(--font-arabic);
+  letter-spacing: normal !important;
+}
+
+[dir="rtl"] * {
+  letter-spacing: normal;
+}
+
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
+  line-height: 1.25;
+}
+

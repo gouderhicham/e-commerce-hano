@@ -1,0 +1,33 @@
+# dependencies
+/node_modules
+.pnpm-store
+
+# next.js
+/.next/
+/out/
+
+# cloudflare (opennext build output + wrangler local state)
+/.open-next/
+/.wrangler/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+pnpm-debug.log*
+
+# env
+.env
+.env*.local
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# prisma
+/prisma/migrations/dev.db*

@@ -1,0 +1,349 @@
+// pc store .39 — Prisma schema
+// Refurbished computers & components shop (Algerian market, French UI).
+// DB: PostgreSQL. Money = integer DA (Algerian dinar), no decimals anywhere.
+//
+// The product model mirrors, field for field, what the storefront renders:
+//   - catalogue card   -> name, category, specs, attributes, price, tone, badge, imageUrl
+//   - fiche produit    -> condition, description,
+//                         configurations, deliveryNote, promises, detail*, chips, detailsGrid
+// Anything editable in the back office exists here; nothing is hard-coded in a page.
+
+generator client {
+  // Driver adapters (GA since 6.6) let Prisma reach Postgres through `pg` over
+  // Cloudflare Hyperdrive instead of opening its own TCP socket, which Workers
+  // forbid. No preview flag is needed any more.
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===== ENUMS =====
+
+enum Role {
+  ADMIN
+  CLIENT
+}
+
+// NOTE: availability ("disponible" | "stock_limite" | "indisponible") is NOT stored.
+// It is always derived: stock <= 0 → INDISPONIBLE, stock <= 5 → STOCK_LIMITE, else DISPONIBLE.
+// The storefront labels them "Rupture" / "Stock limité" / "En stock".
+
+// Cash on delivery (COD): order progression across the 5 canonical statuses.
+enum OrderStatus {
+  NOUVELLE       // "Nouvelle"
+  PRETE_A_LIVRER // "Prête à livrer"
+  EN_LIVRAISON   // "En livraison"
+  LIVREE         // "Livrée"
+  ANNULEE        // "Annulée"
+}
+
+enum PaymentMethod {
+  COD // "Espèces à la livraison" — the only method the shop accepts
+}
+
+/// What a bell notification is about — decides where the admin link points.
+enum NotificationType {
+  ORDER   // → the order sheet (Admin → Commandes)
+  MESSAGE // → the contact message (Admin → Messages)
+  STOCK   // → the product fiche (Admin → Produits)
+}
+
+// ===== MODELS =====
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  role         Role       @default(CLIENT)
+  name         String
+  phone        String?
+  wilayaCode   Int?
+  communeId    Int?
+  adresse      String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  favorites    Favorite[]
+  cartItems    CartItem[]
+  orders       Order[]
+}
+
+model Category {
+  id            String    @id // short ids kept by the seed: "pt","ram","ssd","cpr","cpi","acc"
+  slug          String    @unique
+  name          String // exact catalogue label, e.g. "Mémoire RAM"
+  nameAr        String? // Arabic category name
+  description   String?
+  descriptionAr String? // Arabic description
+  imageUrl      String?
+  /// Shown in the catalogue sidebar ("Type de produit"). False = reachable only by search.
+  filterable    Boolean   @default(true)
+  sortOrder     Int       @default(0)
+  products      Product[]
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  reference   String   @unique // "PC-ELB845-01"
+  name        String // catalogue card title, e.g. "HP EliteBook 845 G8"
+  nameAr      String? // Arabic product title
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  price       Int? // DA. null = "Sur commande" → quote request flow, cannot be added to cart
+  promoPrice  Int? // DA. Discounted sale price; must be < price. null = no promotion
+  stock       Int      @default(0)
+  active      Boolean  @default(true) // inactive products hidden from all public pages
+  sold        Int      @default(0) // denormalized counter for "top products"
+
+  // ── Catalogue card ────────────────────────────────────────────────────────
+  /// One-line spec summary under the card title.
+  specs         String  @default("")
+  specsAr       String? // Arabic one-line spec summary
+  /// Filterable attributes keyed by TagGroup.field: { cpu, cores, ram, speed, ssdCap, ssdType, accType }.
+  attributes    Json    @default("{}")
+  /// Background colour of the card thumbnail, e.g. "#e3ece3".
+  tone          String  @default("#e3ece3")
+
+  // ── Media ─────────────────────────────────────────────────────────────────
+  imageUrl String? // denormalized cover (mirrors the ProductImage with isCover=true)
+  images   ProductImage[]
+
+  // ── Fiche produit ─────────────────────────────────────────────────────────
+  /// Breadcrumb suffix + heading of the condition block, e.g. "État excellent".
+  condition          String   @default("")
+  conditionAr        String?
+  description        String   @default("")
+  descriptionAr      String? // Arabic product description
+  /// [{ label, labelAr, sub, subAr, price }] — the "Configuration choisie" buttons. First entry is the active one.
+  configurations     Json     @default("[]")
+  /// Note under the order button.
+  deliveryNote       String   @default("")
+  deliveryNoteAr     String?
+  /// [{ icon: "check"|"shield"|"plug", title, titleAr, text, textAr }] — the 3 reassurance cards.
+  promises           Json     @default("[]")
+
+  favorites     Favorite[]
+  cartItems     CartItem[]
+  orderLines    OrderLine[]
+  homeFavorites HomeFavorite[]
+  notifications Notification[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([categoryId])
+  @@index([active])
+}
+
+/// Ordered gallery of a product. The image flagged isCover is mirrored into
+/// Product.imageUrl. Bytes live in `MediaObject`, served via /media/<key>.
+model ProductImage {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  isCover   Boolean  @default(false)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+}
+
+model Favorite {
+  userId    String
+  productId Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([userId, productId])
+}
+
+/// Server-side cart of a logged-in user (guests keep a localStorage cart).
+/// Quantities only — prices are always recomputed server-side at checkout.
+model CartItem {
+  userId    String
+  productId Int
+  qty       Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, productId])
+}
+
+model Order {
+  id            String         @id // human order number: "CMD-2026-4821"
+  userId        String? // null = guest checkout (the storefront is guest-only)
+  user          User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  customerName  String // snapshot "Prénom Nom"
+  email         String?
+  phone         String
+  wilayaCode    Int
+  // Delivery is addressed by commune: the shop calls the customer to arrange
+  // the drop-off, so no street address or delivery note is collected.
+  communeId     Int
+  status        OrderStatus    @default(NOUVELLE)
+  method        PaymentMethod
+  subtotal      Int // DA
+  shippingFee   Int // DA — 0 when the free-shipping threshold is reached
+  total         Int // DA = subtotal + shippingFee
+  lines         OrderLine[]
+  notifications Notification[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model OrderLine {
+  id        Int      @id @default(autoincrement())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId Int? // SetNull so deleting a product keeps order history intact
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  name      String // snapshot at purchase time
+  /// Spec line snapshot shown in the cart/admin order sheet.
+  meta      String   @default("")
+  imageUrl  String? // snapshot so the admin sheet survives a product deletion
+  unitPrice Int // snapshot, DA
+  qty       Int
+}
+
+model ContactMessage {
+  id            String         @id @default(cuid())
+  name          String
+  email         String
+  phone         String?
+  subject       String
+  message       String
+  read          Boolean        @default(false)
+  notifications Notification[]
+  createdAt     DateTime       @default(now())
+}
+
+/// One line of the admin bell. `type` + the matching foreign key say where the
+/// back office should navigate when the admin opens it: an order sheet, a
+/// contact message or the product whose stock ran low.
+model Notification {
+  id               String           @id @default(cuid())
+  type             NotificationType @default(ORDER)
+  orderId          String?
+  order            Order?           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  /// STOCK alerts point at the product, never at the order that emptied it.
+  productId        Int?
+  product          Product?         @relation(fields: [productId], references: [id], onDelete: SetNull)
+  contactMessageId String?
+  contactMessage   ContactMessage?  @relation(fields: [contactMessageId], references: [id], onDelete: Cascade)
+  message          String
+  read             Boolean          @default(false)
+  createdAt        DateTime         @default(now())
+
+  @@index([read])
+}
+
+model Wilaya {
+  code     Int       @id // 1 to 69
+  name     String
+  /// Arabic name. Null → the storefront shows the French one.
+  nameAr   String?
+  fee      Int       @default(500)
+  communes Commune[]
+}
+
+model Commune {
+  id         Int    @id
+  name       String
+  /// Arabic name. Null → the storefront shows the French one.
+  nameAr     String?
+  wilayaCode Int
+  fee        Int? // COD delivery fee override (DA); null → inherit the wilaya fee
+  wilaya     Wilaya @relation(fields: [wilayaCode], references: [code], onDelete: Cascade)
+
+  @@index([wilayaCode])
+}
+
+// ===== EDITORIAL CONTENT (Admin → Page d'accueil / Catégories / Tags / Vedette) =====
+
+
+
+/// One block of the catalogue sidebar ("Affiner la sélection"). `field` is the
+/// key read from Product.attributes; `targets` lists the Category ids the block
+/// appears under.
+model TagGroup {
+  id        String      @id
+  name      String
+  nameAr    String?
+  field     String
+  targets   String[]
+  sortOrder Int         @default(0)
+  tags      FilterTag[]
+}
+
+/// One selectable value inside a TagGroup. `value` is stored on the product,
+/// `label` is what the customer sees.
+model FilterTag {
+  id        Int      @id @default(autoincrement())
+  groupId   String
+  group     TagGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  value     String
+  label     String
+  labelAr   String?
+  sortOrder Int      @default(0)
+
+  @@unique([groupId, value])
+  @@index([groupId])
+}
+
+/// Singleton (id = 1) holding site content configuration.
+model SiteContent {
+  id Int @id @default(1)
+
+  showcase Json @default("{}")
+
+  updatedAt DateTime @updatedAt
+}
+
+/// One tile of the home "Nos favoris" strip. Purely references a catalogue product.
+model HomeFavorite {
+  id        Int     @id @default(autoincrement())
+  productId Int     @unique
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sortOrder Int     @default(0)
+
+  @@index([productId])
+}
+
+/// Singleton row (id = 1), Admin → Paramètres.
+///
+/// Everything else the shop used to keep here — identity, shipping numbers and
+/// storefront copy — is now static: see `src/common/shop-config.ts` (backend)
+/// and `front-end/src/lib/shop-config.ts` (storefront + back office).
+/// The Telegram relay stays in the database because the contact form reads it
+/// at runtime and the credentials must be rotatable without a deploy.
+model Settings {
+  id Int @id @default(1)
+
+  /// Telegram relay used by the contact form.
+  telegramBotToken String @default("")
+  telegramChatId   String @default("")
+}
+
+/// An uploaded file (product / category / showcase photo), stored as bytes in
+/// Postgres and served by the Worker at `/media/<key>`.
+///
+/// A Worker has no disk and no long-lived TCP socket, so there is nowhere to
+/// put a file except the database. That costs database size, so uploads are
+/// compressed to WebP and capped (see `domain/image-policy.ts`), and every
+/// response is `immutable` so the edge cache — not Postgres — answers repeats.
+model MediaObject {
+  /// Object key, e.g. "products/ab12cd34.jpg" — the path after `/media/`.
+  key         String   @id
+  contentType String
+  size        Int
+  data        Bytes
+  createdAt   DateTime @default(now())
+}

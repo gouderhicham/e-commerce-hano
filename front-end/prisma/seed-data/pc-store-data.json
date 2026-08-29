@@ -1,0 +1,812 @@
+{
+  "settings": {
+    "telegramBotToken": "",
+    "telegramChatId": ""
+  },
+  "categories": [
+    {
+      "id": "pt",
+      "slug": "portables",
+      "name": "Portables",
+      "nameAr": "حواسيب محمولة",
+      "description": "Ordinateurs portables reconditionnés, testés et garantis.",
+      "descriptionAr": "حواسيب محمولة مجددة ومفحوصة مع ضمان ورشة معتمد.",
+      "imageUrl": "/images/products/laptop-hero.jpg",
+      "filterable": true,
+      "sortOrder": 1
+    },
+    {
+      "id": "ram",
+      "slug": "memoire-ram",
+      "name": "Mémoire RAM",
+      "nameAr": "ذاكرة الوصول العشوائي RAM",
+      "description": "Barrettes DDR4 SODIMM et DIMM.",
+      "descriptionAr": "ذواكر DDR4 SODIMM للحواسيب المحمولة والمكتبية.",
+      "imageUrl": "/images/products/ram-ddr4.jpg",
+      "filterable": true,
+      "sortOrder": 2
+    },
+    {
+      "id": "ssd",
+      "slug": "stockage-ssd",
+      "name": "Stockage SSD",
+      "nameAr": "أقراص التخزين SSD",
+      "description": "SSD NVMe et SATA pour portables et tours.",
+      "descriptionAr": "أقراص SSD NVMe و SATA للحواسيب المحمولة والمكتبية.",
+      "imageUrl": "/images/products/ssd-nvme.jpg",
+      "filterable": true,
+      "sortOrder": 3
+    },
+    {
+      "id": "acc",
+      "slug": "accessoires",
+      "name": "Accessoires",
+      "nameAr": "إكسسوارات ولواحق",
+      "description": "Chargeurs, housses et indispensables du quotidien.",
+      "descriptionAr": "شواحن سريعة، حقائب حماية ولواحق أساسية للاستخدام اليومي.",
+      "imageUrl": "/images/products/charger-usbc.jpg",
+      "filterable": true,
+      "sortOrder": 6
+    }
+  ],
+  "tagGroups": [
+    {
+      "id": "cpu",
+      "name": "Architecture CPU",
+      "nameAr": "معمارية المعالج",
+      "field": "cpu",
+      "targets": [
+        "pt"
+      ],
+      "sortOrder": 1,
+      "tags": [
+        {
+          "value": "Ryzen",
+          "label": "Ryzen",
+          "labelAr": "رايزن Ryzen"
+        },
+        {
+          "value": "Intel",
+          "label": "Intel",
+          "labelAr": "إنتل Intel"
+        }
+      ]
+    },
+    {
+      "id": "cores",
+      "name": "Nombre de cœurs",
+      "nameAr": "عدد الأنوية",
+      "field": "cores",
+      "targets": [
+        "pt"
+      ],
+      "sortOrder": 2,
+      "tags": [
+        {
+          "value": "4",
+          "label": "4 cœurs",
+          "labelAr": "4 أنوية"
+        },
+        {
+          "value": "6",
+          "label": "6 cœurs",
+          "labelAr": "6 أنوية"
+        },
+        {
+          "value": "8",
+          "label": "8 cœurs",
+          "labelAr": "8 أنوية"
+        }
+      ]
+    },
+    {
+      "id": "ram",
+      "name": "Capacité RAM",
+      "nameAr": "سعة الذاكرة RAM",
+      "field": "ram",
+      "targets": [
+        "pt",
+        "ram"
+      ],
+      "sortOrder": 3,
+      "tags": [
+        {
+          "value": "8 Go",
+          "label": "8 Go",
+          "labelAr": "8 جيجابايت"
+        },
+        {
+          "value": "16 Go",
+          "label": "16 Go",
+          "labelAr": "16 جيجابايت"
+        },
+        {
+          "value": "32 Go",
+          "label": "32 Go",
+          "labelAr": "32 جيجابايت"
+        }
+      ]
+    },
+    {
+      "id": "speed",
+      "name": "Fréquence RAM",
+      "nameAr": "تردد الذاكرة RAM",
+      "field": "speed",
+      "targets": [
+        "pt",
+        "ram"
+      ],
+      "sortOrder": 4,
+      "tags": [
+        {
+          "value": "2666 MHz",
+          "label": "2666 MHz",
+          "labelAr": "2666 ميجاهرتز"
+        },
+        {
+          "value": "3200 MHz",
+          "label": "3200 MHz",
+          "labelAr": "3200 ميجاهرتز"
+        }
+      ]
+    },
+    {
+      "id": "ssdCap",
+      "name": "Capacité SSD",
+      "nameAr": "سعة التخزين SSD",
+      "field": "ssdCap",
+      "targets": [
+        "pt",
+        "ssd"
+      ],
+      "sortOrder": 5,
+      "tags": [
+        {
+          "value": "256 Go",
+          "label": "256 Go",
+          "labelAr": "256 جيجابايت"
+        },
+        {
+          "value": "500 Go",
+          "label": "500 Go",
+          "labelAr": "500 جيجابايت"
+        },
+        {
+          "value": "512 Go",
+          "label": "512 Go",
+          "labelAr": "512 جيجابايت"
+        },
+        {
+          "value": "1 To",
+          "label": "1 To",
+          "labelAr": "1 تيرابايت"
+        }
+      ]
+    },
+    {
+      "id": "ssdType",
+      "name": "Interface SSD",
+      "nameAr": "نوع القرص SSD",
+      "field": "ssdType",
+      "targets": [
+        "pt",
+        "ssd"
+      ],
+      "sortOrder": 6,
+      "tags": [
+        {
+          "value": "NVMe",
+          "label": "NVMe",
+          "labelAr": "NVMe M.2"
+        },
+        {
+          "value": "SATA",
+          "label": "SATA",
+          "labelAr": "SATA 2.5\""
+        }
+      ]
+    },
+    {
+      "id": "accType",
+      "name": "Type d'accessoire",
+      "nameAr": "نوع الملحق",
+      "field": "accType",
+      "targets": [
+        "acc"
+      ],
+      "sortOrder": 7,
+      "tags": [
+        {
+          "value": "Chargeurs",
+          "label": "Chargeurs",
+          "labelAr": "شواحن"
+        },
+        {
+          "value": "Housses",
+          "label": "Housses",
+          "labelAr": "حقائب حماية"
+        }
+      ]
+    }
+  ],
+  "siteContent": {
+    "showcase": {
+      "eyebrow": "Sélection de l'atelier",
+      "eyebrowAr": "اختيار الورشة",
+      "title": "HP EliteBook 845 G8 · Édition pro",
+      "titleAr": "إتش بي إيليت بوك 845 G8 · إصدار احترافي",
+      "subtitle": "La performance sans le superflu.",
+      "subtitleAr": "أداء فائق بلا مساومة وبالسعر العادل.",
+      "description": "Conçu pour l'efficacité au quotidien avec un châssis aluminium premium. Reconditionné en état excellent, prêt pour le multitâche et le développement.",
+      "descriptionAr": "يجمع جهاز HP EliteBook 845 G8 بين قوة معالج Ryzen 5 Pro وهيكل ألومنيوم فائق النحافة والأناقة. مجدد بحالة ممتازة وجاهز للأعمال المكتبية والتطوير.",
+      "image": "/images/products/laptop-hero.jpg",
+      "imageAlt": "Ordinateur portable HP EliteBook 845 G8 reconditionné",
+      "specs": [
+        {
+          "label": "Processeur",
+          "labelAr": "المعالج",
+          "val": "AMD Ryzen 5 Pro",
+          "valAr": "AMD Ryzen 5 Pro"
+        },
+        {
+          "label": "Mémoire RAM",
+          "labelAr": "الذاكرة",
+          "val": "16 Go DDR4",
+          "valAr": "16 جيجابايت DDR4"
+        },
+        {
+          "label": "Stockage",
+          "labelAr": "التخزين",
+          "val": "512 Go SSD NVMe",
+          "valAr": "512 جيجابايت NVMe"
+        },
+        {
+          "label": "Écran",
+          "labelAr": "الشاشة",
+          "val": "14\" FHD IPS Anti-reflets",
+          "valAr": "14 بوصة FHD IPS"
+        }
+      ],
+      "imageAltAr": "حاسوب محمول إتش بي إيليت بوك 845 G8 مجدد"
+    }
+  },
+  "homeFavorites": [
+    {
+      "productId": 1,
+      "sortOrder": 1
+    },
+    {
+      "productId": 2,
+      "sortOrder": 2
+    },
+    {
+      "productId": 3,
+      "sortOrder": 3
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "reference": "PC-ELB845-G8",
+      "name": "HP EliteBook 845 G8",
+      "categoryId": "pt",
+      "price": 48900,
+      "promoPrice": null,
+      "stock": 8,
+      "active": true,
+      "sold": 12,
+      "specs": "Ryzen 5 Pro · 6 cœurs · 16 Go · 3200 MHz · 512 Go SSD",
+      "attributes": {
+        "cpu": "Ryzen",
+        "cores": "6 cœurs",
+        "ram": "16 Go",
+        "speed": "3200 MHz",
+        "ssdCap": "512 Go",
+        "ssdType": "NVMe"
+      },
+      "tone": "#e3ece3",
+      "imageUrl": "/images/products/elitebook-845.jpg",
+      "gallery": [
+        "/images/products/elitebook-845-1.jpg",
+        "/images/products/elitebook-845-2.jpg",
+        "/images/products/elitebook-845-3.jpg",
+        "/images/products/elitebook-845-4.jpg"
+      ],
+      "condition": "État excellent",
+      "description": "Un ordinateur portable professionnel puissant, élégant et particulièrement silencieux au quotidien. Reconditionné avec soin dans nos ateliers et garanti 1 mois.",
+      "configurations": [
+        {
+          "label": "256 Go SSD",
+          "labelAr": "256 جيجابايت SSD",
+          "sub": "16 Go RAM · 256 Go SSD",
+          "subAr": "16 جيجابايت RAM · 256 جيجابايت SSD",
+          "price": 43900
+        },
+        {
+          "label": "512 Go SSD",
+          "labelAr": "512 جيجابايت SSD",
+          "sub": "16 Go RAM · 512 Go SSD",
+          "subAr": "16 جيجابايت RAM · 512 جيجابايت SSD",
+          "price": 48900
+        },
+        {
+          "label": "1 To SSD",
+          "labelAr": "1 تيرابايت SSD",
+          "sub": "32 Go RAM · 1 To SSD",
+          "subAr": "32 جيجابايت RAM · 1 تيرابايت SSD",
+          "price": 57900
+        }
+      ],
+      "deliveryNote": "Livraison en 1 à 3 jours · Retours simples sous 14 jours",
+      "promises": [
+        {
+          "icon": "check",
+          "title": "Machine 100% Fonctionnelle",
+          "titleAr": "جهاز يعمل بنسبة 100%",
+          "text": "Testée et nettoyée par notre atelier.",
+          "textAr": "تم الفحص والتنظيف الشامل بورشاتنا."
+        },
+        {
+          "icon": "shield",
+          "title": "1 mois de garantie",
+          "titleAr": "ضمان لمدة شهر كامل",
+          "text": "Pour acheter avec sérénité.",
+          "textAr": "لتتسوق بكل طمأنينة وأمان."
+        },
+        {
+          "icon": "plug",
+          "title": "Chargeur inclus",
+          "titleAr": "الشاحن الأصلي مشمول",
+          "text": "Prêt dès l'ouverture du colis.",
+          "textAr": "جاهز للاستخدام فور استلام الطرد."
+        }
+      ],
+      "nameAr": "إتش بي إيليت بوك 845 G8",
+      "specsAr": "رايزن 5 برو · 6 أنوية · 16 جيجابايت · 3200 ميجاهرتز · 512 جيجابايت SSD",
+      "conditionAr": "حالة ممتازة",
+      "descriptionAr": "حاسوب محمول احترافي قوي وأنيق وهادئ في الاستخدام اليومي. مجدد بعناية فائقة في ورشتنا ومضمون لمدة شهر.",
+      "deliveryNoteAr": "توصيل سريع خلال 1 إلى 3 أيام · إرجاع سهل خلال 14 يومًا",
+      "createdAt": "2026-01-10T10:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "reference": "PC-TPT14-R5",
+      "name": "Lenovo ThinkPad T14",
+      "categoryId": "pt",
+      "price": 52900,
+      "promoPrice": null,
+      "stock": 6,
+      "active": true,
+      "sold": 7,
+      "specs": "Ryzen 5 Pro · 6 cœurs · 16 Go · 3200 MHz · 512 Go SSD",
+      "attributes": {
+        "cpu": "Ryzen",
+        "cores": "6 cœurs",
+        "ram": "16 Go",
+        "speed": "3200 MHz",
+        "ssdCap": "512 Go",
+        "ssdType": "NVMe"
+      },
+      "tone": "#e9e6dd",
+      "imageUrl": "/images/products/thinkpad-t14.jpg",
+      "gallery": [
+        "/images/products/thinkpad-t14.jpg",
+        "/images/products/probook-450.jpg"
+      ],
+      "condition": "État reconditionné certifié",
+      "description": "Le légendaire ThinkPad T14 avec son clavier inégalé et son châssis ultra-résistant certifié militaire.",
+      "configurations": [
+        {
+          "label": "256 Go SSD",
+          "labelAr": "256 جيجابايت SSD",
+          "sub": "16 Go RAM · 256 Go SSD",
+          "subAr": "16 جيجابايت RAM · 256 جيجابايت SSD",
+          "price": 47900
+        },
+        {
+          "label": "512 Go SSD",
+          "labelAr": "512 جيجابايت SSD",
+          "sub": "16 Go RAM · 512 Go SSD",
+          "subAr": "16 جيجابايت RAM · 512 جيجابايت SSD",
+          "price": 52900
+        },
+        {
+          "label": "1 To SSD",
+          "labelAr": "1 تيرابايت SSD",
+          "sub": "32 Go RAM · 1 To SSD",
+          "subAr": "32 جيجابايت RAM · 1 تيرابايت SSD",
+          "price": 61900
+        }
+      ],
+      "deliveryNote": "Livraison en 1 à 3 jours · Retours simples sous 14 jours",
+      "promises": [
+        {
+          "icon": "check",
+          "title": "Machine 100% Fonctionnelle",
+          "titleAr": "جهاز يعمل بنسبة 100%",
+          "text": "Testée et nettoyée par notre atelier.",
+          "textAr": "تم الفحص والتنظيف الشامل بورشاتنا."
+        },
+        {
+          "icon": "shield",
+          "title": "1 mois de garantie",
+          "titleAr": "ضمان لمدة شهر كامل",
+          "text": "Pour acheter avec sérénité.",
+          "textAr": "لتتسوق بكل طمأنينة وأمان."
+        },
+        {
+          "icon": "plug",
+          "title": "Chargeur inclus",
+          "titleAr": "الشاحن الأصلي مشمول",
+          "text": "Prêt dès l'ouverture du colis.",
+          "textAr": "جاهز للاستخدام فور استلام الطرد."
+        }
+      ],
+      "nameAr": "لينوفو ثينك باد T14",
+      "specsAr": "رايزن 5 برو · 6 أنوية · 16 جيجابايت · 3200 ميجاهرتز · 512 جيجابايت SSD",
+      "conditionAr": "حالة تجديد معتمدة",
+      "descriptionAr": "جهاز ThinkPad T14 الأسطوري مع لوحة مفاتيح استثنائية وهيكل فائق المتانة بمعايير عسكرية.",
+      "deliveryNoteAr": "توصيل سريع خلال 1 إلى 3 أيام · إرجاع سهل خلال 14 يومًا",
+      "createdAt": "2026-01-15T11:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "reference": "PC-LAT7420-I5",
+      "name": "Dell Latitude 7420",
+      "categoryId": "pt",
+      "price": 44900,
+      "promoPrice": null,
+      "stock": 3,
+      "active": true,
+      "sold": 5,
+      "specs": "Intel i5 · 4 cœurs · 16 Go · 3200 MHz · 256 Go SSD",
+      "attributes": {
+        "cpu": "Intel",
+        "cores": "4 cœurs",
+        "ram": "16 Go",
+        "speed": "3200 MHz",
+        "ssdCap": "256 Go",
+        "ssdType": "NVMe"
+      },
+      "tone": "#e0e9ec",
+      "imageUrl": "/images/products/latitude-7420.jpg",
+      "gallery": [
+        "/images/products/latitude-7420.jpg"
+      ],
+      "condition": "Très bon état",
+      "description": "Compact et élégant, le Latitude 7420 offre une autonomie optimale pour les professionnels itinérants.",
+      "configurations": [
+        {
+          "label": "256 Go SSD",
+          "labelAr": "256 جيجابايت SSD",
+          "sub": "16 Go RAM · 256 Go SSD",
+          "subAr": "16 جيجابايت RAM · 256 جيجابايت SSD",
+          "price": 44900
+        },
+        {
+          "label": "512 Go SSD",
+          "labelAr": "512 جيجابايت SSD",
+          "sub": "16 Go RAM · 512 Go SSD",
+          "subAr": "16 جيجابايت RAM · 512 جيجابايت SSD",
+          "price": 49900
+        }
+      ],
+      "deliveryNote": "Livraison en 1 à 3 jours · Retours simples sous 14 jours",
+      "promises": [
+        {
+          "icon": "check",
+          "title": "Machine 100% Fonctionnelle",
+          "titleAr": "جهاز يعمل بنسبة 100%",
+          "text": "Testée et nettoyée par notre atelier.",
+          "textAr": "تم الفحص والتنظيف الشامل بورشاتنا."
+        },
+        {
+          "icon": "shield",
+          "title": "1 mois de garantie",
+          "titleAr": "ضمان لمدة شهر كامل",
+          "text": "Pour acheter avec sérénité.",
+          "textAr": "لتتسوق بكل طمأنينة وأمان."
+        },
+        {
+          "icon": "plug",
+          "title": "Chargeur inclus",
+          "titleAr": "الشاحن الأصلي مشمول",
+          "text": "Prêt dès l'ouverture du colis.",
+          "textAr": "جاهز للاستخدام فور استلام الطرد."
+        }
+      ],
+      "nameAr": "ديل لاتيتيود 7420",
+      "specsAr": "إنتل i5 · 4 أنوية · 16 جيجابايت · 3200 ميجاهرتز · 256 جيجابايت SSD",
+      "conditionAr": "حالة جيدة جدًا",
+      "descriptionAr": "مدمج وأنيق، يمنحك Latitude 7420 استقلالية وبطارية ممتازة للمهنيين أثناء التنقل.",
+      "deliveryNoteAr": "توصيل سريع خلال 1 إلى 3 أيام · إرجاع سهل خلال 14 يومًا",
+      "createdAt": "2026-01-20T12:00:00.000Z"
+    },
+    {
+      "id": 5,
+      "reference": "RAM-CRU16-3200",
+      "name": "Crucial 16 Go DDR4",
+      "categoryId": "ram",
+      "price": 3900,
+      "promoPrice": null,
+      "stock": 24,
+      "active": true,
+      "sold": 31,
+      "specs": "3200 MHz · SODIMM · Garantie 2 ans",
+      "attributes": {
+        "ram": "16 Go",
+        "speed": "3200 MHz"
+      },
+      "tone": "#e7eee3",
+      "imageUrl": "/images/products/ram-ddr4.jpg",
+      "gallery": [
+        "/images/products/ram-ddr4.jpg"
+      ],
+      "condition": "Neuf",
+      "description": "Une barrette SODIMM fiable pour redonner de l'air à votre portable. Compatible avec la grande majorité des machines DDR4.",
+      "configurations": [
+        {
+          "label": "8 Go DDR4",
+          "labelAr": "8 جيجابايت DDR4",
+          "sub": "SODIMM 3200 MHz",
+          "subAr": "SODIMM 3200 ميجاهرتز",
+          "price": 2400
+        },
+        {
+          "label": "16 Go DDR4",
+          "labelAr": "16 جيجابايت DDR4",
+          "sub": "SODIMM 3200 MHz",
+          "subAr": "SODIMM 3200 ميجاهرتز",
+          "price": 3900
+        },
+        {
+          "label": "32 Go DDR4",
+          "labelAr": "32 جيجابايت DDR4",
+          "sub": "SODIMM 3200 MHz",
+          "subAr": "SODIMM 3200 ميجاهرتز",
+          "price": 7200
+        }
+      ],
+      "deliveryNote": "Livraison en 1 à 3 jours · Montage offert en atelier",
+      "promises": [
+        {
+          "icon": "check",
+          "title": "Composant testé",
+          "titleAr": "مكون مجرب ومفحوص",
+          "text": "Validé sur banc avant expédition.",
+          "textAr": "تمت المصادقة على منصة الاختبار قبل الإرسال."
+        },
+        {
+          "icon": "shield",
+          "title": "2 ans de garantie",
+          "titleAr": "ضمان لمدة سنتين",
+          "text": "Pour acheter avec sérénité.",
+          "textAr": "لتتسوق بكل طمأنينة وأمان."
+        },
+        {
+          "icon": "plug",
+          "title": "Montage offert",
+          "titleAr": "تركيب مجاني",
+          "text": "Installation gratuite en atelier.",
+          "textAr": "تثبيت مجاني ومباشر بورشاتنا."
+        }
+      ],
+      "nameAr": "كروشيال 16 جيجابايت DDR4",
+      "specsAr": "3200 ميجاهرتز · SODIMM · ضمان سنتين",
+      "conditionAr": "جديد بالعلبة",
+      "descriptionAr": "شريحة رام SODIMM موثوقة وعالية السرعة لترقية اللابتوب ومنحه استجابة فائقة. متوافقة مع أغلب الأجهزة الحديثة.",
+      "deliveryNoteAr": "توصيل سريع خلال 1 إلى 3 أيام · تركيب مجاني في الورشة",
+      "createdAt": "2026-02-05T14:00:00.000Z"
+    },
+    {
+      "id": 7,
+      "reference": "SSD-SAM970-1T",
+      "name": "Samsung 970 EVO Plus",
+      "categoryId": "ssd",
+      "price": 7200,
+      "promoPrice": null,
+      "stock": 20,
+      "active": true,
+      "sold": 27,
+      "specs": "1 To · NVMe · Jusqu'à 3 500 Mo/s",
+      "attributes": {
+        "ssdCap": "1 To",
+        "ssdType": "NVMe"
+      },
+      "tone": "#e2ecec",
+      "imageUrl": "/images/products/ssd-nvme.jpg",
+      "gallery": [
+        "/images/products/ssd-nvme.jpg"
+      ],
+      "condition": "Neuf",
+      "description": "Un SSD NVMe rapide et endurant pour donner une seconde jeunesse à votre machine, sans compromis sur la fiabilité.",
+      "configurations": [
+        {
+          "label": "500 Go",
+          "labelAr": "500 جيجابايت",
+          "sub": "M.2 NVMe PCIe 3.0",
+          "subAr": "M.2 NVMe PCIe 3.0",
+          "price": 4800
+        },
+        {
+          "label": "1 To",
+          "labelAr": "1 تيرابايت",
+          "sub": "M.2 NVMe PCIe 3.0",
+          "subAr": "M.2 NVMe PCIe 3.0",
+          "price": 7200
+        },
+        {
+          "label": "2 To",
+          "labelAr": "2 تيرابايت",
+          "sub": "M.2 NVMe PCIe 3.0",
+          "subAr": "M.2 NVMe PCIe 3.0",
+          "price": 12900
+        }
+      ],
+      "deliveryNote": "Livraison en 1 à 3 jours · Clonage de données offert",
+      "promises": [
+        {
+          "icon": "check",
+          "title": "Composant testé",
+          "titleAr": "مكون مجرب ومفحوص",
+          "text": "Validé sur banc avant expédition.",
+          "textAr": "تمت المصادقة على منصة الاختبار قبل الإرسال."
+        },
+        {
+          "icon": "shield",
+          "title": "3 ans de garantie",
+          "titleAr": "ضمان لمدة 3 سنوات",
+          "text": "Pour acheter avec sérénité.",
+          "textAr": "لتتسوق بكل طمأنينة وأمان."
+        },
+        {
+          "icon": "plug",
+          "title": "Montage offert",
+          "titleAr": "تركيب مجاني",
+          "text": "Installation gratuite en atelier.",
+          "textAr": "تثبيت مجاني ومباشر بورشاتنا."
+        }
+      ],
+      "nameAr": "سامسونج 970 إيفو بلس",
+      "specsAr": "1 تيرابايت · NVMe · سرعة تصل إلى 3500 ميجابايت/ثانية",
+      "conditionAr": "جديد بالعلبة",
+      "descriptionAr": "قرص SSD NVMe فائق السرعة والمتانة يمنح جهازك انطلاقة جديدة وأداءً استثنائيًا دون أي مساومة على الموثوقية.",
+      "deliveryNoteAr": "توصيل سريع خلال 1 إلى 3 أيام · نسخ ونقل البيانات مجانًا",
+      "createdAt": "2026-02-20T16:00:00.000Z"
+    },
+    {
+      "id": 13,
+      "reference": "ACC-CHG-USBC65",
+      "name": "Chargeur USB-C 65W",
+      "categoryId": "acc",
+      "price": 3500,
+      "promoPrice": null,
+      "stock": 30,
+      "active": true,
+      "sold": 41,
+      "specs": "Chargeur universel USB-C 65W · Compatible multi-marques",
+      "attributes": {
+        "accType": "Chargeurs"
+      },
+      "tone": "#e5ece4",
+      "imageUrl": "/images/products/charger-usbc.jpg",
+      "gallery": [
+        "/images/products/charger-usbc.jpg"
+      ],
+      "condition": "Neuf",
+      "description": "Un chargeur USB-C compact de 65 W qui alimente la plupart des portables récents, et votre téléphone au passage.",
+      "configurations": [
+        {
+          "label": "45 W",
+          "labelAr": "45 واط",
+          "sub": "Compact et léger",
+          "subAr": "مدمج وخفيف الوزن",
+          "price": 2800
+        },
+        {
+          "label": "65 W",
+          "labelAr": "65 واط",
+          "sub": "Universel standard",
+          "subAr": "شاحن قياسي عالمي",
+          "price": 3500
+        },
+        {
+          "label": "90 W",
+          "labelAr": "90 واط",
+          "sub": "Haute puissance",
+          "subAr": "طاقة عالية للأجهزة القوية",
+          "price": 4500
+        }
+      ],
+      "deliveryNote": "Livraison en 1 à 3 jours · Compatibilité vérifiée avant envoi",
+      "promises": [
+        {
+          "icon": "check",
+          "title": "Accessoire vérifié",
+          "titleAr": "ملحق مفحوص",
+          "text": "Contrôlé pièce par pièce.",
+          "textAr": "تم الفحص والتحقق قطعة بقطعة."
+        },
+        {
+          "icon": "shield",
+          "title": "6 mois de garantie",
+          "titleAr": "ضمان لمدة 6 أشهر",
+          "text": "Pour acheter avec sérénité.",
+          "textAr": "لتتسوق بكل طمأنينة وأمان."
+        },
+        {
+          "icon": "plug",
+          "title": "Compatibilité vérifiée",
+          "titleAr": "توافق مؤكد",
+          "text": "Nous validons avec votre machine.",
+          "textAr": "نتحقق من توافقه التام مع جهازك."
+        }
+      ],
+      "nameAr": "شاحن USB-C بقدرة 65 واط",
+      "specsAr": "شاحن عالمي USB-C 65W · متوافق مع كافة العلامات",
+      "conditionAr": "جديد بالعلبة",
+      "descriptionAr": "شاحن USB-C مدمج وخفيف الوزن بقدرة 65 واط يشحن معظم الحواسيب الحديثة وهاتفك الذكي في نفس الوقت.",
+      "deliveryNoteAr": "توصيل سريع خلال 1 إلى 3 أيام · تأكيد التوافق قبل الشحن",
+      "createdAt": "2026-03-10T18:00:00.000Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "usr_admin",
+      "email": "admin@pcstore39.dz",
+      "password": "admin123",
+      "role": "ADMIN",
+      "name": "Administrateur pc store 39",
+      "phone": "0550000000",
+      "adresse": "Alger, Algérie",
+      "createdAt": "2026-01-05T09:00:00.000Z",
+      "favoriteProductIds": []
+    },
+    {
+      "id": "usr_client",
+      "email": "client@pcstore39.dz",
+      "password": "client123",
+      "role": "CLIENT",
+      "name": "Karim Benali",
+      "phone": "0550123456",
+      "adresse": "Rue Didouche Mourad, Alger Centre",
+      "createdAt": "2026-03-12T10:30:00.000Z",
+      "favoriteProductIds": [
+        1,
+        2,
+        7
+      ]
+    }
+  ],
+  "orders": [],
+  "messages": [
+    {
+      "id": "msg_1",
+      "name": "Sofiane Kaci",
+      "email": "sofiane.kaci@example.dz",
+      "phone": "0770112233",
+      "subject": "Commande & livraison",
+      "message": "Bonjour, est-ce que la livraison vers Constantine prend aussi 1 à 3 jours ? Merci d'avance.",
+      "read": false,
+      "createdAt": "2026-07-26T09:12:00.000Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "ntf_3",
+      "type": "STOCK",
+      "productReference": "PC-LAT7420-I5",
+      "message": "Stock faible : « Dell Latitude 7420 » — 3 restants",
+      "read": false,
+      "createdAt": "2026-07-25T09:05:00.000Z"
+    },
+    {
+      "id": "ntf_4",
+      "type": "MESSAGE",
+      "contactMessageId": "msg_1",
+      "message": "Nouveau message — Sofiane Kaci : Commande & livraison",
+      "read": false,
+      "createdAt": "2026-07-24T16:40:00.000Z"
+    }
+  ]
+}

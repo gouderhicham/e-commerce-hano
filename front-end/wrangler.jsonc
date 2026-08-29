@@ -1,0 +1,68 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "pc-store-39",
+	"main": ".open-next/worker.js",
+	"compatibility_date": "2026-08-01",
+	// `nodejs_compat` is required by both OpenNext (Next.js internals) and the
+	// `pg` driver Prisma talks to Hyperdrive through.
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	/**
+   * Neon Postgres, reached through Hyperdrive.
+   *
+   * Hyperdrive is not a database: it is a connection pool in front of the
+   * shop's own Neon instance. Workers cannot open a raw TCP socket per request
+   * and cannot hold one between requests, so without it every query would pay a
+   * fresh TCP + TLS handshake to Neon. The data, the schema and every migration
+   * stay in Neon exactly as they are.
+   *
+   * `id` comes from `wrangler hyperdrive create pc-store-39-db
+   *  --connection-string="postgresql://...neon.tech/neondb?sslmode=require"`
+   * — replace the placeholder below with the id it prints.
+   *
+   * `localConnectionString` is used by `wrangler dev` only, so local
+   * development still hits the docker-compose Postgres on :5435.
+   */
+	"hyperdrive": [
+		{
+			"binding": "HYPERDRIVE",
+			"id": "44b36b0eca61842af93881b15417ed4b4",
+			"localConnectionString": "postgresql://pcstore39:pcstore39@localhost:5435/pcstore39"
+		}
+	],
+	// Uploaded product images are NOT in object storage: they live in Postgres
+	// (the `MediaObject` table) and are served by the Worker at `/media/<key>`,
+	// so Neon is the only stateful dependency this app has.
+	/**
+   * Login throttling. The old `@nestjs/throttler` kept its counters in process
+   * memory, which on Workers means per-isolate — i.e. no limit at all.
+   */
+	"ratelimits": [
+		{
+			"name": "LOGIN_RATE_LIMIT",
+			"namespace_id": "1001",
+			"simple": {
+				"limit": 20,
+				"period": 60
+			}
+		}
+	],
+	"vars": {
+		"PUBLIC_BASE_URL": "",
+		"COOKIE_NAME": "pcstore39_session",
+		"JWT_EXPIRES_IN": "7d",
+		"MAIL_FROM": "pc store .39 <no-reply@pcstore39.dz>"
+	},
+	"observability": {
+		"enabled": true
+	}
+	// Secrets are NOT stored here. Set them with `wrangler secret put <NAME>`:
+	//   JWT_SECRET     signing key for the session cookie
+	//   RESEND_API_KEY transactional email (replaces SMTP/nodemailer)
+	//   MAIL_TO        where order/stock/message alerts are delivered
+}
