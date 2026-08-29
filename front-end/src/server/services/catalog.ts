@@ -483,6 +483,8 @@ export async function home(prisma: PrismaClient) {
         spec: f.product.specs || "",
         specAr: f.product.specsAr || "",
         price: f.product.promoPrice ?? f.product.price ?? 0,
+        promoPrice: f.product.promoPrice,
+        originalPrice: f.product.price,
         image: f.product.imageUrl || "",
       })),
     },

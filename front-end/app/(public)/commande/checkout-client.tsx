@@ -429,9 +429,16 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
                         </div>
                       </div>
                     </div>
-                    <b className="whitespace-nowrap font-mono text-[13px] font-bold text-[#17251f]">
-                      {fmtDA(unit * line.qty, locale)}
-                    </b>
+                    <div className="text-end">
+                      <b className="whitespace-nowrap font-mono text-[13px] font-bold text-[#17251f]">
+                        {fmtDA(unit * line.qty, locale)}
+                      </b>
+                      {product.promoPrice != null && product.price != null && product.promoPrice < product.price && (
+                        <span className="block font-mono text-[10px] text-[#9ca59e] line-through">
+                          {fmtDA(product.price * line.qty, locale)}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 );
               })

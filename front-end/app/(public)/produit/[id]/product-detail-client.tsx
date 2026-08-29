@@ -92,7 +92,10 @@ export function ProductDetailClient({
   const [isDragging, setIsDragging] = useState(false);
 
   const selectedConfig = product?.configurations?.[configIndex];
-  const price = selectedConfig?.price ?? product?.promoPrice ?? product?.price;
+  const effectiveBasePrice = product?.promoPrice ?? product?.price;
+  const price = configIndex === 0
+    ? effectiveBasePrice
+    : (selectedConfig?.price ?? effectiveBasePrice);
   const outOfStock = product?.availability === "indisponible";
   const onRequest = product?.price === null;
 
@@ -396,10 +399,18 @@ export function ProductDetailClient({
             <strong className="whitespace-nowrap font-mono text-4xl font-medium tracking-[-.07em]">
               {fmtDA(price, locale)}
             </strong>
-            {selectedConfig?.price == null && product.promoPrice != null && product.price != null && (
-              <span className="whitespace-nowrap font-mono text-lg text-[#9aa39c] line-through">
-                {fmtDA(product.price, locale)}
-              </span>
+            {((configIndex === 0 || selectedConfig?.price == null || selectedConfig?.price === effectiveBasePrice) &&
+              product.promoPrice != null &&
+              product.price != null &&
+              product.promoPrice < product.price) && (
+              <>
+                <span className="whitespace-nowrap font-mono text-xl text-[#9aa39c] line-through">
+                  {fmtDA(product.price, locale)}
+                </span>
+                <span className="rounded-md bg-red-100 px-2 py-0.5 font-mono text-xs font-bold text-red-700">
+                  -{Math.round(((product.price - product.promoPrice) / product.price) * 100)}%
+                </span>
+              </>
             )}
           </div>
 
@@ -409,33 +420,46 @@ export function ProductDetailClient({
                 {t.product.configTitle}
               </p>
               <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                {product.configurations.map((config, index) => (
-                  <button
-                    key={`${config.label}-${index}`}
-                    type="button"
-                    onClick={() => setConfigIndex(index)}
-                    aria-pressed={configIndex === index}
-                    className={`cursor-pointer rounded-xl border p-3.5 text-start transition ${
-                      configIndex === index
-                        ? "border-[#1d4538] bg-[#e4eee5] shadow-sm"
-                        : "border-[#17251f]/12 bg-white hover:border-[#1d4538]/40"
-                    }`}
-                  >
-                    <div className="flex flex-wrap items-baseline justify-between gap-1">
-                      <b className="min-w-0 break-words text-sm font-semibold text-[#17251f]">
-                        {pick(locale, config.label, config.labelAr)}
-                      </b>
-                      {config.price != null && (
-                        <span className="whitespace-nowrap font-mono text-[11px] font-bold text-[#1d4538]">
-                          {fmtDA(config.price, locale)}
-                        </span>
-                      )}
-                    </div>
-                    <span className="mt-1 block break-words text-[11px] text-[#617068]">
-                      {pick(locale, config.sub, config.subAr)}
-                    </span>
-                  </button>
-                ))}
+                {product.configurations.map((config, index) => {
+                  const isFirst = index === 0;
+                  const cfgPrice = isFirst ? effectiveBasePrice : (config.price ?? effectiveBasePrice);
+                  const isDiscounted = isFirst && product.promoPrice != null && product.price != null && product.promoPrice < product.price;
+
+                  return (
+                    <button
+                      key={`${config.label}-${index}`}
+                      type="button"
+                      onClick={() => setConfigIndex(index)}
+                      aria-pressed={configIndex === index}
+                      className={`cursor-pointer rounded-xl border p-3.5 text-start transition ${
+                        configIndex === index
+                          ? "border-[#1d4538] bg-[#e4eee5] shadow-sm"
+                          : "border-[#17251f]/12 bg-white hover:border-[#1d4538]/40"
+                      }`}
+                    >
+                      <div className="flex flex-wrap items-baseline justify-between gap-1">
+                        <b className="min-w-0 break-words text-sm font-semibold text-[#17251f]">
+                          {pick(locale, config.label, config.labelAr)}
+                        </b>
+                        {cfgPrice != null && (
+                          <div className="flex items-baseline gap-1.5">
+                            <span className="whitespace-nowrap font-mono text-[11px] font-bold text-[#1d4538]">
+                              {fmtDA(cfgPrice, locale)}
+                            </span>
+                            {isDiscounted && (
+                              <span className="whitespace-nowrap font-mono text-[9.5px] text-[#9aa39c] line-through">
+                                {fmtDA(product.price, locale)}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <span className="mt-1 block break-words text-[11px] text-[#617068]">
+                        {pick(locale, config.sub, config.subAr)}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -560,9 +584,14 @@ export function ProductDetailClient({
                   className="group flex cursor-pointer flex-col justify-between rounded-2xl border border-[#17251f]/12 bg-[#f8f7f2] p-2.5 sm:p-3 transition hover:-translate-y-1 hover:shadow-md"
                 >
                   <div
-                    className="h-32 xs:h-36 sm:h-40 overflow-hidden rounded-xl"
+                    className="relative h-32 xs:h-36 sm:h-40 overflow-hidden rounded-xl"
                     style={{ backgroundColor: item.tone }}
                   >
+                    {item.promoPrice != null && item.price != null && item.promoPrice < item.price && (
+                      <span className="absolute start-2 top-2 z-10 rounded-full bg-red-600 px-2 py-0.5 font-mono text-[9px] font-bold text-white shadow-sm">
+                        -{Math.round(((item.price - item.promoPrice) / item.price) * 100)}%
+                      </span>
+                    )}
                     {item.imageUrl && (
                       <img
                         src={mediaSrc(item.imageUrl) ?? ""}
@@ -578,9 +607,16 @@ export function ProductDetailClient({
                     <p className="mt-1 line-clamp-2 text-[10px] sm:text-[11px] leading-3.5 sm:leading-4 text-[#718078]">
                       {pick(locale, item.specs, item.specsAr)}
                     </p>
-                    <b className="mt-2.5 sm:mt-3 block whitespace-nowrap font-mono text-[13px] sm:text-[14px] text-[#1d2c26]">
-                      {fmtDA(item.promoPrice ?? item.price, locale)}
-                    </b>
+                    <div className="mt-2.5 sm:mt-3 flex items-baseline gap-1.5">
+                      <b className="block whitespace-nowrap font-mono text-[13px] sm:text-[14px] font-bold text-[#1d2c26]">
+                        {fmtDA(item.promoPrice ?? item.price, locale)}
+                      </b>
+                      {item.promoPrice != null && item.price != null && item.promoPrice < item.price && (
+                        <span className="block whitespace-nowrap font-mono text-[10px] sm:text-[11px] text-[#9aa39c] line-through">
+                          {fmtDA(item.price, locale)}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </Link>
               ))}

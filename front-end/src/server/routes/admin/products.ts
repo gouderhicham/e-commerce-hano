@@ -316,6 +316,12 @@ export const adminProductRoutes = new Hono<AppBindings>()
     await assertReferenceFree(c.var.prisma, dto.reference);
     assertPromoPrice(dto.price ?? null, dto.promoPrice);
 
+    // Ensure the first configuration price matches the effective product price
+    if (dto.configurations && dto.configurations.length > 0) {
+      const effectivePrice = dto.promoPrice ?? dto.price ?? null;
+      dto.configurations[0].price = effectivePrice;
+    }
+
     // Reference is free (checked above), so stored files here won't be orphaned
     // by a later unique-constraint failure. An absent order with files defaults
     // to "all uploaded files, in the order received".
@@ -365,10 +371,15 @@ export const adminProductRoutes = new Hono<AppBindings>()
 
     // Validate the promotion against the resulting state (patched price/promo,
     // else the current values) so a price change can't leave a stale promo.
-    assertPromoPrice(
-      dto.price !== undefined ? dto.price : existing.price,
-      dto.promoPrice !== undefined ? dto.promoPrice : existing.promoPrice,
-    );
+    const resultingPrice = dto.price !== undefined ? dto.price : existing.price;
+    const resultingPromoPrice = dto.promoPrice !== undefined ? dto.promoPrice : existing.promoPrice;
+    assertPromoPrice(resultingPrice, resultingPromoPrice);
+
+    // Sync first configuration price to effective price
+    const effectivePrice = resultingPromoPrice ?? resultingPrice;
+    if (dto.configurations && dto.configurations.length > 0) {
+      dto.configurations[0].price = effectivePrice;
+    }
 
     // Gallery is rebuilt only when `imageOrder` is provided; otherwise it is
     // left untouched. New files are stored here (before the DB write); orphaned

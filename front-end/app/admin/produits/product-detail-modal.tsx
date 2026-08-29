@@ -227,10 +227,15 @@ export function ProductDetailModal({
                     <span className="font-mono text-2xl font-extrabold text-[#17251f] whitespace-nowrap">
                       {fmtDA(displayPrice, lang)}
                     </span>
-                    {product.promoPrice !== null && (
-                      <span className="font-mono text-sm font-semibold text-[#78827b] line-through whitespace-nowrap">
-                        {fmtDA(product.price, lang)}
-                      </span>
+                    {product.promoPrice !== null && product.price !== null && product.promoPrice < product.price && (
+                      <>
+                        <span className="font-mono text-sm font-semibold text-[#78827b] line-through whitespace-nowrap">
+                          {fmtDA(product.price, lang)}
+                        </span>
+                        <span className="rounded-md bg-red-100 px-2 py-0.5 font-mono text-xs font-bold text-red-700">
+                          -{Math.round(((product.price - product.promoPrice) / product.price) * 100)}%
+                        </span>
+                      </>
                     )}
                   </div>
                 </div>
@@ -310,6 +315,10 @@ export function ProductDetailModal({
                 {product.configurations.map((config, idx) => {
                   const label = pick(lang, config.label, config.labelAr);
                   const sub = pick(lang, config.sub, config.subAr);
+                  const isFirst = idx === 0;
+                  const cfgPrice = isFirst ? (product.promoPrice ?? product.price) : config.price;
+                  const isDiscounted = isFirst && product.promoPrice != null && product.price != null && product.promoPrice < product.price;
+
                   return (
                     <div
                       key={idx}
@@ -325,10 +334,17 @@ export function ProductDetailModal({
                           </span>
                         )}
                       </div>
-                      {config.price != null && (
-                        <span className="font-mono text-xs font-bold text-[#1d4538] whitespace-nowrap">
-                          {fmtDA(config.price, lang)}
-                        </span>
+                      {cfgPrice != null && (
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="font-mono text-xs font-bold text-[#1d4538] whitespace-nowrap">
+                            {fmtDA(cfgPrice, lang)}
+                          </span>
+                          {isDiscounted && (
+                            <span className="font-mono text-[10px] text-[#78827b] line-through whitespace-nowrap">
+                              {fmtDA(product.price, lang)}
+                            </span>
+                          )}
+                        </div>
                       )}
                     </div>
                   );

@@ -46,6 +46,11 @@ function toDraft(product: ProductPublic): ProductDraft {
     product.images.findIndex((img) => img.isCover),
     0,
   );
+  const effective = product.promoPrice ?? product.price;
+  const configurations = product.configurations.map((c, i) => ({
+    ...c,
+    price: i === 0 ? effective : c.price,
+  }));
   return {
     id: product.id,
     reference: product.reference,
@@ -66,7 +71,7 @@ function toDraft(product: ProductPublic): ProductDraft {
     coverIndex,
     description: product.description,
     descriptionAr: product.descriptionAr ?? "",
-    configurations: product.configurations.map((c) => ({ ...c })),
+    configurations,
     deliveryNote: product.deliveryNote,
     deliveryNoteAr: product.deliveryNoteAr ?? "",
     promises: product.promises.map((p) => ({ ...p })),
@@ -96,7 +101,12 @@ async function toFormData(draft: ProductDraft): Promise<FormData> {
   fd.set("attributes", JSON.stringify(draft.attributes));
   fd.set("description", draft.description);
   if (draft.descriptionAr.trim()) fd.set("descriptionAr", draft.descriptionAr.trim());
-  fd.set("configurations", JSON.stringify(draft.configurations));
+  
+  const effectivePrice = draft.promoPrice ?? draft.price;
+  const configs = draft.configurations.map((c, i) =>
+    i === 0 ? { ...c, price: effectivePrice } : { ...c },
+  );
+  fd.set("configurations", JSON.stringify(configs));
   fd.set("deliveryNote", draft.deliveryNote);
   if (draft.deliveryNoteAr.trim()) fd.set("deliveryNoteAr", draft.deliveryNoteAr.trim());
   fd.set("promises", JSON.stringify(draft.promises));
@@ -391,6 +401,11 @@ export function ProduitsClient({
                       colors={AVAILABILITY_PILLS[item.availability]}
                     />
                   </span>
+                  {item.promoPrice !== null && item.price !== null && item.promoPrice < item.price && (
+                    <span className="absolute left-3 top-3 z-10 rounded-full bg-red-600 px-2 py-0.5 font-mono text-[8px] font-bold uppercase text-white shadow-xs">
+                      Promo -{Math.round(((item.price - item.promoPrice) / item.price) * 100)}%
+                    </span>
+                  )}
                   {!item.active && (
                     <span className="absolute bottom-3 left-3 z-10 rounded-full bg-[#17251f]/80 px-2.5 py-1 font-mono text-[8px] font-bold uppercase tracking-[.1em] text-white">
                       Inactif
@@ -471,10 +486,15 @@ export function ProduitsClient({
 
                   <div className="mt-4 border-t border-[#17251f]/10 pt-3">
                     <div className="mb-3 flex items-baseline justify-between">
-                      <div>
+                      <div className="flex items-baseline gap-2">
                         <b className="font-mono text-[16px] font-bold text-[#17251f]">
                           {fmtDA(item.promoPrice ?? item.price)}
                         </b>
+                        {item.promoPrice !== null && item.price !== null && item.promoPrice < item.price && (
+                          <span className="font-mono text-xs text-[#78827b] line-through">
+                            {fmtDA(item.price)}
+                          </span>
+                        )}
                       </div>
                       <span className="font-mono text-[10px] text-[#78827b]">
                         {item.stock} en stock

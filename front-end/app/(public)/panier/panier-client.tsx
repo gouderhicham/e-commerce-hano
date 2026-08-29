@@ -112,9 +112,14 @@ export function PanierClient() {
                   <div className="flex min-w-0 items-center gap-4">
                     <Link
                       href={`/produit/${product.id}`}
-                      className="h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-[#17251f]/10"
+                      className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-[#17251f]/10"
                       style={{ backgroundColor: product.tone }}
                     >
+                      {product.promoPrice != null && product.price != null && product.promoPrice < product.price && (
+                        <span className="absolute start-1 top-1 z-10 rounded bg-red-600 px-1 py-0.5 font-mono text-[7.5px] font-bold text-white shadow-xs">
+                          PROMO
+                        </span>
+                      )}
                       {product.imageUrl && (
                         <img
                           src={mediaSrc(product.imageUrl) ?? ""}
@@ -133,9 +138,15 @@ export function PanierClient() {
                       <p className="mt-1 text-xs text-[#627269]">
                         {pick(locale, product.specs, product.specsAr)}
                       </p>
-                      <p className="mt-1 whitespace-nowrap font-mono text-xs font-semibold text-[#1d4538] sm:hidden">
-                        {fmtDA(unit, locale)} / {t.cart.perUnit}
-                      </p>
+                      <div className="mt-1 flex items-baseline gap-1.5 whitespace-nowrap font-mono text-xs font-semibold text-[#1d4538]">
+                        <span>{fmtDA(unit, locale)}</span>
+                        {product.promoPrice != null && product.price != null && product.promoPrice < product.price && (
+                          <span className="font-mono text-[10.5px] text-[#9ca59e] line-through">
+                            {fmtDA(product.price, locale)}
+                          </span>
+                        )}
+                        <span className="text-[10px] text-[#78827b]">/ {t.cart.perUnit}</span>
+                      </div>
                       {line.qty > product.stock && (
                         <p className="mt-1 text-[11px] font-semibold text-[#a06b1f]">
                           {interpolate(t.cart.onlyLeftInStock, { n: product.stock })}
@@ -172,9 +183,16 @@ export function PanierClient() {
                       </button>
                     </div>
 
-                    <b className="whitespace-nowrap font-mono text-base font-bold text-[#17251f]">
-                      {fmtDA(unit * line.qty, locale)}
-                    </b>
+                    <div className="text-end">
+                      <b className="whitespace-nowrap font-mono text-base font-bold text-[#17251f]">
+                        {fmtDA(unit * line.qty, locale)}
+                      </b>
+                      {product.promoPrice != null && product.price != null && product.promoPrice < product.price && (
+                        <span className="block font-mono text-[10.5px] text-[#9ca59e] line-through">
+                          {fmtDA(product.price * line.qty, locale)}
+                        </span>
+                      )}
+                    </div>
 
                     <button
                       type="button"

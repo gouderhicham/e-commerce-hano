@@ -340,6 +340,8 @@ export interface HomeFavoriteItem {
   spec: string;
   specAr?: string | null;
   price: number;
+  promoPrice?: number | null;
+  originalPrice?: number | null;
   image: string;
 }
 

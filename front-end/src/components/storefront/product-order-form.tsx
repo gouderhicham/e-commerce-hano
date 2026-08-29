@@ -335,9 +335,17 @@ export function ProductOrderForm({
                   {configLabel && (
                     <p className="font-mono text-[11px] text-[#63726a]">{configLabel}</p>
                   )}
-                  <p className="mt-1 font-mono text-xs font-semibold text-[#1d4538]">
-                    {fmtDA(unitPrice, locale)}
-                  </p>
+                  <div className="mt-1 flex items-baseline gap-1.5 font-mono text-xs font-semibold text-[#1d4538]">
+                    <span>{fmtDA(unitPrice, locale)}</span>
+                    {product.promoPrice != null &&
+                      product.price != null &&
+                      product.promoPrice < product.price &&
+                      unitPrice === (product.promoPrice ?? product.price) && (
+                        <span className="text-[10px] text-[#9ca59e] line-through">
+                          {fmtDA(product.price, locale)}
+                        </span>
+                      )}
+                  </div>
                 </div>
               </div>
 

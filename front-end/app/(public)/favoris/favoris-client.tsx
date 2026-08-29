@@ -119,6 +119,11 @@ export function FavorisClient() {
                 className="relative h-36 xs:h-44 sm:h-56 overflow-hidden rounded-xl"
                 style={{ backgroundColor: item.tone }}
               >
+                {item.promoPrice != null && item.price != null && item.promoPrice < item.price && (
+                  <span className="absolute start-2 top-2 sm:start-3 sm:top-3 z-10 rounded-full bg-red-600 px-2 py-0.5 font-mono text-[9px] sm:text-[10px] font-bold text-white shadow-sm">
+                    -{Math.round(((item.price - item.promoPrice) / item.price) * 100)}%
+                  </span>
+                )}
                 <button
                   type="button"
                   onClick={(e) => {
@@ -161,6 +166,11 @@ export function FavorisClient() {
                     <b className="block truncate font-mono text-[13px] sm:text-[15px] font-bold text-[#17251f]">
                       {fmtDA(item.promoPrice ?? item.price, locale)}
                     </b>
+                    {item.promoPrice != null && item.price != null && item.promoPrice < item.price && (
+                      <span className="block truncate font-mono text-[10px] sm:text-xs text-[#9aa39c] line-through">
+                        {fmtDA(item.price, locale)}
+                      </span>
+                    )}
                   </div>
                   <button
                     type="button"

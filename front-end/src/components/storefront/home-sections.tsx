@@ -256,7 +256,12 @@ export function FavoritesSection({ favorites }: { favorites?: HomeFavorites | nu
                 }
                 className="group flex cursor-pointer flex-col justify-between rounded-2xl border border-[#17251f]/10 bg-[#f8f7f2] p-2.5 sm:p-3 transition hover:-translate-y-0.5 hover:shadow-md"
               >
-                <div className="h-32 xs:h-40 sm:h-48 overflow-hidden rounded-xl bg-[#dce5dd]">
+                <div className="relative h-32 xs:h-40 sm:h-48 overflow-hidden rounded-xl bg-[#dce5dd]">
+                  {item.promoPrice != null && item.originalPrice != null && item.promoPrice < item.originalPrice && (
+                    <span className="absolute start-2 top-2 z-10 rounded-full bg-red-600 px-2 py-0.5 font-mono text-[9px] sm:text-[10px] font-bold text-white shadow-sm">
+                      -{Math.round(((item.originalPrice - item.promoPrice) / item.originalPrice) * 100)}%
+                    </span>
+                  )}
                   <img
                     src={mediaSrc(item.image) ?? ""}
                     alt={pick(locale, item.name, item.nameAr)}
@@ -273,9 +278,16 @@ export function FavoritesSection({ favorites }: { favorites?: HomeFavorites | nu
                     </p>
                   </div>
                   <div className="mt-3 sm:mt-4 flex items-center justify-between border-t border-[#17251f]/10 pt-2.5 sm:pt-3">
-                    <b className="whitespace-nowrap font-mono text-[13px] sm:text-[15px] font-bold text-[#1d2c26]">
-                      {fmtDA(item.price, locale)}
-                    </b>
+                    <div className="flex items-baseline gap-1.5">
+                      <b className="whitespace-nowrap font-mono text-[13px] sm:text-[15px] font-bold text-[#1d2c26]">
+                        {fmtDA(item.price, locale)}
+                      </b>
+                      {item.promoPrice != null && item.originalPrice != null && item.promoPrice < item.originalPrice && (
+                        <span className="whitespace-nowrap font-mono text-[10px] sm:text-[11px] text-[#9aa39c] line-through">
+                          {fmtDA(item.originalPrice, locale)}
+                        </span>
+                      )}
+                    </div>
                     <span className="text-xs font-semibold text-[#1d4538] transition group-hover:translate-x-0.5">
                       {isRTL ? "←" : "→"}
                     </span>

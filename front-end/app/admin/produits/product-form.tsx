@@ -428,7 +428,12 @@ export function ProductForm({
               value={draft.price !== null && draft.price > 0 ? fmtN(draft.price) : ""}
               onChange={(e) => {
                 const v = parseDA(e.target.value);
-                set("price", v > 0 ? v : null);
+                const nextPrice = v > 0 ? v : null;
+                const effective = draft.promoPrice ?? nextPrice;
+                const nextConfigs = draft.configurations.length > 0
+                  ? draft.configurations.map((c, i) => (i === 0 ? { ...c, price: effective } : c))
+                  : draft.configurations;
+                onChange({ ...draft, price: nextPrice, configurations: nextConfigs });
               }}
               placeholder="Vide = Sur commande"
               className={inputCls}
@@ -443,7 +448,12 @@ export function ProductForm({
               value={draft.promoPrice ? fmtN(draft.promoPrice) : ""}
               onChange={(e) => {
                 const v = parseDA(e.target.value);
-                set("promoPrice", v > 0 ? v : null);
+                const nextPromo = v > 0 ? v : null;
+                const effective = nextPromo ?? draft.price;
+                const nextConfigs = draft.configurations.length > 0
+                  ? draft.configurations.map((c, i) => (i === 0 ? { ...c, price: effective } : c))
+                  : draft.configurations;
+                onChange({ ...draft, promoPrice: nextPromo, configurations: nextConfigs });
               }}
               placeholder="Aucune promo"
               className={inputCls}
@@ -700,12 +710,20 @@ export function ProductForm({
             </label>
             <button
               type="button"
-              onClick={() =>
+              onClick={() => {
+                const isFirst = draft.configurations.length === 0;
+                const autoPrice = isFirst ? (draft.promoPrice ?? draft.price) : null;
                 set("configurations", [
                   ...draft.configurations,
-                  { label: "16 Go / 512 Go", labelAr: "16 جيجابايت / 512 جيجابايت", sub: "Précision", subAr: "مواصفات" },
-                ])
-              }
+                  {
+                    label: "16 Go / 512 Go",
+                    labelAr: "16 جيجابايت / 512 جيجابايت",
+                    sub: "Précision",
+                    subAr: "مواصفات",
+                    ...(autoPrice !== null ? { price: autoPrice } : {}),
+                  },
+                ]);
+              }}
               className="inline-flex cursor-pointer items-center gap-1 font-mono text-[9.5px] font-bold uppercase text-[#1d4538] hover:underline"
             >
               <Plus className="h-3 w-3" /> Ajouter une configuration
@@ -748,17 +766,38 @@ export function ProductForm({
                     placeholder="الاسم بالعربية (مثال: 256 جيجابايت SSD)"
                     className={`${smallInputCls} font-arabic font-semibold`}
                   />
-                  <input
-                    value={config.price ? fmtN(config.price) : ""}
-                    onChange={(e) => {
-                      const v = parseDA(e.target.value);
-                      const next = [...draft.configurations];
-                      next[idx] = { ...next[idx], price: v > 0 ? v : null };
-                      set("configurations", next);
-                    }}
-                    placeholder="Prix (DA)"
-                    className={`${smallInputCls} w-24 font-mono`}
-                  />
+                  {idx === 0 ? (
+                    <div className="relative shrink-0">
+                      {(() => {
+                        const basePrice = draft.promoPrice ?? draft.price;
+                        return (
+                          <input
+                            value={basePrice ? fmtN(basePrice) : ""}
+                            disabled
+                            readOnly
+                            title="Prix de base autofixé : synchronisé avec le prix promo ou prix du produit (non modifiable)."
+                            placeholder="Prix de base"
+                            className={`${smallInputCls} w-28 font-mono bg-[#edf3ee] text-[#1d4538] font-bold border-[#1d4538]/30 cursor-not-allowed`}
+                          />
+                        );
+                      })()}
+                      <span className="absolute -top-2 end-1 rounded bg-[#1d4538] px-1 py-0.5 font-mono text-[7px] font-bold text-white uppercase shadow-2xs">
+                        Base auto
+                      </span>
+                    </div>
+                  ) : (
+                    <input
+                      value={config.price ? fmtN(config.price) : ""}
+                      onChange={(e) => {
+                        const v = parseDA(e.target.value);
+                        const next = [...draft.configurations];
+                        next[idx] = { ...next[idx], price: v > 0 ? v : null };
+                        set("configurations", next);
+                      }}
+                      placeholder="Prix (DA)"
+                      className={`${smallInputCls} w-24 font-mono`}
+                    />
+                  )}
                   <button
                     type="button"
                     onClick={() =>
