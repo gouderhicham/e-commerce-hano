@@ -240,9 +240,8 @@ export async function productById(
   });
   if (!product || !product.active) throw new NotFoundError(NOT_FOUND_FR);
 
-  const categoryList = await categories(prisma);
-  const cat = categoryList.find((c) => c.id === product.categoryId) ?? {
-    id: product.categoryId,
+  let cat = {
+    id: product.categoryId || "",
     slug: "",
     name: "Général",
     nameAr: "عام",
@@ -254,21 +253,29 @@ export async function productById(
     productCount: 0,
   };
 
-  const similarProducts = await prisma.product.findMany({
-    where: { active: true, categoryId: product.categoryId, id: { not: id } },
-    orderBy: [{ sold: "desc" }, { id: "desc" }],
-    take: 4,
-  });
+  try {
+    const categoryList = await categories(prisma);
+    const found = categoryList.find((c) => c.id === product.categoryId);
+    if (found) cat = found;
+  } catch (e) {
+    console.warn("Failed to fetch category for product", e);
+  }
 
-  const similar = similarProducts.map((p) => ({
-    ...p,
-    images: [],
-  }));
+  let similar: any[] = [];
+  try {
+    if (product.categoryId) {
+      const similarProducts = await prisma.product.findMany({
+        where: { active: true, categoryId: product.categoryId, id: { not: id } },
+        orderBy: [{ sold: "desc" }, { id: "desc" }],
+        take: 4,
+      });
+      similar = similarProducts.map((p) => ({ ...p, images: [] }));
+    }
+  } catch (e) {
+    console.warn("Failed to fetch similar products", e);
+  }
 
-  const res = toProductPublic(
-    product,
-    { category: cat, similar },
-  );
+  const res = toProductPublic(product, { category: cat, similar });
   cachedProductsById.set(id, { data: res, timestamp: Date.now() });
   return res;
 }
@@ -337,8 +344,14 @@ export async function publicSettings(prisma: PrismaClient) {
   };
 }
 
+let cachedHome: any = null;
+let cachedHomeTime = 0;
+
 /** Everything the home page renders, in one round trip. */
 export async function home(prisma: PrismaClient) {
+  if (cachedHome && Date.now() - cachedHomeTime < 60000) {
+    return cachedHome;
+  }
   const content = await prisma.siteContent.findUnique({ where: { id: 1 } });
   const cats = await prisma.category.findMany({
     where: { filterable: true },
@@ -362,7 +375,7 @@ export async function home(prisma: PrismaClient) {
     })
     .filter((f): f is NonNullable<typeof f> => f !== null);
 
-  return {
+  const res = {
     showcase: content?.showcase ?? null,
     // Only the tiles: the heading and CTA around this strip are interface
     // chrome and live in the front-end's i18n dictionaries, so they exist in
@@ -392,6 +405,9 @@ export async function home(prisma: PrismaClient) {
       sortOrder: c.sortOrder,
     })),
   };
+  cachedHome = res;
+  cachedHomeTime = Date.now();
+  return res;
 }
 
 // -- internals ---------------------------------------------------------------

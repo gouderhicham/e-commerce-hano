@@ -11,7 +11,11 @@ export const dynamic = "force-dynamic";
 async function loadProduct(idParam: string): Promise<ProductDetail | null> {
   const id = Number(idParam);
   if (!Number.isInteger(id) || id <= 0) return null;
-  return getRepos().products.publicDetail(id);
+  try {
+    return await getRepos().products.publicDetail(id);
+  } catch {
+    return null;
+  }
 }
 
 export async function generateMetadata(): Promise<Metadata> {
