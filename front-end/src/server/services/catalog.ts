@@ -268,11 +268,11 @@ export async function productById(
     const categoryList = await categories(prisma);
     const found = categoryList.find((c) => c.id === product.categoryId);
     if (found) cat = found;
-  } catch (e) {
-    console.warn("Failed to fetch category for product", e);
+  } catch {
+    /* ignore category fetch failure */
   }
 
-  let similar: any[] = [];
+  let similar: ProductPublicWithRelations["similar"] = [];
   try {
     if (product.categoryId) {
       const similarProducts = await prisma.product.findMany({
@@ -282,8 +282,8 @@ export async function productById(
       });
       similar = similarProducts.map((p) => ({ ...p, images: [] }));
     }
-  } catch (e) {
-    console.warn("Failed to fetch similar products", e);
+  } catch {
+    /* ignore similar fetch failure */
   }
 
   const res = toProductPublic(product, { category: cat, similar });
@@ -355,7 +355,34 @@ export async function publicSettings(prisma: PrismaClient) {
   };
 }
 
-let cachedHome: any = null;
+export interface HomeContentResult {
+  showcase: unknown;
+  favorites: {
+    items: Array<{
+      id: string;
+      productId: number;
+      name: string;
+      nameAr?: string | null;
+      spec: string;
+      specAr: string;
+      price: number;
+      image: string;
+    }>;
+  };
+  categoryCards: Array<{
+    id: string;
+    name: string;
+    nameAr?: string | null;
+    detail: string;
+    detailAr: string;
+    img: string;
+    slug: string;
+    categoryId: string;
+    sortOrder: number;
+  }>;
+}
+
+let cachedHome: HomeContentResult | null = null;
 let cachedHomeTime = 0;
 
 /** Everything the home page renders, in one round trip. */
