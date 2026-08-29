@@ -7,8 +7,7 @@ import {
   PromiseSection,
 } from "@/components/storefront/home-sections";
 
-// Revalidate with ISR every 60 seconds on the Edge CDN for instant 15-30ms loads.
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 /**
  * Landing page.

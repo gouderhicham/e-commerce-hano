@@ -5,7 +5,7 @@ import { getRepos } from "@/lib/data/repos";
 import { fmtDA } from "@/lib/format";
 import { ProductDetailClient } from "./product-detail-client";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 const loadProduct = cache(async (idParam: string) => {
   const id = Number(idParam);

@@ -5,7 +5,7 @@ import { parseCatalogueParams, toSearchParams } from "@/lib/catalogue-query";
 import { resolveLocale } from "@/lib/i18n/server";
 import { CatalogueClient } from "./catalogue-client";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Catalogue — pc store 39",
