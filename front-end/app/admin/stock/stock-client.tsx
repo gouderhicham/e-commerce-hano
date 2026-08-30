@@ -17,6 +17,7 @@ import {
   Pill,
   ProductThumb,
   TabChip,
+  TableSkeleton,
 } from "@/components/admin/ui";
 import type { Availability, ProductPublic } from "@/lib/data/types";
 
@@ -175,81 +176,85 @@ export function StockClient({ initial = defaultStockEnvelope }: { initial?: Stoc
         </div>
       </Card>
 
-      <Card className="overflow-hidden">
-        <div className={`transition-opacity ${loading ? "opacity-60" : ""}`}>
-          <div className="overflow-x-auto">
-            <div className="min-w-[720px]">
-              <div className={`${ADMIN_TABLE_HEAD} ${GRID}`}>
-                <span />
-                <span>Nom</span>
-                <span>Référence</span>
-                <span>Quantité</span>
-                <span>Statut</span>
-                <span>Maj</span>
-              </div>
-              {rows.map((product) => (
-                <div
-                  key={product.id}
-                  className={`${ADMIN_TABLE_ROW} ${GRID} py-[11px]`}
-                >
-                  <ProductThumb
-                    imageUrl={product.imageUrl}
-                    name={product.name}
-                    tone={product.tone}
-                  />
-                  <span className="min-w-0 font-semibold leading-[1.3]">
-                    {product.name}
-                  </span>
-                  <span className="font-mono text-[11px] tracking-[.05em] text-[#58675f]">
-                    {product.reference}
-                  </span>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    value={drafts[product.id] ?? String(product.stock)}
-                    onChange={(e) =>
-                      setDrafts((d) => ({
-                        ...d,
-                        [product.id]: e.target.value.replace(/[^0-9]/g, ""),
-                      }))
-                    }
-                    onBlur={() => commit(product)}
-                    aria-label={`Stock de ${product.name}`}
-                    className={`h-[38px] w-[84px] rounded-lg border px-2.5 text-center text-sm font-semibold transition-all duration-300 ${
-                      flash[product.id]
-                        ? "border-[#1d4538] bg-[#dcebdd]"
-                        : "border-[#17251f]/15 bg-white"
-                    }`}
-                  />
-                  <span>
-                    <Pill
-                      label={AVAILABILITY_LABELS[product.availability]}
-                      colors={AVAILABILITY_PILLS[product.availability]}
+      {loading && rows.length === 0 ? (
+        <TableSkeleton rows={PAGE_SIZE} />
+      ) : (
+        <Card className="overflow-hidden">
+          <div className={`transition-opacity ${loading ? "opacity-60" : ""}`}>
+            <div className="overflow-x-auto">
+              <div className="min-w-[720px]">
+                <div className={`${ADMIN_TABLE_HEAD} ${GRID}`}>
+                  <span />
+                  <span>Nom</span>
+                  <span>Référence</span>
+                  <span>Quantité</span>
+                  <span>Statut</span>
+                  <span>Maj</span>
+                </div>
+                {rows.map((product) => (
+                  <div
+                    key={product.id}
+                    className={`${ADMIN_TABLE_ROW} ${GRID} py-[11px]`}
+                  >
+                    <ProductThumb
+                      imageUrl={product.imageUrl}
+                      name={product.name}
+                      tone={product.tone}
                     />
-                  </span>
-                  <span className="font-mono text-[11px] text-[#78827b]">
-                    {frDate(product.updatedAt)}
-                  </span>
-                </div>
-              ))}
-              {rows.length === 0 && (
-                <div className="p-12 text-center text-sm text-[#78827b]">
-                  Aucun produit dans cette vue.
-                </div>
-              )}
+                    <span className="min-w-0 font-semibold leading-[1.3]">
+                      {product.name}
+                    </span>
+                    <span className="font-mono text-[11px] tracking-[.05em] text-[#58675f]">
+                      {product.reference}
+                    </span>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={drafts[product.id] ?? String(product.stock)}
+                      onChange={(e) =>
+                        setDrafts((d) => ({
+                          ...d,
+                          [product.id]: e.target.value.replace(/[^0-9]/g, ""),
+                        }))
+                      }
+                      onBlur={() => commit(product)}
+                      aria-label={`Stock de ${product.name}`}
+                      className={`h-[38px] w-[84px] rounded-lg border px-2.5 text-center text-sm font-semibold transition-all duration-300 ${
+                        flash[product.id]
+                          ? "border-[#1d4538] bg-[#dcebdd]"
+                          : "border-[#17251f]/15 bg-white"
+                      }`}
+                    />
+                    <span>
+                      <Pill
+                        label={AVAILABILITY_LABELS[product.availability]}
+                        colors={AVAILABILITY_PILLS[product.availability]}
+                      />
+                    </span>
+                    <span className="font-mono text-[11px] text-[#78827b]">
+                      {frDate(product.updatedAt)}
+                    </span>
+                  </div>
+                ))}
+                {rows.length === 0 && (
+                  <div className="p-12 text-center text-sm text-[#78827b]">
+                    Aucun produit dans cette vue.
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="border-t border-[#17251f]/10 px-4 pb-4">
-          <Pagination
-            page={page}
-            pageCount={data.pageCount}
-            total={data.total}
-            pageSize={PAGE_SIZE}
-            onPage={setPage}
-          />
-        </div>
-      </Card>
+          <div className="border-t border-[#17251f]/10 px-4 pb-4">
+            <Pagination
+              page={page}
+              pageCount={data.pageCount}
+              total={data.total}
+              pageSize={PAGE_SIZE}
+              onPage={setPage}
+            />
+          </div>
+        </Card>
+      )}
     </div>
   );
 }

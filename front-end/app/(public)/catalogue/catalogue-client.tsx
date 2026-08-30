@@ -73,6 +73,7 @@ export function CatalogueClient({
   const [categories, setCategories] = useState<CategoryWithCount[]>(initialCategories);
   const [tagGroups, setTagGroups] = useState<TagGroup[]>(initialTagGroups);
   const [result, setResult] = useState<Paginated<ProductPublic>>(initial);
+  const [loading, setLoading] = useState(initial.items.length === 0);
   const [animatingId, setAnimatingId] = useState<number | null>(null);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -136,6 +137,7 @@ export function CatalogueClient({
   if (syncedInitial !== initial) {
     setSyncedInitial(initial);
     setResult(initial);
+    setLoading(initial.items.length === 0);
   }
 
   useEffect(() => {
@@ -153,7 +155,10 @@ export function CatalogueClient({
       .then((data) => {
         if (data) setResult(data);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
   }, [searchParams, tagGroups, locale]);
 
   const updateQuery = (updater: (p: URLSearchParams) => void) => {
@@ -536,8 +541,26 @@ export function CatalogueClient({
           aria-busy={isPending}
           className={isPending ? "opacity-60 transition-opacity" : ""}
         >
-          {isPending && <span className="sr-only">{t.common.loading}</span>}
-          {result.items.length === 0 ? (
+          {loading && result.items.length === 0 ? (
+            <div className="grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col justify-between rounded-2xl border border-[#17251f]/12 bg-[#fdfcf8] p-2.5 sm:p-4 shadow-sm"
+                >
+                  <div className="skeleton h-36 xs:h-44 sm:h-56 w-full rounded-xl" />
+                  <div className="mt-3 sm:mt-4 space-y-2">
+                    <div className="skeleton h-4 w-3/4 rounded" />
+                    <div className="skeleton h-3 w-1/2 rounded" />
+                  </div>
+                  <div className="mt-4 flex items-center justify-between border-t border-[#17251f]/10 pt-3">
+                    <div className="skeleton h-5 w-20 rounded" />
+                    <div className="skeleton h-7 w-20 rounded-lg" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : result.items.length === 0 ? (
             <div className="my-12 rounded-2xl border border-[#17251f]/10 bg-[#fdfcf8] p-12 text-center shadow-sm">
               <p className="font-mono text-xs font-bold uppercase tracking-[.15em] text-[#8a6a25]">
                 {t.catalogue.emptyTitle}

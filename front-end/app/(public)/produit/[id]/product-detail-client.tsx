@@ -281,25 +281,23 @@ export function ProductDetailClient({
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (isRTL) nextSlide();
-                    else prevSlide();
+                    prevSlide();
                   }}
                   aria-label={t.product.prevImage}
                   className="absolute left-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-white/80 text-[#1d4538] shadow-md backdrop-blur-md transition-all duration-300 hover:scale-110 hover:bg-white active:scale-95 md:grid"
                 >
-                  <Arrow left={!isRTL} flipRtl={false} />
+                  <Arrow left={true} flipRtl={false} />
                 </button>
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (isRTL) prevSlide();
-                    else nextSlide();
+                    nextSlide();
                   }}
                   aria-label={t.product.nextImage}
                   className="absolute right-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-white/80 text-[#1d4538] shadow-md backdrop-blur-md transition-all duration-300 hover:scale-110 hover:bg-white active:scale-95 md:grid"
                 >
-                  <Arrow left={isRTL} flipRtl={false} />
+                  <Arrow left={false} flipRtl={false} />
                 </button>
               </>
             )}
@@ -668,19 +666,19 @@ export function ProductDetailClient({
                 <>
                   <button
                     type="button"
-                    onClick={isRTL ? nextSlide : prevSlide}
+                    onClick={prevSlide}
                     aria-label={t.product.prevImage}
                     className="absolute left-4 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-white/90 shadow-md transition hover:bg-white sm:grid"
                   >
-                    <Arrow left={!isRTL} flipRtl={false} />
+                    <Arrow left={true} flipRtl={false} />
                   </button>
                   <button
                     type="button"
-                    onClick={isRTL ? prevSlide : nextSlide}
+                    onClick={nextSlide}
                     aria-label={t.product.nextImage}
                     className="absolute right-4 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-white/90 shadow-md transition hover:bg-white sm:grid"
                   >
-                    <Arrow left={isRTL} flipRtl={false} />
+                    <Arrow left={false} flipRtl={false} />
                   </button>
                 </>
               )}

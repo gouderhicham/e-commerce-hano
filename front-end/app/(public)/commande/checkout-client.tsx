@@ -28,7 +28,7 @@ type Errors = Partial<
 
 export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
   const { lines, setQty, remove, clear } = useCart();
-  const { products, missing } = useProductsById(lines.map((l) => l.id));
+  const { products, missing, loading } = useProductsById(lines.map((l) => l.id));
   const { locale, t, isRTL } = useI18n();
 
   const [allWilayas, setAllWilayas] = useState<Wilaya[]>(wilayas);
@@ -369,7 +369,18 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
           </div>
 
           <div className="my-3 divide-y divide-[#17251f]/10">
-            {rows.length === 0 ? (
+            {loading && lines.length > 0 ? (
+              Array.from({ length: Math.min(lines.length, 3) }).map((_, i) => (
+                <div key={i} className="flex items-center gap-3.5 py-4">
+                  <div className="skeleton h-14 w-14 shrink-0 rounded-xl" />
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <div className="skeleton h-4 w-3/4 rounded" />
+                    <div className="skeleton h-3 w-1/2 rounded" />
+                  </div>
+                  <div className="skeleton h-4 w-16 rounded" />
+                </div>
+              ))
+            ) : rows.length === 0 ? (
               <p className="py-8 text-center text-xs font-medium text-[#718078]">
                 {t.cart.emptyTitle}
               </p>

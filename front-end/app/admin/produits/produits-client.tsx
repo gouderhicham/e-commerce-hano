@@ -146,6 +146,7 @@ export function ProduitsClient({
 }) {
   const router = useRouter();
   const [products, setProducts] = useState<ProductPublic[]>(initialProducts);
+  const [loading, setLoading] = useState(initialProducts.length === 0);
   const [categories, setCategories] = useState<CategoryWithCount[]>(initialCategories);
   const [tagGroups, setTagGroups] = useState<TagGroup[]>(initialTagGroups);
   const [search, setSearch] = useState("");
@@ -195,6 +196,8 @@ export function ProduitsClient({
       }
     } catch {
       /* ignore fetch errors */
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -239,6 +242,8 @@ export function ProduitsClient({
         }
       } catch {
         /* ignore fetch errors */
+      } finally {
+        if (alive) setLoading(false);
       }
     };
     void fetchAll();
@@ -373,7 +378,30 @@ export function ProduitsClient({
         </div>
       </Card>
 
-      {filtered.length === 0 ? (
+      {loading && products.length === 0 ? (
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="flex flex-col justify-between rounded-2xl border border-[#17251f]/12 bg-[#fdfcf8] p-4 shadow-sm"
+            >
+              <div className="skeleton h-52 w-full rounded-xl" />
+              <div className="mt-4 space-y-2">
+                <div className="skeleton h-5 w-2/3 rounded" />
+                <div className="skeleton h-3.5 w-4/5 rounded" />
+              </div>
+              <div className="mt-3 flex gap-1.5">
+                <div className="skeleton h-4 w-16 rounded" />
+                <div className="skeleton h-4 w-20 rounded" />
+              </div>
+              <div className="mt-4 flex items-center justify-between border-t border-[#17251f]/10 pt-3">
+                <div className="skeleton h-5 w-24 rounded" />
+                <div className="skeleton h-4 w-16 rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : filtered.length === 0 ? (
         <Card className="p-12 text-center">
           <p className="text-sm font-medium text-[#627269]">
             Aucun produit ne correspond à cette recherche.

@@ -10,6 +10,7 @@ import {
   ErrorBanner,
   PageHeader,
   SavedBanner,
+  TableSkeleton,
   dangerBtn,
   ghostBtn,
   hintCls,
@@ -230,6 +231,7 @@ export function CategoriesClient({
 }) {
   const router = useRouter();
   const [categories, setCategories] = useState<CategoryWithCount[]>(initialCategories);
+  const [loading, setLoading] = useState(initialCategories.length === 0);
   const [editingDraft, setEditingDraft] = useState<CategoryDraft | null>(null);
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState("");
@@ -247,6 +249,8 @@ export function CategoriesClient({
         }
       } catch {
         /* ignore fetch errors */
+      } finally {
+        if (alive) setLoading(false);
       }
     };
     void fetchAll();
@@ -387,108 +391,112 @@ export function CategoriesClient({
       {saved && <SavedBanner>{saved}</SavedBanner>}
       <ErrorBanner>{error}</ErrorBanner>
 
-      <Card className="p-5">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="border-b border-[#17251f]/10 font-mono text-[9.5px] uppercase tracking-[.14em] text-[#78827b]">
-              <tr>
-                <th className="pb-3">Visuel</th>
-                <th className="pb-3">Catégorie (FR / AR)</th>
-                <th className="pb-3">Slug</th>
-                <th className="pb-3">Produits</th>
-                <th className="pb-3">Catalogue Sidebar</th>
-                <th className="pb-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#17251f]/5 font-medium">
-              {categories.map((cat) => (
-                <tr key={cat.id} className="transition hover:bg-[#f8faf7]">
-                  <td className="py-3">
-                    <div className="h-12 w-14 overflow-hidden rounded-lg border border-[#17251f]/10 bg-[#e0ebe1]">
-                      {cat.imageUrl ? (
-                        <img
-                          src={mediaSrc(cat.imageUrl) ?? ""}
-                          alt={cat.name}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <div className="grid h-full w-full place-items-center bg-[#f4f7f3] text-[9px] text-[#78827b]">
-                          Pas d&apos;image
+      {loading && categories.length === 0 ? (
+        <TableSkeleton rows={4} />
+      ) : (
+        <Card className="p-5">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="border-b border-[#17251f]/10 font-mono text-[9.5px] uppercase tracking-[.14em] text-[#78827b]">
+                <tr>
+                  <th className="pb-3">Visuel</th>
+                  <th className="pb-3">Catégorie (FR / AR)</th>
+                  <th className="pb-3">Slug</th>
+                  <th className="pb-3">Produits</th>
+                  <th className="pb-3">Catalogue Sidebar</th>
+                  <th className="pb-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#17251f]/5 font-medium">
+                {categories.map((cat) => (
+                  <tr key={cat.id} className="transition hover:bg-[#f8faf7]">
+                    <td className="py-3">
+                      <div className="h-12 w-14 overflow-hidden rounded-lg border border-[#17251f]/10 bg-[#e0ebe1]">
+                        {cat.imageUrl ? (
+                          <img
+                            src={mediaSrc(cat.imageUrl) ?? ""}
+                            alt={cat.name}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <div className="grid h-full w-full place-items-center bg-[#f4f7f3] text-[9px] text-[#78827b]">
+                            Pas d&apos;image
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="py-3">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-[#17251f]">{cat.name}</span>
+                        {cat.nameAr && (
+                          <span className="rounded bg-[#e0ebe1] px-1.5 py-0.5 font-arabic text-[11px] font-semibold text-[#1d4538]">
+                            {cat.nameAr}
+                          </span>
+                        )}
+                      </div>
+                      {(cat.description || cat.descriptionAr) && (
+                        <div className="mt-0.5 text-[11px] text-[#627269]">
+                          {cat.description} {cat.descriptionAr && `· ${cat.descriptionAr}`}
                         </div>
                       )}
-                    </div>
-                  </td>
-                  <td className="py-3">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-[#17251f]">{cat.name}</span>
-                      {cat.nameAr && (
-                        <span className="rounded bg-[#e0ebe1] px-1.5 py-0.5 font-arabic text-[11px] font-semibold text-[#1d4538]">
-                          {cat.nameAr}
-                        </span>
-                      )}
-                    </div>
-                    {(cat.description || cat.descriptionAr) && (
-                      <div className="mt-0.5 text-[11px] text-[#627269]">
-                        {cat.description} {cat.descriptionAr && `· ${cat.descriptionAr}`}
-                      </div>
-                    )}
-                  </td>
-                  <td className="py-3 font-mono text-[10px] text-[#627269]">
-                    {cat.slug}
-                  </td>
-                  <td className="py-3 font-mono font-bold text-[#1d4538]">
-                    {cat.productCount} produit{cat.productCount > 1 ? "s" : ""}
-                  </td>
-                  <td className="py-3">
-                    <Toggle
-                      checked={cat.filterable}
-                      onChange={() => toggleFilterable(cat)}
-                      label={`Afficher ${cat.name} dans la sidebar`}
-                    />
-                  </td>
-                  <td className="py-3 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setEditingDraft({
-                            id: cat.id,
-                            name: cat.name,
-                            nameAr: cat.nameAr || "",
-                            description: cat.description || "",
-                            descriptionAr: cat.descriptionAr || "",
-                            filterable: cat.filterable,
-                            imageUrl: cat.imageUrl,
-                            imageFile: null,
-                          })
-                        }
-                        className="inline-flex items-center gap-1 rounded-lg border border-[#17251f]/15 bg-white px-2.5 py-1.5 font-mono text-[10px] font-bold text-[#17251f] hover:border-[#1d4538] hover:text-[#1d4538]"
-                      >
-                        <Edit3 className="h-3 w-3" /> Éditer
-                      </button>
+                    </td>
+                    <td className="py-3 font-mono text-[10px] text-[#627269]">
+                      {cat.slug}
+                    </td>
+                    <td className="py-3 font-mono font-bold text-[#1d4538]">
+                      {cat.productCount} produit{cat.productCount > 1 ? "s" : ""}
+                    </td>
+                    <td className="py-3">
+                      <Toggle
+                        checked={cat.filterable}
+                        onChange={() => toggleFilterable(cat)}
+                        label={`Afficher ${cat.name} dans la sidebar`}
+                      />
+                    </td>
+                    <td className="py-3 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setEditingDraft({
+                              id: cat.id,
+                              name: cat.name,
+                              nameAr: cat.nameAr || "",
+                              description: cat.description || "",
+                              descriptionAr: cat.descriptionAr || "",
+                              filterable: cat.filterable,
+                              imageUrl: cat.imageUrl,
+                              imageFile: null,
+                            })
+                          }
+                          className="inline-flex items-center gap-1 rounded-lg border border-[#17251f]/15 bg-white px-2.5 py-1.5 font-mono text-[10px] font-bold text-[#17251f] hover:border-[#1d4538] hover:text-[#1d4538]"
+                        >
+                          <Edit3 className="h-3 w-3" /> Éditer
+                        </button>
 
-                      <button
-                        type="button"
-                        disabled={cat.productCount > 0}
-                        onClick={() => deleteCategory(cat)}
-                        aria-label={`Supprimer ${cat.name}`}
-                        title={
-                          cat.productCount > 0
-                            ? `Impossible de supprimer : cette catégorie contient ${cat.productCount} produit(s)`
-                            : `Supprimer ${cat.name}`
-                        }
-                        className={`${dangerBtn} disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-[#17251f]`}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+                        <button
+                          type="button"
+                          disabled={cat.productCount > 0}
+                          onClick={() => deleteCategory(cat)}
+                          aria-label={`Supprimer ${cat.name}`}
+                          title={
+                            cat.productCount > 0
+                              ? `Impossible de supprimer : cette catégorie contient ${cat.productCount} produit(s)`
+                              : `Supprimer ${cat.name}`
+                          }
+                          className={`${dangerBtn} disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-[#17251f]`}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
 
       <CategoryFormModal
         key={editingDraft ? (editingDraft.id || "new") : "closed"}
