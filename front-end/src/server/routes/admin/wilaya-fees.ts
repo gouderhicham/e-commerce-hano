@@ -4,6 +4,7 @@ import { z } from "zod";
 import type { AppBindings } from "../../env";
 import { BadRequestError, ValidationError } from "../../http/errors";
 import { body } from "../../http/validate";
+import { invalidateCatalogCache } from "../../services/catalog";
 
 /**
  * Bulk delivery-fee editing.
@@ -209,6 +210,7 @@ export const adminWilayaFeeRoutes = new Hono<AppBindings>()
         c.var.prisma.wilaya.update({ where: { code: i.code }, data: { fee: i.fee } }),
       ),
     );
+    invalidateCatalogCache();
     return c.json({ items: await list(c.var.prisma) });
   })
 
@@ -231,6 +233,7 @@ export const adminWilayaFeeRoutes = new Hono<AppBindings>()
         c.var.prisma.commune.update({ where: { id: i.id }, data: { fee: i.fee } }),
       ),
     );
+    invalidateCatalogCache();
     return c.json({ items: await list(c.var.prisma) });
   })
 
@@ -331,6 +334,7 @@ export const adminWilayaFeeRoutes = new Hono<AppBindings>()
       ),
     ]);
 
+    invalidateCatalogCache();
     return c.json({
       updatedWilayas: wilayaUpdates.length,
       updatedCommunes: communeUpdates.length,

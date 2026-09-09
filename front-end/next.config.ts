@@ -37,6 +37,19 @@ if (process.env.NODE_ENV === "development" && process.env.CLOUDFLARE_DEV === "1"
 const nextConfig: NextConfig = {
   compress: false,
   serverExternalPackages: ["pg-cloudflare"],
+  async headers() {
+    return [
+      {
+        source: "/images/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

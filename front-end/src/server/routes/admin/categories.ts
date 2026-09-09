@@ -8,6 +8,7 @@ import { ConflictError, NotFoundError, ValidationError } from "../../http/errors
 import { body, params, parseOrThrow } from "../../http/validate";
 import { deleteByUrl, uploadImage } from "../../infra/storage";
 import { afterResponse } from "../../infra/notify";
+import { invalidateCatalogCache } from "../../services/catalog";
 
 const NOT_FOUND_FR = "Catégorie introuvable.";
 
@@ -138,6 +139,7 @@ export const adminCategoryRoutes = new Hono<AppBindings>()
       },
     });
 
+    invalidateCatalogCache();
     return c.json({ ...created, productCount: 0 }, 201);
   })
 
@@ -181,6 +183,7 @@ export const adminCategoryRoutes = new Hono<AppBindings>()
       afterResponse(c, deleteByUrl(c.var.prisma, existing.imageUrl));
     }
 
+    invalidateCatalogCache();
     return c.json({
       id: updated.id,
       slug: updated.slug,
@@ -215,5 +218,6 @@ export const adminCategoryRoutes = new Hono<AppBindings>()
       afterResponse(c, deleteByUrl(c.var.prisma, category.imageUrl));
     }
 
+    invalidateCatalogCache();
     return c.json({ success: true });
   });

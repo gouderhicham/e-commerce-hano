@@ -27,8 +27,18 @@ export function createApp() {
     await next();
   });
 
-  // Resolve the session once, ahead of the routes: the guards then only assert.
-  app.use("*", withUser);
+  // Initialize user as null by default; public routes pay zero DB lookup cost.
+  app.use("*", async (c, next) => {
+    c.set("user", null);
+    await next();
+  });
+
+  // Resolve session only for routes that actually inspect or require user context.
+  app.use("/auth/*", withUser);
+  app.use("/account/*", withUser);
+  app.use("/admin/*", withUser);
+  app.use("/orders/*", withUser);
+  app.use("/orders", withUser);
 
   app.get("/health", async (c) => {
     try {

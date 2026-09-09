@@ -13,17 +13,61 @@ import { serveObject } from "@/server/infra/storage";
 export const dynamic = "force-dynamic";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ key: string[] }> },
 ): Promise<Response> {
   const { env } = getRuntime();
   const { key } = await params;
+  const joinedKey = key.join("/");
+
+  // 1. HTTP 304 conditional request check (If-None-Match)
+  const ifNoneMatch = request.headers.get("if-none-match");
+  if (
+    ifNoneMatch &&
+    (ifNoneMatch === `"${joinedKey}"` || ifNoneMatch === `W/"${joinedKey}"`)
+  ) {
+    return new Response(null, {
+      status: 304,
+      headers: {
+        "Cache-Control": "public, max-age=31536000, immutable",
+        ETag: `"${joinedKey}"`,
+      },
+    });
+  }
+
+  // 2. Cloudflare edge cache lookup
+  const cache =
+    typeof caches !== "undefined" && "default" in caches
+      ? (caches as unknown as { default: Cache }).default
+      : null;
+
+  if (cache) {
+    try {
+      const cached = await cache.match(request);
+      if (cached) {
+        return cached;
+      }
+    } catch {
+      // Non-fatal if edge cache match throws
+    }
+  }
 
   try {
-    return await serveObject(
+    const response = await serveObject(
       getPrisma(env.HYPERDRIVE.connectionString),
-      key.join("/"),
+      joinedKey,
     );
+
+    // 3. Asynchronously store in Cloudflare edge cache on cache miss
+    if (cache && response.status === 200) {
+      try {
+        await cache.put(request, response.clone());
+      } catch {
+        // Non-fatal if edge cache put throws
+      }
+    }
+
+    return response;
   } catch {
     return Response.json({ error: "Fichier introuvable." }, { status: 404 });
   }

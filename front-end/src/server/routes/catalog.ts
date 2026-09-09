@@ -17,48 +17,49 @@ import {
  * start the old Vercel + Neon pair had on each first visit.
  */
 
-/** Cache at the edge, revalidate in the background. */
-function cacheable(seconds: number, staleSeconds = 300) {
-  return `public, s-maxage=${seconds}, stale-while-revalidate=${staleSeconds}`;
+/** Cache at the browser (max-age) and edge (s-maxage), revalidate in the background. */
+function cacheable(edgeSeconds: number, staleSeconds = 300, browserSeconds = 15) {
+  return `public, max-age=${browserSeconds}, s-maxage=${edgeSeconds}, stale-while-revalidate=${staleSeconds}`;
 }
 
 export const catalogRoutes = new Hono<AppBindings>()
   .get("/categories", async (c) => {
-    c.header("Cache-Control", cacheable(300));
+    c.header("Cache-Control", cacheable(300, 600, 60));
     return c.json(await catalog.categories(c.var.prisma));
   })
 
   .get("/tag-groups", async (c) => {
-    c.header("Cache-Control", cacheable(300));
+    c.header("Cache-Control", cacheable(300, 600, 60));
     return c.json(await catalog.tagGroups(c.var.prisma));
   })
 
   .get("/home", async (c) => {
-    c.header("Cache-Control", cacheable(60));
+    c.header("Cache-Control", cacheable(60, 300, 15));
     return c.json(await catalog.home(c.var.prisma));
   })
 
   // Declared before "/products/:id" so "suggest" is never read as an id.
   .get("/products/suggest", async (c) => {
     const { q } = query(c, suggestQuerySchema);
+    c.header("Cache-Control", cacheable(60, 300, 15));
     return c.json(await catalog.suggest(c.var.prisma, q));
   })
 
   .get("/products/:id", async (c) => {
     const { id } = params(c, numericIdParam);
-    c.header("Cache-Control", cacheable(60));
+    c.header("Cache-Control", cacheable(60, 300, 15));
     return c.json(await catalog.productById(c.var.prisma, id));
   })
 
   .get("/products", async (c) => {
     const q = query(c, productQuerySchema);
-    c.header("Cache-Control", cacheable(60));
+    c.header("Cache-Control", cacheable(60, 300, 15));
     return c.json(await catalog.products(c.var.prisma, q));
   })
 
   .get("/shipping/wilayas", async (c) => {
     // The 58 wilayas and their communes change about once a decade.
-    c.header("Cache-Control", cacheable(3600));
+    c.header("Cache-Control", cacheable(3600, 86400, 300));
     const isLight = c.req.query("light") === "true";
     return c.json(
       isLight
@@ -68,6 +69,6 @@ export const catalogRoutes = new Hono<AppBindings>()
   })
 
   .get("/settings/public", async (c) => {
-    c.header("Cache-Control", cacheable(3600));
+    c.header("Cache-Control", cacheable(3600, 86400, 60));
     return c.json(await catalog.publicSettings(c.var.prisma));
   });

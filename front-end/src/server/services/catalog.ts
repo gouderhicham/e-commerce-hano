@@ -48,6 +48,33 @@ export interface TagGroupPublic {
 
 export type ProductListResult = Paginated<ProductPublicWithRelations>;
 
+export interface HomeContentResult {
+  showcase: unknown;
+  favorites: {
+    items: Array<{
+      id: string;
+      productId: number;
+      name: string;
+      nameAr?: string | null;
+      spec: string;
+      specAr: string;
+      price: number;
+      image: string;
+    }>;
+  };
+  categoryCards: Array<{
+    id: string;
+    name: string;
+    nameAr?: string | null;
+    detail: string;
+    detailAr: string;
+    img: string;
+    slug: string;
+    categoryId: string;
+    sortOrder: number;
+  }>;
+}
+
 let cachedWilayas: Array<{
   code: number;
   name: string;
@@ -64,11 +91,21 @@ let cachedWilayas: Array<{
 
 let cachedTagGroups: TagGroupPublic[] | null = null;
 let cachedCategories: CategoryPublic[] | null = null;
+let cachedHome: HomeContentResult | null = null;
+let cachedHomeTime = 0;
+
+const cachedProductsById = new Map<
+  number,
+  { data: ProductPublicWithRelations; timestamp: number }
+>();
 
 export function invalidateCatalogCache() {
   cachedWilayas = null;
   cachedTagGroups = null;
   cachedCategories = null;
+  cachedHome = null;
+  cachedHomeTime = 0;
+  cachedProductsById.clear();
 }
 
 /** Active categories with active product count. */
@@ -268,11 +305,6 @@ export async function suggest(
   });
 }
 
-const cachedProductsById = new Map<
-  number,
-  { data: ProductPublicWithRelations; timestamp: number }
->();
-
 /** Product detail with gallery, category and similar products. 404 if hidden. */
 export async function productById(
   prisma: PrismaClient,
@@ -285,63 +317,31 @@ export async function productById(
 
   const product = await prisma.product.findUnique({
     where: { id },
+    include: {
+      images: { orderBy: { sortOrder: "asc" } },
+      category: true,
+    },
   });
   if (!product || !product.active) throw new NotFoundError(NOT_FOUND_FR);
 
-  const images = await prisma.productImage
-    .findMany({
-      where: { productId: id },
-      orderBy: { sortOrder: "asc" },
-    })
-    .catch(() => []);
-
-  let cat: {
-    id: string;
-    slug: string;
-    name: string;
-    nameAr?: string | null;
-    description: string | null;
-    descriptionAr?: string | null;
-    imageUrl: string | null;
-    filterable: boolean;
-    sortOrder: number;
-    productCount: number;
-  } = {
-    id: product.categoryId || "",
-    slug: "",
-    name: "Général",
-    nameAr: "عام",
-    description: "",
-    descriptionAr: "",
-    imageUrl: null,
-    filterable: false,
-    sortOrder: 0,
-    productCount: 0,
-  };
-
-  try {
-    const categoryList = await categories(prisma);
-    const found = categoryList.find((c) => c.id === product.categoryId);
-    if (found) cat = found;
-  } catch {
-    /* ignore category fetch failure */
-  }
-
   let similar: (ProductScalar & { images?: ProductImageRow[] })[] = [];
-  try {
-    if (product.categoryId) {
+  if (product.categoryId) {
+    try {
       const similarProducts = await prisma.product.findMany({
         where: { active: true, categoryId: product.categoryId, id: { not: id } },
         orderBy: [{ sold: "desc" }, { id: "desc" }],
         take: 4,
       });
       similar = similarProducts.map((p) => ({ ...p, images: [] }));
+    } catch {
+      /* ignore similar fetch failure */
     }
-  } catch {
-    /* ignore similar fetch failure */
   }
 
-  const res = toProductPublic({ ...product, images }, { category: cat, similar });
+  const res = toProductPublic(product, {
+    category: product.category ?? undefined,
+    similar,
+  });
   cachedProductsById.set(id, { data: res, timestamp: Date.now() });
   return res;
 }
@@ -409,36 +409,6 @@ export async function publicSettings(prisma: PrismaClient) {
     telegramChatId: s.telegramChatId,
   };
 }
-
-export interface HomeContentResult {
-  showcase: unknown;
-  favorites: {
-    items: Array<{
-      id: string;
-      productId: number;
-      name: string;
-      nameAr?: string | null;
-      spec: string;
-      specAr: string;
-      price: number;
-      image: string;
-    }>;
-  };
-  categoryCards: Array<{
-    id: string;
-    name: string;
-    nameAr?: string | null;
-    detail: string;
-    detailAr: string;
-    img: string;
-    slug: string;
-    categoryId: string;
-    sortOrder: number;
-  }>;
-}
-
-let cachedHome: HomeContentResult | null = null;
-let cachedHomeTime = 0;
 
 /** Everything the home page renders, in one round trip. */
 export async function home(prisma: PrismaClient) {

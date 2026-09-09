@@ -5,6 +5,7 @@ import type { AppBindings } from "../../env";
 import { generateFieldKey, slugify } from "../../domain/slug";
 import { NotFoundError, ValidationError } from "../../http/errors";
 import { body, params } from "../../http/validate";
+import { invalidateCatalogCache } from "../../services/catalog";
 
 const GROUP_NOT_FOUND_FR = "Groupe de filtres introuvable.";
 
@@ -162,6 +163,7 @@ export const adminContentRoutes = new Hono<AppBindings>()
         ...(dto.showcase !== undefined && { showcase: json(dto.showcase) }),
       },
     });
+    invalidateCatalogCache();
     return c.json({ content });
   })
 
@@ -221,6 +223,7 @@ export const adminContentRoutes = new Hono<AppBindings>()
       }),
     ]);
 
+    invalidateCatalogCache();
     return c.json({ items: await homeFavorites(c.var.prisma) });
   })
 
@@ -275,6 +278,7 @@ export const adminContentRoutes = new Hono<AppBindings>()
       include: { tags: { orderBy: { sortOrder: "asc" } } },
     });
 
+    invalidateCatalogCache();
     return c.json({ group }, 201);
   })
 
@@ -300,6 +304,7 @@ export const adminContentRoutes = new Hono<AppBindings>()
       include: { tags: { orderBy: { sortOrder: "asc" } } },
     });
 
+    invalidateCatalogCache();
     return c.json({ group });
   })
 
@@ -307,5 +312,6 @@ export const adminContentRoutes = new Hono<AppBindings>()
     const { id } = params(c, idParam);
     await assertGroupExists(c.var.prisma, id);
     await c.var.prisma.tagGroup.delete({ where: { id } });
+    invalidateCatalogCache();
     return c.json({ success: true });
   });

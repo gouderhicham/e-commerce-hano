@@ -10,6 +10,7 @@ import { BadRequestError, NotFoundError, ValidationError } from "../../http/erro
 import { body, params, parseOrThrow, query } from "../../http/validate";
 import { deleteByUrl, uploadImage } from "../../infra/storage";
 import { afterResponse } from "../../infra/notify";
+import { invalidateCatalogCache } from "../../services/catalog";
 import {
   createProductSchema,
   productAdminQuerySchema,
@@ -352,6 +353,7 @@ export const adminProductRoutes = new Hono<AppBindings>()
       include: PRODUCT_INCLUDE,
     });
 
+    invalidateCatalogCache();
     return c.json(toProductAdmin(created), 201);
   })
 
@@ -427,6 +429,7 @@ export const adminProductRoutes = new Hono<AppBindings>()
       );
     }
 
+    invalidateCatalogCache();
     return c.json(toProductAdmin(updated));
   })
 
@@ -449,6 +452,7 @@ export const adminProductRoutes = new Hono<AppBindings>()
       ),
     );
 
+    invalidateCatalogCache();
     return c.json({ success: true });
   })
 
@@ -462,6 +466,7 @@ export const adminProductRoutes = new Hono<AppBindings>()
       data: { active },
       include: PRODUCT_INCLUDE,
     });
+    invalidateCatalogCache();
     return c.json(toProductAdmin(updated));
   })
 
@@ -475,5 +480,6 @@ export const adminProductRoutes = new Hono<AppBindings>()
       data: { stock },
       include: PRODUCT_INCLUDE,
     });
+    invalidateCatalogCache();
     return c.json(toProductAdmin(updated));
   });
