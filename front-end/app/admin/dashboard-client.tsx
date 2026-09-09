@@ -196,7 +196,7 @@ export function DashboardClient({
           return (
             <Card key={metric.label} className="p-5">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-[9.5px] font-bold uppercase tracking-[.15em] text-[#78827b]">
+                <span className="font-mono text-xs font-bold uppercase tracking-[.15em] text-[#78827b]">
                   {metric.label}
                 </span>
                 <span
@@ -210,7 +210,7 @@ export function DashboardClient({
               >
                 {metric.value}
               </b>
-              <p className="mt-1 text-[11px] text-[#627269]">{metric.hint}</p>
+              <p className="mt-1 text-xs text-[#627269]">{metric.hint}</p>
             </Card>
           );
         })}
@@ -224,7 +224,7 @@ export function DashboardClient({
             </h2>
             <Link
               href="/admin/commandes"
-              className="inline-flex cursor-pointer items-center gap-1 font-mono text-[10.5px] font-bold uppercase tracking-[.1em] text-[#1d4538] hover:underline"
+              className="inline-flex cursor-pointer items-center gap-1 font-mono text-xs font-bold uppercase tracking-[.1em] text-[#1d4538] hover:underline"
             >
               <span>Voir tout</span>
               <ArrowUpRight className="h-3.5 w-3.5" />
@@ -238,7 +238,7 @@ export function DashboardClient({
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="border-b border-[#17251f]/10 font-mono text-[9.5px] uppercase tracking-[.14em] text-[#78827b]">
+                <thead className="border-b border-[#17251f]/10 font-mono text-xs uppercase tracking-[.14em] text-[#78827b]">
                   <tr>
                     <th className="pb-3">Client</th>
                     <th className="pb-3">Date</th>
@@ -253,11 +253,11 @@ export function DashboardClient({
                         <p className="font-bold text-[#17251f]">
                           {order.customerName}
                         </p>
-                        <span className="font-mono text-[10px] text-[#627269]">
+                        <span className="font-mono text-xs text-[#627269]">
                           {order.id}
                         </span>
                       </td>
-                      <td className="py-3 text-[11px] text-[#4f5d55]">
+                      <td className="py-3 text-xs text-[#4f5d55]">
                         {frDateTime(order.createdAt)}
                       </td>
                       <td className="py-3 font-mono font-bold text-[#1d4538]">
@@ -277,11 +277,11 @@ export function DashboardClient({
           )}
 
           <div className="mt-6 border-t border-[#17251f]/10 pt-4">
-            <span className="font-mono text-[9.5px] font-bold uppercase tracking-[.14em] text-[#1d4538]">
+            <span className="font-mono text-xs font-bold uppercase tracking-[.14em] text-[#1d4538]">
               Cohérence avec le frontoffice
             </span>
             {alerts.length === 0 ? (
-              <p className="mt-2 text-[11px] font-medium text-[#4f5d55]">
+              <p className="mt-2 text-xs font-medium text-[#4f5d55]">
                 Tous les produits sont rattachés à un filtre du catalogue.
               </p>
             ) : (
@@ -290,7 +290,7 @@ export function DashboardClient({
                   <Link
                     key={alert.label}
                     href={alert.href}
-                    className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 p-2.5 text-[10.5px] font-medium leading-4 text-amber-900 transition hover:bg-amber-100"
+                    className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 p-2.5 text-xs font-medium leading-4 text-amber-900 transition hover:bg-amber-100"
                   >
                     <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
                     <span>
@@ -333,8 +333,8 @@ export function DashboardClient({
             </div>
           </div>
 
-          <div className="mt-6 space-y-1 border-t border-[#17251f]/10 pt-4 text-[11px] text-[#627269]">
-            <p className="font-mono text-[9.5px] font-bold uppercase text-[#1d4538]">
+          <div className="mt-6 space-y-1 border-t border-[#17251f]/10 pt-4 text-xs text-[#627269]">
+            <p className="font-mono text-xs font-bold uppercase text-[#1d4538]">
               Réglages appliqués au site
             </p>
             <p>
@@ -360,7 +360,7 @@ export function DashboardClient({
             </h2>
             <Link
               href="/admin/stock"
-              className="inline-flex cursor-pointer items-center gap-1 font-mono text-[10.5px] font-bold uppercase tracking-[.1em] text-[#1d4538] hover:underline"
+              className="inline-flex cursor-pointer items-center gap-1 font-mono text-xs font-bold uppercase tracking-[.1em] text-[#1d4538] hover:underline"
             >
               <span>Gérer le stock</span>
               <ArrowUpRight className="h-3.5 w-3.5" />
@@ -382,7 +382,7 @@ export function DashboardClient({
                   <p className="truncate text-xs font-bold text-[#17251f]">
                     {product.name}
                   </p>
-                  <p className="font-mono text-[10px] text-[#627269]">
+                  <p className="font-mono text-xs text-[#627269]">
                     {product.stock} en stock
                   </p>
                 </div>

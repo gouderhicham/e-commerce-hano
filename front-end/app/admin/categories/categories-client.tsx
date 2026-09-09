@@ -89,7 +89,7 @@ function CategoryFormModal({
     <Modal open={isOpen} onClose={onClose} maxWidth={640}>
       <div className="mb-4 flex items-center justify-between border-b border-[#17251f]/10 pb-4">
         <div>
-          <span className="font-mono text-[9.5px] font-bold uppercase text-[#1d4538]">
+          <span className="font-mono text-xs font-bold uppercase text-[#1d4538]">
             Gestion Catalogue
           </span>
           <h2 className="text-xl font-bold text-[#17251f]">
@@ -125,7 +125,7 @@ function CategoryFormModal({
               className={inputCls}
               autoFocus
             />
-            <div className="mt-1 flex items-center gap-1.5 font-mono text-[10px] text-[#78827b]">
+            <div className="mt-1 flex items-center gap-1.5 font-mono text-xs text-[#78827b]">
               <span>Slug :</span>
               <span className="font-bold text-[#1d4538]">
                 {generatedSlug || "—"}
@@ -397,7 +397,7 @@ export function CategoriesClient({
         <Card className="p-5">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="border-b border-[#17251f]/10 font-mono text-[9.5px] uppercase tracking-[.14em] text-[#78827b]">
+              <thead className="border-b border-[#17251f]/10 font-mono text-xs uppercase tracking-[.14em] text-[#78827b]">
                 <tr>
                   <th className="pb-3">Visuel</th>
                   <th className="pb-3">Catégorie (FR / AR)</th>
@@ -413,13 +413,13 @@ export function CategoriesClient({
                     <td className="py-3">
                       <div className="h-12 w-14 overflow-hidden rounded-lg border border-[#17251f]/10 bg-[#e0ebe1]">
                         {cat.imageUrl ? (
-                          <img
+                           <img
                             src={mediaSrc(cat.imageUrl) ?? ""}
                             alt={cat.name}
                             className="h-full w-full object-cover"
                           />
                         ) : (
-                          <div className="grid h-full w-full place-items-center bg-[#f4f7f3] text-[9px] text-[#78827b]">
+                          <div className="grid h-full w-full place-items-center bg-[#f4f7f3] text-xs text-[#78827b]">
                             Pas d&apos;image
                           </div>
                         )}
@@ -429,18 +429,18 @@ export function CategoriesClient({
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-[#17251f]">{cat.name}</span>
                         {cat.nameAr && (
-                          <span className="rounded bg-[#e0ebe1] px-1.5 py-0.5 font-arabic text-[11px] font-semibold text-[#1d4538]">
+                          <span className="rounded bg-[#e0ebe1] px-1.5 py-0.5 font-arabic text-xs font-semibold text-[#1d4538]">
                             {cat.nameAr}
                           </span>
                         )}
                       </div>
                       {(cat.description || cat.descriptionAr) && (
-                        <div className="mt-0.5 text-[11px] text-[#627269]">
+                        <div className="mt-0.5 text-xs text-[#627269]">
                           {cat.description} {cat.descriptionAr && `· ${cat.descriptionAr}`}
                         </div>
                       )}
                     </td>
-                    <td className="py-3 font-mono text-[10px] text-[#627269]">
+                    <td className="py-3 font-mono text-xs text-[#627269]">
                       {cat.slug}
                     </td>
                     <td className="py-3 font-mono font-bold text-[#1d4538]">
@@ -469,7 +469,7 @@ export function CategoriesClient({
                               imageFile: null,
                             })
                           }
-                          className="inline-flex items-center gap-1 rounded-lg border border-[#17251f]/15 bg-white px-2.5 py-1.5 font-mono text-[10px] font-bold text-[#17251f] hover:border-[#1d4538] hover:text-[#1d4538]"
+                          className="inline-flex items-center gap-1 rounded-lg border border-[#17251f]/15 bg-white px-2.5 py-1.5 font-mono text-xs font-bold text-[#17251f] hover:border-[#1d4538] hover:text-[#1d4538]"
                         >
                           <Edit3 className="h-3 w-3" /> Éditer
                         </button>

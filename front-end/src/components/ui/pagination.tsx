@@ -60,7 +60,7 @@ export function Pagination({
   const label = total === 0 ? "" : `${start + 1}–${end} sur ${total}`;
 
   const btnClass = (active: boolean, disabled: boolean) =>
-    `min-w-[34px] h-[34px] px-2.5 rounded-lg border text-[12px] font-bold transition ${
+    `min-w-[36px] h-[36px] px-2.5 rounded-lg border text-xs font-bold transition ${
       active
         ? "border-[#1d4538] bg-[#1d4538] text-white"
         : `border-[#17251f]/15 bg-white ${
@@ -72,7 +72,7 @@ export function Pagination({
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 pt-4">
-      <span className="font-mono text-[11px] text-[#78827b]">{label}</span>
+      <span className="font-mono text-xs text-[#78827b]">{label}</span>
       <div className="flex items-center gap-1.5">
         <button
           className={btnClass(false, page === 1)}
@@ -87,7 +87,7 @@ export function Pagination({
             <span
               key={`gap-${i}`}
               aria-hidden="true"
-              className="flex h-[34px] min-w-[34px] select-none items-center justify-center text-[12px] text-[#78827b]"
+              className="flex h-[36px] min-w-[36px] select-none items-center justify-center text-xs text-[#78827b]"
             >
               …
             </span>

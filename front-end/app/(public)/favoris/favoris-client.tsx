@@ -59,7 +59,7 @@ export function FavorisClient() {
     <div className="mx-auto max-w-[1360px] px-5 pb-16 pt-6 sm:px-8">
       <div className="mb-8 flex items-center justify-between border-b border-[#17251f]/10 pb-5">
         <div>
-          <span className="block font-mono text-[10px] font-bold uppercase tracking-[.2em] text-[#1d4538]">
+          <span className="block font-mono text-xs font-bold uppercase tracking-[.2em] text-[#1d4538]">
             {t.favorites.eyebrow}
           </span>
           <h1 className="mt-1 text-3xl font-semibold tracking-[-.06em] text-[#17251f] sm:text-4xl">
@@ -71,7 +71,7 @@ export function FavorisClient() {
         </div>
         <Link
           href="/catalogue"
-          className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[.1em] text-[#1d4538] transition hover:text-[#14352b]"
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.1em] text-[#1d4538] transition hover:text-[#14352b]"
         >
           <Arrow left /> {t.favorites.viewStore}
         </Link>
@@ -102,7 +102,7 @@ export function FavorisClient() {
           </p>
           <Link
             href="/catalogue"
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#1d4538] px-7 py-3.5 text-[11px] font-bold uppercase tracking-[.1em] text-white shadow-sm transition hover:bg-[#14352b]"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#1d4538] px-7 py-3.5 text-xs font-bold uppercase tracking-[.1em] text-white shadow-sm transition hover:bg-[#14352b]"
           >
             {t.favorites.browseCatalog}
           </Link>
@@ -120,7 +120,7 @@ export function FavorisClient() {
                 style={{ backgroundColor: item.tone }}
               >
                 {item.promoPrice != null && item.price != null && item.promoPrice < item.price && (
-                  <span className="absolute start-2 top-2 sm:start-3 sm:top-3 z-10 rounded-full bg-red-600 px-2 py-0.5 font-mono text-[9px] sm:text-[10px] font-bold text-white shadow-sm">
+                  <span className="absolute start-2 top-2 sm:start-3 sm:top-3 z-10 rounded-full bg-red-600 px-2 py-0.5 font-mono text-xs font-bold text-white shadow-sm">
                     -{Math.round(((item.price - item.promoPrice) / item.price) * 100)}%
                   </span>
                 )}
@@ -153,21 +153,21 @@ export function FavorisClient() {
 
               <div className="flex flex-1 flex-col justify-between px-0.5 pb-0.5 pt-3 sm:px-1 sm:pb-1 sm:pt-4">
                 <div>
-                  <h3 className="line-clamp-2 text-[13px] sm:text-[17px] font-semibold tracking-[-.04em] text-[#17251f] transition group-hover:text-[#1d4538]">
+                  <h3 className="line-clamp-2 text-sm sm:text-base font-semibold tracking-[-.04em] text-[#17251f] transition group-hover:text-[#1d4538]">
                     {pick(locale, item.name, item.nameAr)}
                   </h3>
-                  <p className="mt-1 line-clamp-2 text-[10px] sm:text-[11px] leading-3.5 sm:leading-4 text-[#5f6e66]">
+                  <p className="mt-1 line-clamp-2 text-xs leading-3.5 sm:leading-4 text-[#5f6e66]">
                     {pick(locale, item.specs, item.specsAr)}
                   </p>
                 </div>
 
                 <div className="mt-3 sm:mt-5 flex items-center justify-between gap-1.5 sm:gap-2 border-t border-[#17251f]/10 pt-2.5 sm:pt-3">
                   <div className="min-w-0">
-                    <b className="block truncate font-mono text-[13px] sm:text-[15px] font-bold text-[#17251f]">
+                    <b className="block truncate font-mono text-sm sm:text-base font-bold text-[#17251f]">
                       {fmtDA(item.promoPrice ?? item.price, locale)}
                     </b>
                     {item.promoPrice != null && item.price != null && item.promoPrice < item.price && (
-                      <span className="block truncate font-mono text-[10px] sm:text-xs text-[#9aa39c] line-through">
+                      <span className="block truncate font-mono text-xs text-[#9aa39c] line-through">
                         {fmtDA(item.price, locale)}
                       </span>
                     )}
@@ -178,7 +178,7 @@ export function FavorisClient() {
                       e.stopPropagation();
                       onAdd(item);
                     }}
-                    className="inline-flex shrink-0 cursor-pointer items-center gap-1 sm:gap-1.5 rounded-lg bg-[#1d4538] px-2.5 sm:px-3.5 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-[.08em] text-white shadow-xs transition hover:bg-[#14352b]"
+                    className="inline-flex shrink-0 cursor-pointer items-center gap-1 sm:gap-1.5 rounded-lg bg-[#1d4538] px-2.5 sm:px-3.5 py-1.5 text-xs font-bold uppercase tracking-[.08em] text-white shadow-xs transition hover:bg-[#14352b]"
                   >
                     <Cart className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     <span className="hidden xs:inline">{t.favorites.addToCart}</span>

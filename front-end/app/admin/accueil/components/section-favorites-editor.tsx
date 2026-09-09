@@ -64,7 +64,7 @@ export function SectionFavoritesEditor({
           <h2 className="text-base font-medium tracking-tight text-[#17251f]">
             Sélection « Nos favoris »
           </h2>
-          <span className="font-mono text-[9px] font-bold uppercase tracking-[.14em] text-[#78827b]">
+          <span className="font-mono text-xs font-bold uppercase tracking-[.14em] text-[#78827b]">
             #favoris
           </span>
         </div>
@@ -76,14 +76,14 @@ export function SectionFavoritesEditor({
               <label className={`${labelCls} mb-0`}>
                 Vignettes « Nos favoris » ({items.length})
               </label>
-              <p className="text-[10px] text-[#78827b]">
+              <p className="text-xs text-[#78827b]">
                 Produits choisis depuis le catalogue. Leurs informations sont verrouillées et synchronisées.
               </p>
             </div>
             <button
               type="button"
               onClick={() => setIsPickerOpen(true)}
-              className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#1d4538] px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[.08em] text-white shadow-sm transition hover:bg-[#16352b]"
+              className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#1d4538] px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-[.08em] text-white shadow-sm transition hover:bg-[#16352b]"
             >
               <Plus className="h-3.5 w-3.5" /> Choisir un produit du catalogue
             </button>
@@ -103,7 +103,7 @@ export function SectionFavoritesEditor({
                   className="flex items-center gap-3.5 rounded-2xl border border-[#17251f]/10 bg-[#fbfcfb] p-3 shadow-xs transition hover:border-[#1d4538]/30"
                 >
                   {/* Position Badge */}
-                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-[#e7eee5] font-mono text-[11px] font-bold text-[#1d4538]">
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-[#e7eee5] font-mono text-xs font-bold text-[#1d4538]">
                     #{idx + 1}
                   </span>
 
@@ -116,7 +116,7 @@ export function SectionFavoritesEditor({
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="grid h-full w-full place-items-center bg-[#f4f7f3] text-[9px] text-[#78827b]">
+                      <div className="grid h-full w-full place-items-center bg-[#f4f7f3] text-xs text-[#78827b]">
                         Pas d&apos;image
                       </div>
                     )}
@@ -134,7 +134,7 @@ export function SectionFavoritesEditor({
                           target="_blank"
                           rel="noreferrer"
                           title="Voir la fiche produit"
-                          className="inline-flex items-center gap-1 font-mono text-[9px] text-[#1d4538] hover:underline"
+                          className="inline-flex items-center gap-1 font-mono text-xs text-[#1d4538] hover:underline"
                         >
                           <span>#{linked.id}</span>
                           <ExternalLink className="h-2.5 w-2.5" />
@@ -142,11 +142,11 @@ export function SectionFavoritesEditor({
                       )}
                     </div>
 
-                    <p className="truncate text-[11px] text-[#58675f]">
+                    <p className="truncate text-xs text-[#58675f]">
                       {displaySpec || "Aucune caractéristique disponible"}
                     </p>
 
-                    <div className="mt-1 flex items-center gap-3 font-mono text-[10px]">
+                    <div className="mt-1 flex items-center gap-3 font-mono text-xs">
                       <span className="font-bold text-[#1d4538]">
                         {fmtDA(displayPrice > 0 ? displayPrice : null)}
                       </span>
@@ -200,7 +200,7 @@ export function SectionFavoritesEditor({
                 <p className="font-mono text-xs font-semibold text-[#58675f]">
                   Aucun produit favori sélectionné.
                 </p>
-                <p className="mt-1 text-[11px] text-[#78827b]">
+                <p className="mt-1 text-xs text-[#78827b]">
                   Cliquez sur « Choisir un produit du catalogue » pour ajouter des vignettes.
                 </p>
               </div>

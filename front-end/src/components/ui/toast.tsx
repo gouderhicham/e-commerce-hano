@@ -69,18 +69,18 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 className="pointer-events-auto flex min-w-[300px] max-w-[420px] animate-fade-in items-center gap-3 rounded-full border border-[#17251f]/10 bg-[#fdfcf8]/95 px-4 py-3 shadow-[0_16px_40px_rgba(23,37,31,0.14)] backdrop-blur-xl"
               >
                 <span
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[15px] font-bold text-white shadow-sm"
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white shadow-sm"
                   style={{ background: meta.bg }}
                 >
                   {meta.icon}
                 </span>
-                <span className="flex-1 text-[14px] font-semibold leading-tight text-[#17251f]">
+                <span className="flex-1 text-base font-semibold leading-tight text-[#17251f]">
                   {t.message}
                 </span>
                 <button
                   onClick={() => dismiss(t.id)}
                   aria-label="Fermer / إغلاق"
-                  className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full border-none bg-[#17251f]/5 p-0 text-[22px] leading-none text-[#58675f] transition-colors hover:bg-[#17251f]/10 hover:text-[#17251f]"
+                  className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full border-none bg-[#17251f]/5 p-0 text-xl leading-none text-[#58675f] transition-colors hover:bg-[#17251f]/10 hover:text-[#17251f]"
                 >
                   ×
                 </button>

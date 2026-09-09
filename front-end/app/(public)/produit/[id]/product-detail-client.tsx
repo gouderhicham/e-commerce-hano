@@ -227,7 +227,7 @@ export function ProductDetailClient({
       <div className="mx-auto max-w-[1360px] px-5 pt-6 sm:px-8">
         <Link
           href="/catalogue"
-          className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[.12em] text-[#537062] transition hover:text-[#1d4538]"
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.12em] text-[#537062] transition hover:text-[#1d4538]"
         >
           <Arrow left /> {t.product.backToCatalog}
         </Link>
@@ -310,12 +310,12 @@ export function ProductDetailClient({
                     e.stopPropagation();
                     setLightbox(true);
                   }}
-                  className="absolute end-5 top-5 z-10 cursor-pointer rounded-full border border-[#1d4538]/15 bg-[#f8f7f2]/90 px-3 py-1.5 font-mono text-[9px] font-bold uppercase tracking-[.13em] text-[#39594d] shadow-sm backdrop-blur-sm transition hover:bg-white"
+                  className="absolute end-5 top-5 z-10 cursor-pointer rounded-full border border-[#1d4538]/15 bg-[#f8f7f2]/90 px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-[.13em] text-[#39594d] shadow-sm backdrop-blur-sm transition hover:bg-white"
                 >
                   {t.product.zoom} ⤢
                 </button>
 
-                <span className="absolute bottom-5 start-5 z-10 rounded-lg border border-white/20 bg-black/20 px-3 py-1.5 font-mono text-[9px] font-bold uppercase tracking-[.14em] text-white shadow-sm backdrop-blur-md">
+                <span className="absolute bottom-5 start-5 z-10 rounded-lg border border-white/20 bg-black/20 px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-[.14em] text-white shadow-sm backdrop-blur-md">
                   {active + 1} / {gallery.length}
                 </span>
               </>
@@ -369,7 +369,7 @@ export function ProductDetailClient({
         </div>
 
         <div className="w-full min-w-0 lg:pt-7">
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[.19em] text-[#728078]">
+          <p className="font-mono text-xs font-semibold uppercase tracking-[.19em] text-[#728078]">
             {pick(locale, product.category?.name, product.category?.nameAr)}
             {(pick(locale, product.condition, product.conditionAr)) ? ` / ${pick(locale, product.condition, product.conditionAr)}` : ""}
           </p>
@@ -379,7 +379,7 @@ export function ProductDetailClient({
               {headline}
             </h1>
             <span
-              className={`rounded-full px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-[.12em] ${
+              className={`rounded-full px-3.5 py-1.5 font-mono text-xs font-bold uppercase tracking-[.12em] ${
                 STOCK_TONE[product.availability]
               }`}
             >
@@ -388,7 +388,7 @@ export function ProductDetailClient({
           </div>
 
           {(product.description || product.descriptionAr) && (
-            <p className="mt-7 max-w-lg text-[16px] leading-7 text-[#5d6c64]">
+            <p className="mt-7 max-w-lg text-base leading-relaxed text-[#5d6c64]">
               {pick(locale, product.description, product.descriptionAr)}
             </p>
           )}
@@ -414,7 +414,7 @@ export function ProductDetailClient({
 
           {product.configurations && product.configurations.length > 0 && (
             <div className="mt-7">
-              <p className="font-mono text-[9px] font-bold uppercase tracking-[.15em] text-[#7b8981]">
+              <p className="font-mono text-xs font-bold uppercase tracking-[.15em] text-[#7b8981]">
                 {t.product.configTitle}
               </p>
               <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
@@ -441,18 +441,18 @@ export function ProductDetailClient({
                         </b>
                         {cfgPrice != null && (
                           <div className="flex items-baseline gap-1.5">
-                            <span className="whitespace-nowrap font-mono text-[11px] font-bold text-[#1d4538]">
+                            <span className="whitespace-nowrap font-mono text-xs font-bold text-[#1d4538]">
                               {fmtDA(cfgPrice, locale)}
                             </span>
                             {isDiscounted && (
-                              <span className="whitespace-nowrap font-mono text-[9.5px] text-[#9aa39c] line-through">
+                              <span className="whitespace-nowrap font-mono text-xs text-[#9aa39c] line-through">
                                 {fmtDA(product.price, locale)}
                               </span>
                             )}
                           </div>
                         )}
                       </div>
-                      <span className="mt-1 block break-words text-[11px] text-[#617068]">
+                      <span className="mt-1 block break-words text-xs text-[#617068]">
                         {pick(locale, config.sub, config.subAr)}
                       </span>
                     </button>
@@ -467,7 +467,7 @@ export function ProductDetailClient({
               type="button"
               onClick={handleOrderNow}
               disabled={outOfStock && !onRequest}
-              className="flex flex-1 min-w-[200px] cursor-pointer items-center justify-center gap-2.5 rounded-xl bg-[#1d4538] py-4 sm:py-5 px-4 text-[12px] font-bold uppercase tracking-[.1em] text-white shadow-md transition-all duration-200 hover:bg-[#14352b] hover:shadow-lg active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex flex-1 min-w-[200px] cursor-pointer items-center justify-center gap-2.5 rounded-xl bg-[#1d4538] py-4 sm:py-5 px-4 text-xs font-bold uppercase tracking-[.1em] text-white shadow-md transition-all duration-200 hover:bg-[#14352b] hover:shadow-lg active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
             >
               <span>
                 {onRequest
@@ -519,7 +519,7 @@ export function ProductDetailClient({
           </div>
 
           {(pick(locale, product.deliveryNote, product.deliveryNoteAr)) && (
-            <p className="mt-3 text-center text-[11px] text-[#718078]">
+            <p className="mt-3 text-center text-xs text-[#718078]">
               {pick(locale, product.deliveryNote, product.deliveryNoteAr)}
             </p>
           )}
@@ -541,14 +541,14 @@ export function ProductDetailClient({
                       >
                         <Icon className="h-4.5 w-4.5" />
                       </span>
-                      <span className="font-mono text-[10px] font-bold uppercase tracking-[.1em] text-[#1d4538]/70">
+                      <span className="font-mono text-xs font-bold uppercase tracking-[.1em] text-[#1d4538]/70">
                         {String(index + 1).padStart(2, "0")}
                       </span>
                     </div>
-                    <p className="mt-4 text-[14px] font-bold tracking-tight text-[#17251f]">
+                    <p className="mt-4 text-base font-bold tracking-tight text-[#17251f]">
                       {pick(locale, promise.title, promise.titleAr)}
                     </p>
-                    <p className="mt-1.5 text-[12px] leading-5 text-[#58675f]">
+                    <p className="mt-1.5 text-xs leading-5 text-[#58675f]">
                       {pick(locale, promise.text, promise.textAr)}
                     </p>
                   </div>
@@ -571,7 +571,7 @@ export function ProductDetailClient({
       {product.similar && product.similar.length > 0 && (
         <section className="mx-auto max-w-[1360px] px-5 pb-20 sm:px-8">
           <div className="border-t border-[#17251f]/10 pt-10">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[.18em] text-[#718078]">
+            <p className="font-mono text-xs font-semibold uppercase tracking-[.18em] text-[#718078]">
               {t.product.sameCategory}
             </p>
             <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
@@ -586,7 +586,7 @@ export function ProductDetailClient({
                     style={{ backgroundColor: item.tone }}
                   >
                     {item.promoPrice != null && item.price != null && item.promoPrice < item.price && (
-                      <span className="absolute start-2 top-2 z-10 rounded-full bg-red-600 px-2 py-0.5 font-mono text-[9px] font-bold text-white shadow-sm">
+                      <span className="absolute start-2 top-2 z-10 rounded-full bg-red-600 px-2.5 py-0.5 font-mono text-xs font-bold text-white shadow-sm">
                         -{Math.round(((item.price - item.promoPrice) / item.price) * 100)}%
                       </span>
                     )}
@@ -599,18 +599,18 @@ export function ProductDetailClient({
                     )}
                   </div>
                   <div className="px-0.5 pb-0.5 pt-3 sm:px-1 sm:pb-1 sm:pt-4">
-                    <h3 className="line-clamp-2 text-[13px] sm:text-[15px] font-medium tracking-[-.04em]">
+                    <h3 className="line-clamp-2 text-sm sm:text-base font-medium tracking-[-.04em]">
                       {pick(locale, item.name, item.nameAr)}
                     </h3>
-                    <p className="mt-1 line-clamp-2 text-[10px] sm:text-[11px] leading-3.5 sm:leading-4 text-[#718078]">
+                    <p className="mt-1 line-clamp-2 text-xs leading-4 text-[#718078]">
                       {pick(locale, item.specs, item.specsAr)}
                     </p>
                     <div className="mt-2.5 sm:mt-3 flex items-baseline gap-1.5">
-                      <b className="block whitespace-nowrap font-mono text-[13px] sm:text-[14px] font-bold text-[#1d2c26]">
+                      <b className="block whitespace-nowrap font-mono text-sm sm:text-base font-bold text-[#1d2c26]">
                         {fmtDA(item.promoPrice ?? item.price, locale)}
                       </b>
                       {item.promoPrice != null && item.price != null && item.promoPrice < item.price && (
-                        <span className="block whitespace-nowrap font-mono text-[10px] sm:text-[11px] text-[#9aa39c] line-through">
+                        <span className="block whitespace-nowrap font-mono text-xs text-[#9aa39c] line-through">
                           {fmtDA(item.price, locale)}
                         </span>
                       )}

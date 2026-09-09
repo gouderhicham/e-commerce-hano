@@ -41,13 +41,13 @@ export function PageHeader({
   return (
     <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
       <div>
-        <p className="font-mono text-[10px] uppercase tracking-[.18em] text-[#78827b]">
+        <p className="font-mono text-xs uppercase tracking-[.18em] text-[#78827b]">
           {eyebrow}
         </p>
         <h1 className="mt-1 text-3xl font-medium tracking-[-.06em] text-[#17251f]">
           {title}
         </h1>
-        {hint && <p className="mt-1.5 text-[11px] text-[#627269]">{hint}</p>}
+        {hint && <p className="mt-1.5 text-sm text-[#627269]">{hint}</p>}
       </div>
       {action}
     </div>
@@ -57,7 +57,7 @@ export function PageHeader({
 export function Pill({ label, colors }: { label: string; colors: PillColors }) {
   return (
     <span
-      className="inline-flex h-[26px] items-center whitespace-nowrap rounded-full px-3 font-mono text-[10px] font-bold uppercase tracking-[.06em]"
+      className="inline-flex min-h-[28px] items-center whitespace-nowrap rounded-full px-3 font-mono text-xs font-bold uppercase tracking-[.06em]"
       style={{
         color: colors.color,
         background: colors.bg,
@@ -84,7 +84,7 @@ export function ProductThumb({
   const src = mediaSrc(imageUrl);
   return (
     <span
-      className="flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[#17251f]/10 font-mono text-[10px] font-bold text-[#1d4538]"
+      className="flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[#17251f]/10 font-mono text-xs font-bold text-[#1d4538]"
       style={{ width: size, height: size, background: tone }}
     >
       {src ? (
@@ -145,7 +145,7 @@ export function TabChip({
       {label}
       {count !== undefined && (
         <span
-          className={`inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full px-[5px] font-mono text-[10px] font-bold ${
+          className={`inline-flex h-[20px] min-w-[20px] items-center justify-center rounded-full px-[6px] font-mono text-xs font-bold ${
             active ? "bg-white/25 text-white" : "bg-[#edf3ee] text-[#1d4538]"
           }`}
         >
@@ -159,7 +159,7 @@ export function TabChip({
 /** Amber advisory used across the back office for frontoffice-coherence hints. */
 export function Warning({ children }: { children: React.ReactNode }) {
   return (
-    <p className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 p-2.5 text-[10.5px] font-medium leading-4 text-amber-900">
+    <p className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-medium leading-relaxed text-amber-900">
       <svg
         viewBox="0 0 24 24"
         fill="none"
@@ -168,7 +168,7 @@ export function Warning({ children }: { children: React.ReactNode }) {
         strokeLinecap="round"
         strokeLinejoin="round"
         aria-hidden="true"
-        className="h-3.5 w-3.5 shrink-0"
+        className="h-4 w-4 shrink-0 mt-0.5"
       >
         <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
         <path d="M12 9v4" />
@@ -182,7 +182,7 @@ export function Warning({ children }: { children: React.ReactNode }) {
 /** Green confirmation banner shown after a save. */
 export function SavedBanner({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex animate-fade-in items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-xs font-bold text-emerald-800">
+    <div className="flex animate-fade-in items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-bold text-emerald-800">
       <svg
         viewBox="0 0 24 24"
         fill="none"
@@ -205,7 +205,7 @@ export function SavedBanner({ children }: { children: React.ReactNode }) {
 export function ErrorBanner({ children }: { children: React.ReactNode }) {
   if (!children) return null;
   return (
-    <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-xs font-semibold text-red-700">
+    <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
       {children}
     </div>
   );
@@ -240,30 +240,30 @@ export function TableSkeleton({ rows = 6 }: { rows?: number }) {
 
 /** Shared form classes so every admin form looks the same. */
 export const labelCls =
-  "block font-mono text-[9.5px] font-bold uppercase tracking-[.1em] text-[#78827b] mb-1";
+  "block font-mono text-xs font-bold uppercase tracking-[.1em] text-[#78827b] mb-1.5";
 export const inputCls =
-  "w-full rounded-xl border border-[#17251f]/15 bg-white p-3 text-xs font-semibold outline-none transition focus:border-[#1d4538]";
+  "w-full rounded-xl border border-[#17251f]/15 bg-white p-3 text-base font-semibold outline-none transition focus:border-[#1d4538]";
 export const smallInputCls =
-  "w-full rounded-lg border border-[#17251f]/15 bg-white p-2 text-xs outline-none transition focus:border-[#1d4538]";
-export const hintCls = "mt-1 text-[10px] leading-4 text-[#78827b]";
+  "w-full rounded-lg border border-[#17251f]/15 bg-white p-2 text-sm font-medium outline-none transition focus:border-[#1d4538]";
+export const hintCls = "mt-1.5 text-xs leading-relaxed text-[#78827b]";
 export const sectionCls =
   "rounded-2xl border border-[#17251f]/10 bg-[#f8faf7] p-4 space-y-3.5";
 
 export const primaryBtn =
-  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1d4538] px-5 py-3 font-mono text-[11px] font-bold uppercase tracking-[.1em] text-white shadow-sm transition hover:bg-[#14352b] disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1d4538] px-5 py-3 font-mono text-xs font-bold uppercase tracking-[.1em] text-white shadow-sm transition hover:bg-[#14352b] disabled:cursor-not-allowed disabled:opacity-50";
 export const ghostBtn =
-  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#17251f]/20 bg-white px-5 py-3 font-mono text-[11px] font-bold uppercase tracking-[.1em] text-[#17251f] transition hover:border-[#1d4538] hover:text-[#1d4538]";
+  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#17251f]/20 bg-white px-5 py-3 font-mono text-xs font-bold uppercase tracking-[.1em] text-[#17251f] transition hover:border-[#1d4538] hover:text-[#1d4538]";
 export const dangerBtn =
-  "inline-flex cursor-pointer items-center justify-center gap-1 rounded-lg border border-red-200 bg-red-50 px-2.5 py-1.5 font-mono text-[10px] font-bold uppercase text-red-600 transition hover:bg-red-100";
+  "inline-flex cursor-pointer items-center justify-center gap-1 rounded-lg border border-red-200 bg-red-50 px-2.5 py-1.5 font-mono text-xs font-bold uppercase text-red-600 transition hover:bg-red-100";
 
 export const iconBtn = (danger = false) =>
-  `flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-lg border bg-white transition ${
+  `flex h-[36px] w-[36px] cursor-pointer items-center justify-center rounded-lg border bg-white transition ${
     danger
       ? "border-red-200 text-red-600 hover:bg-red-50"
       : "border-[#17251f]/15 text-[#17251f] hover:border-[#1d4538] hover:text-[#1d4538]"
   }`;
 
 export const ADMIN_TABLE_HEAD =
-  "grid gap-3 items-center px-[18px] py-3.5 bg-[#f4f7f3] border-b border-[#17251f]/10 font-mono text-[9.5px] font-bold text-[#78827b] uppercase tracking-[.14em]";
+  "grid gap-3 items-center px-[18px] py-3.5 bg-[#f4f7f3] border-b border-[#17251f]/10 font-mono text-xs font-bold text-[#78827b] uppercase tracking-[.14em]";
 export const ADMIN_TABLE_ROW =
   "grid gap-3 items-center px-[18px] py-3 border-b border-[#17251f]/5 text-sm hover:bg-[#f8faf7] transition";

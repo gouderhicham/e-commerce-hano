@@ -92,7 +92,7 @@ export function ContactClient() {
   return (
     <div className="mx-auto max-w-[1360px] px-5 pb-16 pt-8 sm:px-8">
       <div className="mx-auto mb-10 max-w-2xl border-b border-[#17251f]/10 pb-6 text-center">
-        <span className="block font-mono text-[10px] font-bold uppercase tracking-[.2em] text-[#1d4538]">
+        <span className="block font-mono text-xs font-bold uppercase tracking-[.2em] text-[#1d4538]">
           {t.contact.eyebrow}
         </span>
         <h1 className="mt-2 text-4xl font-semibold tracking-[-.06em] text-[#17251f] sm:text-5xl">
@@ -135,7 +135,7 @@ export function ContactClient() {
               <div>
                 <label
                   htmlFor="fullName"
-                  className="mb-2 block text-[11px] font-bold uppercase tracking-[.08em] text-[#17251f]"
+                  className="mb-2 block text-xs font-bold uppercase tracking-[.08em] text-[#17251f]"
                 >
                   {t.contact.fullName} <span className="text-[#1d4538]">*</span>
                 </label>
@@ -152,7 +152,7 @@ export function ContactClient() {
               <div>
                 <label
                   htmlFor="email"
-                  className="mb-2 block text-[11px] font-bold uppercase tracking-[.08em] text-[#17251f]"
+                  className="mb-2 block text-xs font-bold uppercase tracking-[.08em] text-[#17251f]"
                 >
                   {t.contact.email} <span className="text-[#1d4538]">*</span>
                 </label>
@@ -171,7 +171,7 @@ export function ContactClient() {
               <div>
                 <label
                   htmlFor="phone"
-                  className="mb-2 block text-[11px] font-bold uppercase tracking-[.08em] text-[#17251f]"
+                  className="mb-2 block text-xs font-bold uppercase tracking-[.08em] text-[#17251f]"
                 >
                   {t.contact.phone}
                 </label>
@@ -189,7 +189,7 @@ export function ContactClient() {
               <div>
                 <label
                   htmlFor="subject"
-                  className="mb-2 block text-[11px] font-bold uppercase tracking-[.08em] text-[#17251f]"
+                  className="mb-2 block text-xs font-bold uppercase tracking-[.08em] text-[#17251f]"
                 >
                   {t.contact.subject} <span className="text-[#1d4538]">*</span>
                 </label>
@@ -211,7 +211,7 @@ export function ContactClient() {
             <div>
               <label
                 htmlFor="message"
-                className="mb-2 block text-[11px] font-bold uppercase tracking-[.08em] text-[#17251f]"
+                className="mb-2 block text-xs font-bold uppercase tracking-[.08em] text-[#17251f]"
               >
                 {t.contact.message} <span className="text-[#1d4538]">*</span>
               </label>
@@ -228,7 +228,7 @@ export function ContactClient() {
             <button
               type="submit"
               disabled={status === "loading"}
-              className="flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-xl bg-[#1d4538] py-4 text-[12px] font-bold uppercase tracking-[.12em] text-white shadow-md transition-all duration-200 hover:bg-[#14352b] hover:shadow-lg active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-xl bg-[#1d4538] py-4 text-xs font-bold uppercase tracking-[.12em] text-white shadow-md transition-all duration-200 hover:bg-[#14352b] hover:shadow-lg active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {status === "loading" ? (
                 <span>{t.contact.sending}</span>
@@ -243,7 +243,7 @@ export function ContactClient() {
         )}
       </div>
 
-      <div className="mx-auto mt-8 grid max-w-2xl gap-3 text-center font-mono text-[11px] uppercase tracking-[.14em] text-[#627269] sm:grid-cols-3">
+      <div className="mx-auto mt-8 grid max-w-2xl gap-3 text-center font-mono text-xs uppercase tracking-[.14em] text-[#627269] sm:grid-cols-3">
         <p>{SHOP.phone}</p>
         <p className="normal-case tracking-normal">{SHOP.email}</p>
         <p className="normal-case tracking-normal">{SHOP.address}</p>

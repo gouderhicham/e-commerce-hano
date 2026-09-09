@@ -126,7 +126,7 @@ export function ClientsClient({
                 <span className="min-w-0 overflow-hidden text-[#58675f] text-ellipsis whitespace-nowrap">
                   {row.user.email}
                 </span>
-                <span className="text-[13px] text-[#58675f]">
+                <span className="text-xs text-[#58675f]">
                   {row.user.phone ?? "—"}
                 </span>
                 <span className="text-[#58675f]">{getWilayaName(row.user.wilayaCode)}</span>
@@ -181,7 +181,7 @@ export function ClientsClient({
                   <div className="font-mono text-xl font-bold">
                     {c.user.name}
                   </div>
-                  <div className="text-[13px] text-[#78827b]">
+                  <div className="text-xs text-[#78827b]">
                     Client depuis {frDate(c.since)}
                   </div>
                 </div>

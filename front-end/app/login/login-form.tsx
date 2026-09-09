@@ -10,9 +10,9 @@ import { favoritesReset } from "@/components/storefront/favorites-context";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const inputCls =
-  "w-full rounded-xl border border-[#17251f]/15 bg-white px-4 py-3.5 text-sm text-[#17251f] outline-none transition focus:border-[#1d4538] focus:ring-2 focus:ring-[#1d4538]/15";
+  "w-full rounded-xl border border-[#17251f]/15 bg-white px-4 py-3.5 text-base text-[#17251f] outline-none transition focus:border-[#1d4538] focus:ring-2 focus:ring-[#1d4538]/15";
 const labelCls =
-  "mb-2 block text-[11px] font-bold uppercase tracking-[.08em] text-[#17251f]";
+  "mb-2 block text-xs font-bold uppercase tracking-[.08em] text-[#17251f]";
 
 /**
  * Back-office sign-in. The storefront is entirely guest — browsing, favourites,
@@ -82,18 +82,18 @@ export function LoginCard({ guardMsg }: { guardMsg: string }) {
           className="h-10 w-10 rounded-full border border-[#1d4538]/20 object-cover shadow-sm"
         />
         <div className="flex flex-col justify-center leading-none">
-          <div className="flex items-baseline gap-1 font-mono text-[17px] font-extrabold uppercase tracking-[.18em] text-[#17251f]">
+          <div className="flex items-baseline gap-1 font-mono text-base font-extrabold uppercase tracking-[.18em] text-[#17251f]">
             <span>pc store</span>
             <span className="font-black text-[#1d4538]">.39</span>
           </div>
-          <span className="mt-0.5 font-mono text-[8px] font-semibold uppercase tracking-[.25em] text-[#78827b]">
+          <span className="mt-0.5 font-mono text-xs font-semibold uppercase tracking-[.25em] text-[#78827b]">
             panneau d&apos;administration
           </span>
         </div>
       </Link>
 
       <div className="rounded-2xl border border-[#17251f]/10 bg-[#fdfcf8] p-6 shadow-sm sm:p-8">
-        <span className="block font-mono text-[10px] font-bold uppercase tracking-[.2em] text-[#1d4538]">
+        <span className="block font-mono text-xs font-bold uppercase tracking-[.2em] text-[#1d4538]">
           Backoffice
         </span>
         <h1 className="mt-1 text-3xl font-semibold tracking-[-.06em] text-[#17251f]">
@@ -131,7 +131,7 @@ export function LoginCard({ guardMsg }: { guardMsg: string }) {
               className={inputCls}
             />
             {errors.email && (
-              <p className="mt-1 text-[11px] font-medium text-red-600">
+              <p className="mt-1 text-xs font-medium text-red-600">
                 {errors.email}
               </p>
             )}
@@ -155,7 +155,7 @@ export function LoginCard({ guardMsg }: { guardMsg: string }) {
               className={inputCls}
             />
             {errors.password && (
-              <p className="mt-1 text-[11px] font-medium text-red-600">
+              <p className="mt-1 text-xs font-medium text-red-600">
                 {errors.password}
               </p>
             )}
@@ -164,7 +164,7 @@ export function LoginCard({ guardMsg }: { guardMsg: string }) {
           <button
             type="submit"
             disabled={submitting}
-            className="flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-xl bg-[#1d4538] py-4 text-[12px] font-bold uppercase tracking-[.12em] text-white shadow-md transition-all duration-200 hover:bg-[#14352b] hover:shadow-lg active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-xl bg-[#1d4538] py-4 text-xs font-bold uppercase tracking-[.12em] text-white shadow-md transition-all duration-200 hover:bg-[#14352b] hover:shadow-lg active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? "Connexion…" : "Se connecter"}
             {!submitting && <span className="text-base">→</span>}
@@ -172,7 +172,7 @@ export function LoginCard({ guardMsg }: { guardMsg: string }) {
         </form>
       </div>
 
-      <p className="mt-6 text-center text-[11px] text-[#78827b]">
+      <p className="mt-6 text-center text-xs text-[#78827b]">
         <Link href="/" className="font-semibold text-[#1d4538] hover:underline">
           ← Retour à la boutique
         </Link>

@@ -177,7 +177,7 @@ export function missingFields(draft: ProductDraft): string[] {
 }
 
 const sectionLabel = (text: string) => (
-  <span className="font-mono text-[9.5px] font-bold uppercase tracking-[.14em] text-[#1d4538]">
+  <span className="font-mono text-xs font-bold uppercase tracking-[.14em] text-[#1d4538]">
     {text}
   </span>
 );
@@ -438,7 +438,7 @@ export function ProductForm({
               placeholder="Vide = Sur commande"
               className={inputCls}
             />
-            <p className="mt-1 font-mono text-[10px] text-[#78827b]">
+            <p className="mt-1 font-mono text-xs text-[#78827b]">
               Rendu site : {fmtDA(draft.price)}
             </p>
           </div>
@@ -461,7 +461,7 @@ export function ProductForm({
             {draft.promoPrice !== null &&
               draft.price !== null &&
               draft.promoPrice >= draft.price && (
-                <p className="mt-1 text-[10px] font-semibold text-red-600">
+                <p className="mt-1 text-xs font-semibold text-red-600">
                   Le prix promo doit être inférieur au prix.
                 </p>
               )}
@@ -489,7 +489,7 @@ export function ProductForm({
               type="button"
               onClick={() => set("specs", selectedTagLabels.join(" · "))}
               disabled={!selectedTagLabels.length}
-              className="mt-1 inline-flex cursor-pointer items-center gap-1 font-mono text-[9.5px] font-bold uppercase text-[#1d4538] hover:underline disabled:opacity-40"
+              className="mt-1 inline-flex cursor-pointer items-center gap-1 font-mono text-xs font-bold uppercase text-[#1d4538] hover:underline disabled:opacity-40"
             >
               <Wand2 className="h-3 w-3" /> Composer depuis les attributs
             </button>
@@ -510,7 +510,7 @@ export function ProductForm({
               type="button"
               onClick={() => set("specsAr", selectedTagLabelsAr.join(" · "))}
               disabled={!selectedTagLabelsAr.length}
-              className="mt-1 inline-flex cursor-pointer items-center gap-1 font-mono text-[9.5px] font-bold uppercase text-[#1d4538] hover:underline disabled:opacity-40"
+              className="mt-1 inline-flex cursor-pointer items-center gap-1 font-mono text-xs font-bold uppercase text-[#1d4538] hover:underline disabled:opacity-40"
             >
               <Wand2 className="h-3 w-3" /> Composer en arabe depuis les attributs
             </button>
@@ -520,14 +520,14 @@ export function ProductForm({
 
         <div className="space-y-3 rounded-xl border border-[#1d4538]/20 bg-[#edf3ee] p-3.5">
           <div className="flex items-center justify-between border-b border-[#1d4538]/15 pb-2">
-            <span className="font-mono text-[9.5px] font-bold uppercase tracking-[.14em] text-[#1d4538]">
+            <span className="font-mono text-xs font-bold uppercase tracking-[.14em] text-[#1d4538]">
               Attributs filtrables (sidebar catalogue)
             </span>
-            <span className="text-[10px] text-[#627269]">Sélection multiple autorisée</span>
+            <span className="text-xs text-[#627269]">Sélection multiple autorisée</span>
           </div>
 
           {relevantGroups.length === 0 ? (
-            <p className="text-[10.5px] font-medium text-[#627269]">
+            <p className="text-xs font-medium text-[#627269]">
               Aucun groupe de filtres ne cible « {category?.name ?? "cette catégorie"} ».
             </p>
           ) : (
@@ -541,7 +541,7 @@ export function ProductForm({
 
               return (
                 <div key={group.id}>
-                  <div className="mb-1.5 flex items-baseline gap-2 font-mono text-[9px] font-bold uppercase tracking-[.14em] text-[#1d4538]">
+                  <div className="mb-1.5 flex items-baseline gap-2 font-mono text-xs font-bold uppercase tracking-[.14em] text-[#1d4538]">
                     <span>{group.name}</span>
                     {group.nameAr && (
                       <span className="font-arabic font-semibold normal-case text-[#2c5b48]">
@@ -549,7 +549,7 @@ export function ProductForm({
                       </span>
                     )}
                     {!group.targets.includes(draft.categoryId) && (
-                      <span className="font-sans text-[9px] font-semibold normal-case text-amber-700">
+                      <span className="font-sans text-xs font-semibold normal-case text-amber-700">
                         (hors catégorie)
                       </span>
                     )}
@@ -567,7 +567,7 @@ export function ProductForm({
                           onClick={() =>
                             toggleAttribute(group.field, tag.label)
                           }
-                          className={`cursor-pointer rounded-md border px-2.5 py-1 text-[10.5px] font-medium transition ${
+                          className={`cursor-pointer rounded-md border px-2.5 py-1 text-xs font-medium transition ${
                             active
                               ? "border-[#1d4538] bg-[#1d4538] font-semibold text-white shadow-2xs"
                               : "border-[#17251f]/15 bg-white text-[#17251f] hover:border-[#1d4538]/50"
@@ -576,7 +576,7 @@ export function ProductForm({
                           <span className="font-mono">{active ? "✓ " : "+ "}</span>
                           <span>{tag.label}</span>
                           {tag.labelAr && tag.labelAr !== tag.label && (
-                            <span className={`ml-1.5 font-arabic text-[10px] ${active ? "text-[#d7e6d9]" : "text-[#627269]"}`}>
+                            <span className={`ml-1.5 font-arabic text-xs ${active ? "text-[#d7e6d9]" : "text-[#627269]"}`}>
                               ({tag.labelAr})
                             </span>
                           )}
@@ -600,7 +600,7 @@ export function ProductForm({
             <label className={`${labelCls} mb-0`}>
               Galerie fiche produit ({draft.gallery.length})
             </label>
-            <label className="inline-flex cursor-pointer items-center gap-1 font-mono text-[9.5px] font-bold uppercase text-[#1d4538] hover:underline">
+            <label className="inline-flex cursor-pointer items-center gap-1 font-mono text-xs font-bold uppercase text-[#1d4538] hover:underline">
               <Plus className="h-3 w-3" /> Ajouter des images
               <input
                 type="file"
@@ -616,7 +616,7 @@ export function ProductForm({
           </div>
 
           {draft.gallery.length === 0 && (
-            <p className="text-[10.5px] font-medium text-[#a06b1f]">
+            <p className="text-xs font-medium text-[#a06b1f]">
               Sans galerie, le slider de la fiche produit reste vide.
             </p>
           )}
@@ -640,7 +640,7 @@ export function ProductForm({
                       <ImageIcon className="h-4 w-4 text-[#78827b]" />
                     )}
                   </span>
-                  <span className="min-w-0 flex-1 truncate font-mono text-[10px] text-[#627269]">
+                  <span className="min-w-0 flex-1 truncate font-mono text-xs text-[#627269]">
                     {slot.file ? slot.file.name : (slot.url ?? "—")}
                   </span>
                   <button
@@ -724,7 +724,7 @@ export function ProductForm({
                   },
                 ]);
               }}
-              className="inline-flex cursor-pointer items-center gap-1 font-mono text-[9.5px] font-bold uppercase text-[#1d4538] hover:underline"
+              className="inline-flex cursor-pointer items-center gap-1 font-mono text-xs font-bold uppercase text-[#1d4538] hover:underline"
             >
               <Plus className="h-3 w-3" /> Ajouter une configuration
             </button>
@@ -732,7 +732,7 @@ export function ProductForm({
 
           <div className="space-y-3">
             {draft.configurations.length === 0 && (
-              <p className="text-[10.5px] font-medium text-[#627269]">
+              <p className="text-xs font-medium text-[#627269]">
                 Aucune configuration : le bloc est masqué sur la fiche.
               </p>
             )}
@@ -742,7 +742,7 @@ export function ProductForm({
                 className="space-y-2 rounded-xl border border-[#17251f]/10 bg-white p-3 shadow-2xs"
               >
                 <div className="flex items-center gap-2">
-                  <span className="shrink-0 font-mono text-[9px] font-bold text-[#78827b]">
+                  <span className="shrink-0 font-mono text-xs font-bold text-[#78827b]">
                     {idx === 0 ? "ACTIVE" : `0${idx + 1}`}
                   </span>
                   <input
@@ -781,7 +781,7 @@ export function ProductForm({
                           />
                         );
                       })()}
-                      <span className="absolute -top-2 end-1 rounded bg-[#1d4538] px-1 py-0.5 font-mono text-[7px] font-bold text-white uppercase shadow-2xs">
+                      <span className="absolute -top-2.5 end-0.5 rounded bg-[#1d4538] px-1.5 py-0.5 font-mono text-xs font-bold text-white uppercase shadow-2xs">
                         Base auto
                       </span>
                     </div>
@@ -875,7 +875,7 @@ export function ProductForm({
                 className="space-y-2 rounded-xl border border-[#17251f]/10 bg-white p-3 shadow-2xs"
               >
                 <div className="flex items-center gap-2">
-                  <span className="shrink-0 font-mono text-[9px] font-bold text-[#78827b]">
+                  <span className="shrink-0 font-mono text-xs font-bold text-[#78827b]">
                     0{idx + 1}
                   </span>
                   <select
@@ -888,7 +888,7 @@ export function ProductForm({
                       };
                       set("promises", next);
                     }}
-                    className="w-24 shrink-0 cursor-pointer rounded-lg border border-[#17251f]/15 bg-white p-2 text-[11px] font-semibold outline-none focus:border-[#1d4538]"
+                    className="w-24 shrink-0 cursor-pointer rounded-lg border border-[#17251f]/15 bg-white p-2 text-xs font-semibold outline-none focus:border-[#1d4538]"
                   >
                     <option value="check">Check</option>
                     <option value="shield">Garantie</option>
@@ -963,7 +963,7 @@ export function ProductForm({
                     { icon: "check", title: "Nouvelle promesse", titleAr: "ميزة جديدة", text: "", textAr: "" },
                   ])
                 }
-                className="inline-flex cursor-pointer items-center gap-1 font-mono text-[9.5px] font-bold uppercase text-[#1d4538] hover:underline"
+                className="inline-flex cursor-pointer items-center gap-1 font-mono text-xs font-bold uppercase text-[#1d4538] hover:underline"
               >
                 <Plus className="h-3 w-3" /> Ajouter une carte (3 attendues)
               </button>
@@ -973,8 +973,8 @@ export function ProductForm({
       </div>
 
       {missing.length > 0 && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-[10.5px] font-medium text-amber-900">
-          <span className="flex items-center gap-1.5 font-mono text-[9.5px] font-bold uppercase">
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-medium text-amber-900">
+          <span className="flex items-center gap-1.5 font-mono text-xs font-bold uppercase">
             Champs manquants pour une fiche complète
           </span>
           <p className="mt-1.5">{missing.join(" · ")}</p>
@@ -982,12 +982,12 @@ export function ProductForm({
       )}
 
       {missingAr.length > 0 && (
-        <div className="rounded-xl border border-[#17251f]/12 bg-[#f1f5f0] p-3 text-[10.5px] font-medium text-[#3d5a4c]">
-          <span className="flex items-center gap-1.5 font-mono text-[9.5px] font-bold uppercase">
+        <div className="rounded-xl border border-[#17251f]/12 bg-[#f1f5f0] p-3 text-xs font-medium text-[#3d5a4c]">
+          <span className="flex items-center gap-1.5 font-mono text-xs font-bold uppercase">
             Traductions arabes manquantes
           </span>
           <p className="mt-1.5">{missingAr.join(" · ")}</p>
-          <p className="mt-1.5 text-[10px] text-[#5c7466]">
+          <p className="mt-1.5 text-xs text-[#5c7466]">
             La fiche reste publiable : ces champs afficheront le texte français
             aux clients arabophones.
           </p>

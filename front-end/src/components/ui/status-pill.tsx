@@ -15,10 +15,10 @@ export function StatusPill({
 }) {
   const sizeClasses =
     size === "sm"
-      ? "h-[22px] px-[9px] text-[11px]"
+      ? "h-[26px] px-2.5 text-xs"
       : size === "lg"
-        ? "h-[30px] px-3.5 text-sm"
-        : "h-[26px] px-3 text-xs";
+        ? "h-[32px] px-3.5 text-sm"
+        : "h-[28px] px-3 text-xs";
   return (
     <span
       className={`inline-flex items-center whitespace-nowrap rounded-full font-semibold ${sizeClasses}`}

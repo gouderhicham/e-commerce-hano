@@ -430,12 +430,12 @@ export function ProduitsClient({
                     />
                   </span>
                   {item.promoPrice !== null && item.price !== null && item.promoPrice < item.price && (
-                    <span className="absolute left-3 top-3 z-10 rounded-full bg-red-600 px-2 py-0.5 font-mono text-[8px] font-bold uppercase text-white shadow-xs">
+                    <span className="absolute left-3 top-3 z-10 rounded-full bg-red-600 px-2 py-0.5 font-mono text-xs font-bold uppercase text-white shadow-xs">
                       Promo -{Math.round(((item.price - item.promoPrice) / item.price) * 100)}%
                     </span>
                   )}
                   {!item.active && (
-                    <span className="absolute bottom-3 left-3 z-10 rounded-full bg-[#17251f]/80 px-2.5 py-1 font-mono text-[8px] font-bold uppercase tracking-[.1em] text-white">
+                    <span className="absolute bottom-3 left-3 z-10 rounded-full bg-[#17251f]/80 px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-[.1em] text-white">
                       Inactif
                     </span>
                   )}
@@ -451,11 +451,11 @@ export function ProduitsClient({
                 <div className="flex flex-1 flex-col justify-between px-1 pb-1 pt-4">
                   <div>
                     <div className="flex items-center justify-between gap-2">
-                      <p className="truncate font-mono text-[9px] font-semibold uppercase tracking-[.13em] text-[#78827b]">
+                      <p className="truncate font-mono text-xs font-semibold uppercase tracking-[.13em] text-[#78827b]">
                         {categoryName(item.categoryId)}
                         {item.condition ? ` / ${item.condition}` : ""}
                       </p>
-                      <span className="shrink-0 rounded bg-[#edf3ee] px-1.5 py-0.5 font-mono text-[8.5px] font-bold text-[#1d4538]">
+                      <span className="shrink-0 rounded bg-[#edf3ee] px-1.5 py-0.5 font-mono text-xs font-bold text-[#1d4538]">
                         {item.images.length} img
                       </span>
                     </div>
@@ -464,16 +464,16 @@ export function ProduitsClient({
                         {item.name}
                       </h3>
                       {item.nameAr && (
-                        <span className="rounded bg-[#e0ebe1] px-1.5 py-0.5 font-arabic text-[11px] font-semibold text-[#1d4538]">
+                        <span className="rounded bg-[#e0ebe1] px-1.5 py-0.5 font-arabic text-xs font-semibold text-[#1d4538]">
                           {item.nameAr}
                         </span>
                       )}
                     </div>
-                    <p className="mt-1 line-clamp-2 text-[11.5px] leading-4 text-[#627269]">
+                    <p className="mt-1 line-clamp-2 text-xs leading-4 text-[#627269]">
                       {item.specs}
                     </p>
                     {item.specsAr && (
-                      <p className="mt-0.5 line-clamp-1 font-arabic text-[10.5px] leading-4 text-[#78827b]">
+                      <p className="mt-0.5 line-clamp-1 font-arabic text-xs leading-4 text-[#78827b]">
                         {item.specsAr}
                       </p>
                     )}
@@ -482,19 +482,19 @@ export function ProduitsClient({
                       {attributeValues.map((value) => (
                         <span
                           key={value}
-                          className="rounded border border-[#1d4538]/25 bg-[#edf3ee] px-1.5 py-0.5 font-mono text-[9px] font-semibold text-[#1d4538]"
+                          className="rounded border border-[#1d4538]/25 bg-[#edf3ee] px-1.5 py-0.5 font-mono text-xs font-semibold text-[#1d4538]"
                         >
                           {value}
                         </span>
                       ))}
                       {attributeValues.length === 0 && (
-                        <span className="rounded border border-amber-200 bg-amber-50 px-1.5 py-0.5 font-mono text-[9px] font-semibold text-amber-800">
+                        <span className="rounded border border-amber-200 bg-amber-50 px-1.5 py-0.5 font-mono text-xs font-semibold text-amber-800">
                           aucun filtre
                         </span>
                       )}
                     </div>
 
-                    <div className="mt-2 flex flex-wrap gap-1 font-mono text-[8.5px] font-bold uppercase text-[#78827b]">
+                    <div className="mt-2 flex flex-wrap gap-1 font-mono text-xs font-bold uppercase text-[#78827b]">
                       <span className="rounded bg-[#f4f7f3] px-1.5 py-0.5">
                         {item.configurations.length} config.
                       </span>
@@ -506,7 +506,7 @@ export function ProduitsClient({
                     </div>
 
                     {gaps.length > 0 && (
-                      <p className="mt-2 rounded-lg border border-amber-200 bg-amber-50 p-1.5 text-[9.5px] font-medium leading-4 text-amber-900">
+                      <p className="mt-2 rounded-lg border border-amber-200 bg-amber-50 p-1.5 text-xs font-medium leading-4 text-amber-900">
                         Fiche incomplète : {gaps.join(", ")}
                       </p>
                     )}
@@ -524,7 +524,7 @@ export function ProduitsClient({
                           </span>
                         )}
                       </div>
-                      <span className="font-mono text-[10px] text-[#78827b]">
+                      <span className="font-mono text-xs text-[#78827b]">
                         {item.stock} en stock
                       </span>
                     </div>
@@ -534,7 +534,7 @@ export function ProduitsClient({
                         type="button"
                         onClick={() => setPreview(item)}
                         title="Aperçu de la fiche"
-                        className="flex cursor-pointer items-center justify-center gap-1 rounded-lg border border-[#1d4538]/30 bg-[#edf3ee] py-1.5 font-mono text-[10px] font-bold uppercase text-[#1d4538] transition hover:bg-[#1d4538] hover:text-white"
+                        className="flex cursor-pointer items-center justify-center gap-1 rounded-lg border border-[#1d4538]/30 bg-[#edf3ee] py-1.5 font-mono text-xs font-bold uppercase text-[#1d4538] transition hover:bg-[#1d4538] hover:text-white"
                       >
                         <Eye className="h-3.5 w-3.5" />
                         <span>Aperçu</span>
@@ -542,7 +542,7 @@ export function ProduitsClient({
                       <button
                         type="button"
                         onClick={() => setEditing(toDraft(item))}
-                        className="flex cursor-pointer items-center justify-center gap-1 rounded-lg border border-[#17251f]/15 bg-white py-1.5 font-mono text-[10px] font-bold uppercase text-[#17251f] transition hover:border-[#1d4538] hover:text-[#1d4538]"
+                        className="flex cursor-pointer items-center justify-center gap-1 rounded-lg border border-[#17251f]/15 bg-white py-1.5 font-mono text-xs font-bold uppercase text-[#17251f] transition hover:border-[#1d4538] hover:text-[#1d4538]"
                       >
                         <Edit3 className="h-3.5 w-3.5" />
                         <span>Éditer</span>
@@ -574,7 +574,7 @@ export function ProduitsClient({
           <>
             <div className="mb-4 flex items-center justify-between border-b border-[#17251f]/10 pb-4">
               <div>
-                <span className="font-mono text-[9.5px] font-bold uppercase text-[#1d4538]">
+                <span className="font-mono text-xs font-bold uppercase text-[#1d4538]">
                   Catalogue &amp; Fiche
                 </span>
                 <h2 className="text-xl font-bold text-[#17251f]">
@@ -614,7 +614,7 @@ export function ProduitsClient({
           <>
             <div className="mb-4 flex items-center justify-between border-b border-[#17251f]/10 pb-4">
               <div>
-                <span className="font-mono text-[9.5px] font-bold uppercase text-[#1d4538]">
+                <span className="font-mono text-xs font-bold uppercase text-[#1d4538]">
                   Modification fiche
                 </span>
                 <h2 className="text-xl font-bold text-[#17251f]">

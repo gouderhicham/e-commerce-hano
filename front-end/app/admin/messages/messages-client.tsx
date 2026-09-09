@@ -140,7 +140,7 @@ export function MessagesClient({
                   >
                     {m.name}
                   </span>
-                  <span className="inline-flex h-[22px] items-center rounded-full border border-[#1d4538]/30 bg-[#edf3ee] px-2.5 text-[11px] font-semibold whitespace-nowrap text-[#1d4538]">
+                  <span className="inline-flex min-h-[26px] items-center rounded-full border border-[#1d4538]/30 bg-[#edf3ee] px-2.5 text-xs font-semibold whitespace-nowrap text-[#1d4538]">
                     {m.subject}
                   </span>
                   {!isOpen && (

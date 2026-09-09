@@ -124,7 +124,7 @@ export function StockClient({ initial = defaultStockEnvelope }: { initial?: Stoc
             <div className={`font-mono text-2xl font-bold ${kpi.tone}`}>
               {kpi.value}
             </div>
-            <div className="mt-1 font-mono text-[10px] uppercase tracking-[.14em] text-[#78827b]">
+            <div className="mt-1 font-mono text-xs uppercase tracking-[.14em] text-[#78827b]">
               {kpi.label}
             </div>
           </Card>
@@ -204,7 +204,7 @@ export function StockClient({ initial = defaultStockEnvelope }: { initial?: Stoc
                     <span className="min-w-0 font-semibold leading-[1.3]">
                       {product.name}
                     </span>
-                    <span className="font-mono text-[11px] tracking-[.05em] text-[#58675f]">
+                    <span className="font-mono text-xs tracking-[.05em] text-[#58675f]">
                       {product.reference}
                     </span>
                     <input
@@ -231,7 +231,7 @@ export function StockClient({ initial = defaultStockEnvelope }: { initial?: Stoc
                         colors={AVAILABILITY_PILLS[product.availability]}
                       />
                     </span>
-                    <span className="font-mono text-[11px] text-[#78827b]">
+                    <span className="font-mono text-xs text-[#78827b]">
                       {frDate(product.updatedAt)}
                     </span>
                   </div>

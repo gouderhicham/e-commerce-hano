@@ -17,11 +17,11 @@ import type { Order, ProductDetail, Wilaya } from "@/lib/data/types";
 export const ORDER_SECTION_ID = "commander";
 
 const inputCls =
-  "mt-2 w-full border-b border-[#17251f]/20 bg-transparent py-3 text-[14px] font-normal text-[#17251f] outline-none transition placeholder:text-[#9ca59e] focus:border-[#1d4538]";
+  "mt-2 w-full border-b border-[#17251f]/20 bg-transparent py-3 text-base font-normal text-[#17251f] outline-none transition placeholder:text-[#9ca59e] focus:border-[#1d4538]";
 const labelCls =
-  "block text-[11px] font-bold uppercase tracking-[.08em] text-[#33423b]";
+  "block text-xs font-bold uppercase tracking-[.08em] text-[#33423b]";
 const errorCls =
-  "mt-1 block text-[11px] font-medium normal-case tracking-normal text-red-600";
+  "mt-1 block text-xs font-medium normal-case tracking-normal text-red-600";
 
 type Errors = Partial<
   Record<"firstName" | "lastName" | "phone" | "wilaya" | "commune", string>
@@ -148,7 +148,7 @@ export function ProductOrderForm({
         className="border-y border-[#17251f]/10 bg-[#e7eee5] py-16 sm:py-20"
       >
         <div className="mx-auto max-w-[640px] px-5 text-center sm:px-8">
-          <span className="font-mono text-[10px] font-bold uppercase tracking-[.22em] text-[#2c5b48]">
+          <span className="font-mono text-xs font-bold uppercase tracking-[.22em] text-[#2c5b48]">
             {t.checkout.successEyebrow}
           </span>
           <h2 className="mt-3 text-3xl font-medium tracking-[-.05em] text-[#17251f] sm:text-4xl">
@@ -212,7 +212,7 @@ export function ProductOrderForm({
     >
       <div className="mx-auto max-w-[1360px] px-5 sm:px-8">
         <div className="mx-auto max-w-xl text-center">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-[.2em] text-[#627269]">
+          <p className="font-mono text-xs font-bold uppercase tracking-[.2em] text-[#627269]">
             {t.checkout.eyebrow}
           </p>
           <h2 className="mt-2 text-3xl font-medium tracking-[-.05em] text-[#17251f] sm:text-4xl">
@@ -229,7 +229,7 @@ export function ProductOrderForm({
         >
           {/* Inputs */}
           <div>
-            <h3 className="font-mono text-[11px] font-bold uppercase tracking-[.14em] text-[#2c5b48]">
+            <h3 className="font-mono text-xs font-bold uppercase tracking-[.14em] text-[#2c5b48]">
               {t.checkout.subtitle}
             </h3>
 
@@ -316,7 +316,7 @@ export function ProductOrderForm({
           {/* Summary */}
           <div className="flex flex-col justify-between rounded-2xl border border-[#17251f]/10 bg-[#f8f7f2] p-6">
             <div>
-              <h3 className="font-mono text-[11px] font-bold uppercase tracking-[.14em] text-[#2c5b48]">
+              <h3 className="font-mono text-xs font-bold uppercase tracking-[.14em] text-[#2c5b48]">
                 {t.checkout.orderSummaryTitle}
               </h3>
 
@@ -333,7 +333,7 @@ export function ProductOrderForm({
                     {pick(locale, product.name, product.nameAr)}
                   </p>
                   {configLabel && (
-                    <p className="font-mono text-[11px] text-[#63726a]">{configLabel}</p>
+                    <p className="font-mono text-xs text-[#63726a]">{configLabel}</p>
                   )}
                   <div className="mt-1 flex items-baseline gap-1.5 font-mono text-xs font-semibold text-[#1d4538]">
                     <span>{fmtDA(unitPrice, locale)}</span>
@@ -341,7 +341,7 @@ export function ProductOrderForm({
                       product.price != null &&
                       product.promoPrice < product.price &&
                       unitPrice === (product.promoPrice ?? product.price) && (
-                        <span className="text-[10px] text-[#9ca59e] line-through">
+                        <span className="text-xs text-[#9ca59e] line-through">
                           {fmtDA(product.price, locale)}
                         </span>
                       )}

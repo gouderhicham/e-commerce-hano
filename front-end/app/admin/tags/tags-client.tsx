@@ -398,7 +398,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                   <div className="mb-3 flex items-start justify-between gap-2 border-b border-[#17251f]/10 pb-2">
                     <div className="grid flex-1 gap-1 sm:grid-cols-2">
                       <div>
-                        <span className="block font-mono text-[8px] font-bold uppercase text-[#78827b]">
+                        <span className="block font-mono text-xs font-bold uppercase text-[#78827b]">
                           Nom FR
                         </span>
                         <input
@@ -406,11 +406,11 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                           onChange={(e) => patch(group.id, { name: e.target.value })}
                           aria-label="Nom du groupe (FR)"
                           placeholder="Nom FR"
-                          className="w-full bg-transparent font-mono text-[11px] font-bold uppercase tracking-[.1em] text-[#1d4538] outline-none"
+                          className="w-full bg-transparent font-mono text-xs font-bold uppercase tracking-[.1em] text-[#1d4538] outline-none"
                         />
                       </div>
                       <div>
-                        <span className="block font-mono text-[8px] font-bold uppercase text-[#78827b]">
+                        <span className="block font-mono text-xs font-bold uppercase text-[#78827b]">
                           الاسم بالعربية
                         </span>
                         <input
@@ -419,7 +419,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                           dir="rtl"
                           aria-label="Nom du groupe (العربية)"
                           placeholder="الاسم بالعربية"
-                          className="w-full bg-transparent font-arabic text-[11px] font-bold text-[#1d4538] outline-none"
+                          className="w-full bg-transparent font-arabic text-xs font-bold text-[#1d4538] outline-none"
                         />
                       </div>
                     </div>
@@ -435,7 +435,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                   </div>
 
                   <div className="mb-3">
-                    <label className="mb-1 block font-mono text-[8.5px] font-bold uppercase text-[#78827b]">
+                    <label className="mb-1 block font-mono text-xs font-bold uppercase text-[#78827b]">
                       Catégories cibles
                     </label>
                     <div className="flex flex-wrap gap-1">
@@ -450,7 +450,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                                 : [...group.targets, cat.id],
                             })
                           }
-                          className={`cursor-pointer rounded border px-1.5 py-0.5 font-mono text-[9px] font-bold transition ${
+                          className={`cursor-pointer rounded border px-1.5 py-0.5 font-mono text-xs font-bold transition ${
                             group.targets.includes(cat.id)
                               ? "border-[#1d4538] bg-[#1d4538] text-white"
                               : "border-[#17251f]/15 bg-white text-[#4a5850] hover:border-[#1d4538]/40"
@@ -472,7 +472,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
 
                   {/* Tags list */}
                   <div className="mb-4 space-y-1.5">
-                    <div className="flex items-center justify-between font-mono text-[8.5px] font-bold uppercase text-[#78827b]">
+                    <div className="flex items-center justify-between font-mono text-xs font-bold uppercase text-[#78827b]">
                       <span>Tags ({group.tags.length})</span>
                       <span>Libellé FR · Libellé AR</span>
                     </div>
@@ -495,7 +495,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                             }}
                             title="Libellé affiché au client en français"
                             placeholder="Libellé FR"
-                            className="w-1/2 rounded border border-[#17251f]/10 bg-white px-2 py-1 text-[11px] font-semibold outline-none focus:border-[#1d4538]"
+                            className="w-1/2 rounded border border-[#17251f]/10 bg-white px-2 py-1 text-xs font-semibold outline-none focus:border-[#1d4538]"
                           />
                           <input
                             value={tag.labelAr ?? ""}
@@ -507,11 +507,11 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                             dir="rtl"
                             title="الاسم المعروض للعملاء بالعربية"
                             placeholder="الاسم بالعربية"
-                            className="w-1/2 rounded border border-[#17251f]/10 bg-white px-2 py-1 font-arabic text-[11px] font-semibold outline-none focus:border-[#1d4538]"
+                            className="w-1/2 rounded border border-[#17251f]/10 bg-white px-2 py-1 font-arabic text-xs font-semibold outline-none focus:border-[#1d4538]"
                           />
                           <span
                             title="Nombre de produits utilisant ce tag"
-                            className={`shrink-0 rounded px-1.5 py-0.5 font-mono text-[9px] font-bold ${
+                            className={`shrink-0 rounded px-1.5 py-0.5 font-mono text-xs font-bold ${
                               used
                                 ? "bg-[#1d4538] text-white"
                                 : "border border-amber-200 bg-white text-[#a06b1f]"
@@ -540,7 +540,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                 {/* Add Tag row & Save group button */}
                 <div className="space-y-2 border-t border-[#17251f]/10 pt-3">
                   <div className="space-y-1.5 rounded-xl border border-[#17251f]/10 bg-[#fbfcfb] p-2">
-                    <span className="block font-mono text-[8.5px] font-bold uppercase text-[#78827b]">
+                    <span className="block font-mono text-xs font-bold uppercase text-[#78827b]">
                       Ajouter un nouveau tag
                     </span>
                     <div className="flex gap-1.5">
@@ -553,7 +553,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                           }))
                         }
                         placeholder="Libellé FR (ex: 32 Go)"
-                        className="w-1/2 rounded-lg border border-[#17251f]/15 bg-white px-2.5 py-1 text-[10.5px] outline-none focus:border-[#1d4538]"
+                        className="w-1/2 rounded-lg border border-[#17251f]/15 bg-white px-2.5 py-1 text-xs outline-none focus:border-[#1d4538]"
                       />
                       <input
                         value={curInput?.labelAr ?? ""}
@@ -565,14 +565,14 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                         }
                         dir="rtl"
                         placeholder="الاسم بالعربية (مثال: 32 جيجابايت)"
-                        className="w-1/2 rounded-lg border border-[#17251f]/15 bg-white px-2.5 py-1 font-arabic text-[10.5px] outline-none focus:border-[#1d4538]"
+                        className="w-1/2 rounded-lg border border-[#17251f]/15 bg-white px-2.5 py-1 font-arabic text-xs outline-none focus:border-[#1d4538]"
                       />
                     </div>
                     <button
                       type="button"
                       onClick={() => addTagToGroup(group.id)}
                       disabled={!curInput?.label?.trim()}
-                      className="inline-flex w-full cursor-pointer items-center justify-center gap-1 rounded-lg bg-[#1d4538] py-1.5 font-mono text-[10px] font-bold uppercase text-white transition hover:bg-[#14352b] disabled:opacity-40"
+                      className="inline-flex w-full cursor-pointer items-center justify-center gap-1 rounded-lg bg-[#1d4538] py-1.5 font-mono text-xs font-bold uppercase text-white transition hover:bg-[#14352b] disabled:opacity-40"
                     >
                       <Plus className="h-3 w-3" />
                       <span>Ajouter le tag</span>
@@ -596,14 +596,14 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
         {/* Live replica of the storefront catalogue sidebar with [FR] / [AR] toggle */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[.15em] text-[#78827b]">
+            <span className="font-mono text-xs font-bold uppercase tracking-[.15em] text-[#78827b]">
               Aperçu Sidebar Catalogue
             </span>
             <div className="flex items-center overflow-hidden rounded-lg border border-[#17251f]/15 bg-[#f4f7f3] p-0.5 text-xs font-semibold">
               <button
                 type="button"
                 onClick={() => setSidebarLang("fr")}
-                className={`cursor-pointer rounded-md px-2 py-0.5 text-[10px] transition ${
+                className={`cursor-pointer rounded-md px-2 py-0.5 text-xs transition ${
                   sidebarLang === "fr"
                     ? "bg-[#1d4538] text-white shadow-2xs"
                     : "text-[#58675f] hover:text-[#17251f]"
@@ -614,7 +614,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
               <button
                 type="button"
                 onClick={() => setSidebarLang("ar")}
-                className={`cursor-pointer rounded-md px-2 py-0.5 font-arabic text-[10px] transition ${
+                className={`cursor-pointer rounded-md px-2 py-0.5 font-arabic text-xs transition ${
                   sidebarLang === "ar"
                     ? "bg-[#1d4538] text-white shadow-2xs"
                     : "text-[#58675f] hover:text-[#17251f]"
@@ -630,7 +630,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
             dir={sidebarLang === "ar" ? "rtl" : "ltr"}
           >
             <div className="border-b border-[#17251f]/10 pb-4">
-              <p className="font-mono text-[9.5px] font-bold uppercase tracking-[.18em] text-[#627269]">
+              <p className="font-mono text-xs font-bold uppercase tracking-[.18em] text-[#627269]">
                 {sidebarLang === "ar" ? "تصفية النتائج" : "Filtres"}
               </p>
               <h2 className={`mt-1 text-xl font-semibold tracking-[-.04em] text-[#17251f] ${sidebarLang === "ar" ? "font-arabic" : ""}`}>
@@ -646,7 +646,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
             </div>
 
             <div>
-              <p className="font-mono text-[9.5px] font-bold uppercase tracking-[.18em] text-[#627269]">
+              <p className="font-mono text-xs font-bold uppercase tracking-[.18em] text-[#627269]">
                 {sidebarLang === "ar" ? "نوع المنتجات" : "Type de produit"}
               </p>
               <div className="mt-2.5 space-y-1">
@@ -672,7 +672,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                           />
                           {catLabel}
                         </span>
-                        <span className="font-mono text-[9px] text-[#78827b]">
+                        <span className="font-mono text-xs text-[#78827b]">
                           {products.filter((p) => p.categoryId === cat.id).length}
                         </span>
                       </button>
@@ -680,7 +680,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                       {isSelected && (
                         <div className="my-2.5 animate-fade-in space-y-3 rounded-xl border border-[#1d4538]/20 bg-[#edf3ee] p-3 text-xs shadow-inner">
                           {groupsFor(cat.id).length === 0 && (
-                            <p className="text-[10.5px] font-medium text-[#627269]">
+                            <p className="text-xs font-medium text-[#627269]">
                               {sidebarLang === "ar"
                                 ? "لا توجد مجموعات فلاتر لهذه الفئة."
                                 : "Aucun groupe ne cible cette catégorie."}
@@ -691,7 +691,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                               sidebarLang === "ar" && group.nameAr ? group.nameAr : group.name;
                             return (
                               <div key={group.id}>
-                                <p className={`mb-1.5 font-mono text-[9px] font-bold uppercase tracking-[.14em] text-[#1d4538] ${sidebarLang === "ar" ? "font-arabic tracking-normal" : ""}`}>
+                                <p className={`mb-1.5 font-mono text-xs font-bold uppercase tracking-[.14em] text-[#1d4538] ${sidebarLang === "ar" ? "font-arabic tracking-normal" : ""}`}>
                                   {groupTitle}
                                 </p>
                                 <div className="flex flex-wrap gap-1.5">
@@ -711,7 +711,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                                         onClick={() =>
                                           toggleSelection(group.field, tagKey)
                                         }
-                                        className={`cursor-pointer rounded-md border px-2.5 py-1 text-[10.5px] font-medium transition ${
+                                        className={`cursor-pointer rounded-md border px-2.5 py-1 text-xs font-medium transition ${
                                           active
                                             ? "border-[#1d4538] bg-[#1d4538] font-semibold text-white shadow-2xs"
                                             : "border-[#17251f]/15 bg-white text-[#4a5850] hover:border-[#1d4538]/40"
@@ -735,7 +735,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
 
             {activeSelection.length > 0 && (
               <div className="border-t border-[#17251f]/10 pt-2">
-                <span className="mb-1 block font-mono text-[8.5px] font-bold uppercase text-[#78827b]">
+                <span className="mb-1 block font-mono text-xs font-bold uppercase text-[#78827b]">
                   {sidebarLang === "ar"
                     ? `الفلاتر النشطة (${activeSelection.length}) :`
                     : `Filtres actifs (${activeSelection.length}) :`}
@@ -744,7 +744,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                   {activeSelection.map(({ field, value }) => (
                     <span
                       key={`${field}-${value}`}
-                      className="inline-flex items-center gap-1 rounded bg-[#1d4538] px-2 py-0.5 font-mono text-[9px] font-bold text-white"
+                      className="inline-flex items-center gap-1 rounded bg-[#1d4538] px-2 py-0.5 font-mono text-xs font-bold text-white"
                     >
                       <span>{value}</span>
                       <button
@@ -761,17 +761,17 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
               </div>
             )}
 
-            <div className="rounded-xl border border-[#1d4538]/20 bg-[#edf3ee] p-2.5 text-center font-mono text-[10px] font-bold uppercase text-[#1d4538]">
+            <div className="rounded-xl border border-[#1d4538]/20 bg-[#edf3ee] p-2.5 text-center font-mono text-xs font-bold uppercase text-[#1d4538]">
               {sidebarLang === "ar"
                 ? `${visibleCount} منتج متوفر`
                 : `${visibleCount} article${visibleCount !== 1 ? "s" : ""} trouvé${visibleCount !== 1 ? "s" : ""}`}
             </div>
 
             <div className="border-t border-[#17251f]/10 pt-3">
-              <p className="font-mono text-[9px] font-bold uppercase tracking-[.18em] text-[#627269]">
+              <p className="font-mono text-xs font-bold uppercase tracking-[.18em] text-[#627269]">
                 {sidebarLang === "ar" ? "ضمانات المتجر" : "Nos garanties"}
               </p>
-              <div className="mt-2 space-y-1.5 text-[11px] font-medium leading-4 text-[#596860]">
+              <div className="mt-2 space-y-1.5 text-xs font-medium leading-4 text-[#596860]">
                 {(sidebarLang === "ar" ? GUARANTEES_AR : GUARANTEES_FR).map((guarantee) => (
                   <p key={guarantee} className={`flex items-center gap-1.5 ${sidebarLang === "ar" ? "font-arabic" : ""}`}>
                     <span className="font-bold text-[#2c5b48]">✓</span>{" "}
@@ -782,7 +782,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
             </div>
           </Card>
 
-          <p className="rounded-xl border border-[#17251f]/10 bg-[#fdfcf8] p-3 text-[10px] leading-4 text-[#627269]">
+          <p className="rounded-xl border border-[#17251f]/10 bg-[#fdfcf8] p-3 text-xs leading-4 text-[#627269]">
             Rappel : le catalogue ignore un filtre pour les produits qui n&apos;ont pas l&apos;attribut correspondant.
           </p>
         </div>
@@ -836,7 +836,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
 
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1 block font-mono text-[9px] font-bold uppercase text-[#78827b]">
+                  <label className="mb-1 block font-mono text-xs font-bold uppercase text-[#78827b]">
                     Nom du groupe (Français) *
                   </label>
                   <input
@@ -849,7 +849,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                 </div>
 
                 <div>
-                  <label className="mb-1 block font-mono text-[9px] font-bold uppercase text-[#78827b]">
+                  <label className="mb-1 block font-mono text-xs font-bold uppercase text-[#78827b]">
                     الاسم بالعربية (العربية)
                   </label>
                   <input
@@ -863,7 +863,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
               </div>
 
               <div>
-                <label className="mb-1.5 block font-mono text-[9px] font-bold uppercase text-[#78827b]">
+                <label className="mb-1.5 block font-mono text-xs font-bold uppercase text-[#78827b]">
                   Catégories cibles
                 </label>
                 <div className="flex flex-wrap gap-1.5">
@@ -878,7 +878,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                             isChecked ? prev.filter((t) => t !== cat.id) : [...prev, cat.id],
                           )
                         }
-                        className={`cursor-pointer rounded-lg border px-2.5 py-1 font-mono text-[10.5px] font-semibold transition ${
+                        className={`cursor-pointer rounded-lg border px-2.5 py-1 font-mono text-xs font-semibold transition ${
                           isChecked
                             ? "border-[#1d4538] bg-[#1d4538] text-white shadow-2xs"
                             : "border-[#17251f]/15 bg-white text-[#58675f] hover:border-[#1d4538]/50"
@@ -895,10 +895,10 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
               {/* Initial tags list */}
               <div className="rounded-2xl border border-[#17251f]/10 bg-[#fbfcfb] p-3.5 space-y-3">
                 <div className="flex items-center justify-between border-b border-[#17251f]/10 pb-2">
-                  <span className="font-mono text-[9px] font-bold uppercase text-[#78827b]">
+                  <span className="font-mono text-xs font-bold uppercase text-[#78827b]">
                     Tags de filtre ({modalTags.length})
                   </span>
-                  <span className="text-[10px] text-[#78827b]">Libellé FR · Libellé AR</span>
+                  <span className="text-xs text-[#78827b]">Libellé FR · Libellé AR</span>
                 </div>
 
                 <div className="space-y-1.5 max-h-36 overflow-y-auto cart-scrollbar">
@@ -925,7 +925,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                 </div>
 
                 <div className="pt-2 border-t border-[#17251f]/10">
-                  <span className="mb-1 block font-mono text-[8.5px] font-bold uppercase text-[#78827b]">
+                  <span className="mb-1 block font-mono text-xs font-bold uppercase text-[#78827b]">
                     Ajouter un tag au groupe
                   </span>
                   <div className="flex gap-1.5">
@@ -935,7 +935,7 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                         setModalNewTag((prev) => ({ ...prev, label: e.target.value }))
                       }
                       placeholder="Libellé FR (ex: Full HD)"
-                      className="w-1/2 rounded-lg border border-[#17251f]/15 bg-white p-2 text-[10.5px] outline-none focus:border-[#1d4538]"
+                      className="w-1/2 rounded-lg border border-[#17251f]/15 bg-white p-2 text-xs outline-none focus:border-[#1d4538]"
                     />
                     <input
                       dir="rtl"
@@ -944,14 +944,14 @@ function matchAttributeValue(productVal: string, filterVal: string): boolean {
                         setModalNewTag((prev) => ({ ...prev, labelAr: e.target.value }))
                       }
                       placeholder="الاسم AR (مثال: دقة عالية)"
-                      className="w-1/2 rounded-lg border border-[#17251f]/15 bg-white p-2 font-arabic text-[10.5px] outline-none focus:border-[#1d4538]"
+                      className="w-1/2 rounded-lg border border-[#17251f]/15 bg-white p-2 font-arabic text-xs outline-none focus:border-[#1d4538]"
                     />
                   </div>
                   <button
                     type="button"
                     onClick={handleAddTagToModal}
                     disabled={!modalNewTag.label.trim()}
-                    className="mt-2 inline-flex w-full cursor-pointer items-center justify-center gap-1 rounded-lg bg-[#1d4538] py-1.5 font-mono text-[10px] font-bold uppercase text-white transition hover:bg-[#14352b] disabled:opacity-40"
+                    className="mt-2 inline-flex w-full cursor-pointer items-center justify-center gap-1 rounded-lg bg-[#1d4538] py-1.5 font-mono text-xs font-bold uppercase text-white transition hover:bg-[#14352b] disabled:opacity-40"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     <span>Ajouter à la liste des tags</span>

@@ -52,7 +52,7 @@ export function ProductPickerModal({
             <h3 className="text-base font-semibold tracking-tight text-[#17251f]">
               Sélectionner un produit du catalogue
             </h3>
-            <p className="text-[11px] text-[#58675f]">
+            <p className="text-xs text-[#58675f]">
               Recherchez et ajoutez un produit à la sélection « Nos favoris ».
             </p>
           </div>
@@ -116,7 +116,7 @@ export function ProductPickerModal({
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="grid h-full w-full place-items-center bg-[#f4f7f3] text-[9px] text-[#78827b]">
+                      <div className="grid h-full w-full place-items-center bg-[#f4f7f3] text-xs text-[#78827b]">
                         Pas d&apos;image
                       </div>
                     )}
@@ -129,15 +129,15 @@ export function ProductPickerModal({
                         {p.name}
                       </h4>
                       {p.reference && (
-                        <span className="font-mono text-[9px] text-[#78827b]">
+                        <span className="font-mono text-xs text-[#78827b]">
                           ({p.reference})
                         </span>
                       )}
                     </div>
-                    <p className="truncate text-[10.5px] text-[#58675f]">
+                    <p className="truncate text-xs text-[#58675f]">
                       {p.specs || "Aucune spec"}
                     </p>
-                    <div className="mt-0.5 font-mono text-[10px] font-bold text-[#1d4538]">
+                    <div className="mt-0.5 font-mono text-xs font-bold text-[#1d4538]">
                       {displayPrice !== null ? fmtDA(displayPrice) : "Sur commande"}
                     </div>
                   </div>
@@ -151,7 +151,7 @@ export function ProductPickerModal({
                     onSelectProduct(p);
                     onClose();
                   }}
-                  className={`shrink-0 rounded-lg px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider transition ${
+                  className={`shrink-0 rounded-lg px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-wider transition ${
                     isAlreadySelected
                       ? "bg-[#e7eee5] text-[#78827b]"
                       : "cursor-pointer bg-[#1d4538] text-white hover:bg-[#16352b]"

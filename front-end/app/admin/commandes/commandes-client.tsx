@@ -222,7 +222,7 @@ export function CommandesClient({
         <Card className="overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="border-b border-[#17251f]/10 bg-[#f4f7f3] font-mono text-[9.5px] uppercase tracking-[.14em] text-[#78827b]">
+              <thead className="border-b border-[#17251f]/10 bg-[#f4f7f3] font-mono text-xs uppercase tracking-[.14em] text-[#78827b]">
                 <tr>
                   <th className="p-4">ID Commande</th>
                   <th className="p-4">Client &amp; Contact</th>
@@ -244,23 +244,23 @@ export function CommandesClient({
                       <p className="font-bold text-[#17251f]">
                         {order.customerName}
                       </p>
-                      <p className="text-[10px] text-[#627269]">{order.phone}</p>
+                      <p className="text-xs text-[#627269]">{order.phone}</p>
                     </td>
                     <td className="p-4 text-[#4f5d55]">
                       <p>{wilayaLabel(order.wilayaCode)}</p>
-                      <p className="text-[10px] text-[#627269]">
+                      <p className="text-xs text-[#627269]">
                         {communeLabel(order.wilayaCode, order.communeId)}
                       </p>
                     </td>
                     <td className="p-4 text-[#4f5d55]">
-                      <p className="font-mono text-[11px] font-bold">
+                      <p className="font-mono text-xs font-bold">
                         {itemCount(order)} art.
                       </p>
-                      <p className="max-w-[140px] truncate text-[10px] text-[#627269]">
+                      <p className="max-w-[140px] truncate text-xs text-[#627269]">
                         {order.lines.map((l) => l.name).join(", ")}
                       </p>
                     </td>
-                    <td className="p-4 text-[11px] text-[#627269]">
+                    <td className="p-4 text-xs text-[#627269]">
                       {frDateTime(order.createdAt)}
                     </td>
                     <td className="p-4 font-mono text-sm font-bold text-[#17251f]">
@@ -274,7 +274,7 @@ export function CommandesClient({
                           applyStatus(order, e.target.value as OrderStatus)
                         }
                         aria-label={`Statut de ${order.id}`}
-                        className="cursor-pointer rounded-lg border border-[#17251f]/20 bg-white px-2.5 py-1 font-mono text-[10px] font-bold outline-none disabled:cursor-not-allowed disabled:opacity-60"
+                        className="cursor-pointer rounded-lg border border-[#17251f]/20 bg-white px-2.5 py-1 font-mono text-xs font-bold outline-none disabled:cursor-not-allowed disabled:opacity-60"
                       >
                         {ORDER_STATUSES.map((s) => (
                           <option key={s} value={s}>
@@ -287,7 +287,7 @@ export function CommandesClient({
                       <button
                         type="button"
                         onClick={() => setSelected(order)}
-                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#1d4538] px-3 py-1.5 text-[11px] font-bold text-white transition hover:bg-[#14352b]"
+                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#1d4538] px-3 py-1.5 text-xs font-bold text-white transition hover:bg-[#14352b]"
                       >
                         <span>Voir</span>
                         <ChevronRight className="h-3.5 w-3.5" />
@@ -322,7 +322,7 @@ export function CommandesClient({
           <>
             <div className="mb-4 flex items-center justify-between border-b border-[#17251f]/10 pb-4">
               <div>
-                <span className="font-mono text-[10px] font-bold uppercase text-[#1d4538]">
+                <span className="font-mono text-xs font-bold uppercase text-[#1d4538]">
                   Fiche de commande
                 </span>
                 <h2 className="text-xl font-bold text-[#17251f]">
@@ -344,7 +344,7 @@ export function CommandesClient({
 
             <div className="space-y-4 text-xs">
               <div className="space-y-1.5 rounded-xl bg-[#edf3ee] p-4">
-                <span className="font-mono text-[9px] font-bold uppercase tracking-[.14em] text-[#1d4538]">
+                <span className="font-mono text-xs font-bold uppercase tracking-[.14em] text-[#1d4538]">
                   01 · Coordonnées
                 </span>
                 <p className="text-sm font-bold text-[#17251f]">
@@ -359,7 +359,7 @@ export function CommandesClient({
               </div>
 
               <div className="space-y-1.5 rounded-xl border border-[#17251f]/10 bg-[#f4f7f3] p-4">
-                <span className="font-mono text-[9px] font-bold uppercase tracking-[.14em] text-[#1d4538]">
+                <span className="font-mono text-xs font-bold uppercase tracking-[.14em] text-[#1d4538]">
                   02 · Livraison
                 </span>
                 <p className="flex items-start gap-1.5 font-medium text-[#4f5d55]">
@@ -369,16 +369,16 @@ export function CommandesClient({
                     {wilayaLabel(activeOrder.wilayaCode)}
                   </span>
                 </p>
-                <p className="text-[11px] text-[#78827b]">
+                <p className="text-xs text-[#78827b]">
                   Appeler le client pour convenir du point de livraison.
                 </p>
-                <p className="pt-1 font-mono text-[10px] text-[#78827b]">
+                <p className="pt-1 font-mono text-xs text-[#78827b]">
                   Reçue le {frDateTime(activeOrder.createdAt)}
                 </p>
               </div>
 
               <div>
-                <h3 className="mb-2 font-mono text-[10px] font-bold uppercase text-[#1d4538]">
+                <h3 className="mb-2 font-mono text-xs font-bold uppercase text-[#1d4538]">
                   Panier ({itemCount(activeOrder)} articles)
                 </h3>
                 <div className="divide-y divide-[#17251f]/10 border-y border-[#17251f]/10">
@@ -396,11 +396,11 @@ export function CommandesClient({
                       <div className="min-w-0 flex-1">
                         <p className="font-bold leading-4 text-[#17251f]">
                           {line.name}{" "}
-                          <span className="font-mono text-[10px] text-[#627269]">
+                          <span className="font-mono text-xs text-[#627269]">
                             ×{line.qty}
                           </span>
                         </p>
-                        <p className="text-[10.5px] text-[#627269]">
+                        <p className="text-xs text-[#627269]">
                           {line.meta}
                         </p>
                       </div>
@@ -433,7 +433,7 @@ export function CommandesClient({
                     {fmtDA(activeOrder.total)}
                   </span>
                 </div>
-                <p className="flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase text-[#1d4538]">
+                <p className="flex items-center gap-1.5 font-mono text-xs font-bold uppercase text-[#1d4538]">
                   <Wallet className="h-3.5 w-3.5" />{" "}
                   {PAYMENT_METHOD_LABELS[activeOrder.method]}
                 </p>
@@ -446,7 +446,7 @@ export function CommandesClient({
               </div>
 
               <div className="border-t border-[#17251f]/10 pt-3">
-                <label className="mb-1 block font-mono text-[9.5px] font-bold uppercase text-[#78827b]">
+                <label className="mb-1 block font-mono text-xs font-bold uppercase text-[#78827b]">
                   Mettre à jour le statut :
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -456,7 +456,7 @@ export function CommandesClient({
                       type="button"
                       disabled={busy || activeOrder.status === "ANNULEE"}
                       onClick={() => applyStatus(activeOrder, s)}
-                      className={`cursor-pointer rounded-lg px-2.5 py-1.5 font-mono text-[9px] font-bold uppercase transition disabled:cursor-not-allowed disabled:opacity-50 ${
+                      className={`cursor-pointer rounded-lg px-2.5 py-1.5 font-mono text-xs font-bold uppercase transition disabled:cursor-not-allowed disabled:opacity-50 ${
                         activeOrder.status === s
                           ? "bg-[#1d4538] text-white"
                           : "border border-[#17251f]/15 bg-white text-[#17251f] hover:bg-gray-50"

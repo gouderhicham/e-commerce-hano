@@ -12,7 +12,7 @@ export function Label({
   return (
     <label
       htmlFor={htmlFor}
-      className="mb-1 block font-mono text-[9.5px] font-bold uppercase tracking-[.1em] text-[#78827b]"
+      className="mb-1 block font-mono text-xs font-bold uppercase tracking-[.1em] text-[#78827b]"
     >
       {children}
     </label>
@@ -20,7 +20,7 @@ export function Label({
 }
 
 const INPUT_CLASSES =
-  "w-full rounded-xl border border-[#17251f]/15 bg-white p-3 text-xs font-semibold text-[#17251f] outline-none transition focus:border-[#1d4538]";
+  "w-full rounded-xl border border-[#17251f]/15 bg-white p-3 text-base font-semibold text-[#17251f] outline-none transition focus:border-[#1d4538]";
 
 export const Input = forwardRef<
   HTMLInputElement,
@@ -60,6 +60,6 @@ export const Textarea = forwardRef<
 export function FieldError({ children }: { children?: React.ReactNode }) {
   if (!children) return null;
   return (
-    <div className="mt-1 text-[11px] font-medium text-[#dc2626]">{children}</div>
+    <div className="mt-1 text-xs font-medium text-[#dc2626]">{children}</div>
   );
 }

@@ -243,7 +243,7 @@ export function CatalogueClient({
     <div className="mx-auto max-w-[1360px] px-5 pb-20 pt-6 sm:px-8">
       <div className="mb-8 flex flex-col gap-4 border-b border-[#17251f]/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <span className="block font-mono text-[10px] font-bold uppercase tracking-[.2em] text-[#1d4538]">
+          <span className="block font-mono text-xs font-bold uppercase tracking-[.2em] text-[#1d4538]">
             {t.catalogue.eyebrow}
           </span>
           <h1 className="mt-1 text-3xl font-semibold tracking-[-.06em] text-[#17251f] sm:text-4xl">
@@ -266,7 +266,7 @@ export function CatalogueClient({
             <FilterIcon className="h-3.5 w-3.5" />
             <span>{t.catalogue.openFilters}</span>
             {activeFilterCount > 0 && (
-              <span className="grid h-4 w-4 place-items-center rounded-full bg-[#1d4538] text-[9px] font-bold text-white">
+              <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#1d4538] px-1 font-mono text-xs font-bold text-white">
                 {activeFilterCount}
               </span>
             )}
@@ -339,7 +339,7 @@ export function CatalogueClient({
                 <h2 className="text-xs font-bold uppercase tracking-[.15em] text-[#17251f]">
                   {t.catalogue.filterTitle}
                 </h2>
-                <p className="mt-0.5 text-[11px] text-[#627269]">
+                <p className="mt-0.5 text-xs text-[#627269]">
                   {activeFilterCount > 0
                     ? `${activeFilterCount} ${t.catalogue.activeFilter}`
                     : t.catalogue.filterSubtitle}
@@ -349,7 +349,7 @@ export function CatalogueClient({
                 <button
                   type="button"
                   onClick={clearAllFilters}
-                  className="cursor-pointer text-[11px] font-semibold text-[#1d4538] underline hover:text-[#14352b]"
+                  className="cursor-pointer text-xs font-semibold text-[#1d4538] underline hover:text-[#14352b]"
                 >
                   {t.catalogue.resetFilters}
                 </button>
@@ -359,7 +359,7 @@ export function CatalogueClient({
             <div>
               <label
                 htmlFor="search-sidebar"
-                className="mb-1.5 block text-[11px] font-bold uppercase tracking-[.08em] text-[#627269]"
+                className="mb-1.5 block text-xs font-bold uppercase tracking-[.08em] text-[#627269]"
               >
                 {t.catalogue.searchLabel}
               </label>
@@ -388,7 +388,7 @@ export function CatalogueClient({
                   key={group.id}
                   className="border-t border-[#17251f]/8 pt-4"
                 >
-                  <h3 className="mb-2.5 text-[11px] font-bold uppercase tracking-[.1em] text-[#17251f]">
+                  <h3 className="mb-2.5 text-xs font-bold uppercase tracking-[.1em] text-[#17251f]">
                     {pick(locale, group.name, group.nameAr)}
                   </h3>
                   <div className="space-y-1.5">
@@ -423,8 +423,8 @@ export function CatalogueClient({
               );
             })}
 
-            <div className="border-t border-[#17251f]/10 pt-4 text-[11px] text-[#627269]">
-              <h3 className="mb-2 text-[10px] font-bold uppercase tracking-[.15em] text-[#17251f]">
+            <div className="border-t border-[#17251f]/10 pt-4 text-xs text-[#627269]">
+              <h3 className="mb-2 text-xs font-bold uppercase tracking-[.15em] text-[#17251f]">
                 {t.catalogue.guaranteesTitle}
               </h3>
               <div className="flex items-center gap-2 py-1">
@@ -589,7 +589,7 @@ export function CatalogueClient({
                     style={{ backgroundColor: item.tone }}
                   >
                     {item.promoPrice != null && item.price != null && item.promoPrice < item.price && (
-                      <span className="absolute start-2 top-2 sm:start-3 sm:top-3 z-10 rounded-full bg-red-600 px-2 py-0.5 font-mono text-[9px] sm:text-[10px] font-bold text-white shadow-sm">
+                      <span className="absolute start-2 top-2 sm:start-3 sm:top-3 z-10 rounded-full bg-red-600 px-2.5 py-0.5 font-mono text-xs font-bold text-white shadow-sm">
                         -{Math.round(((item.price - item.promoPrice) / item.price) * 100)}%
                       </span>
                     )}
@@ -625,21 +625,21 @@ export function CatalogueClient({
 
                   <div className="flex flex-1 flex-col justify-between px-0.5 pb-0.5 pt-3 sm:px-1 sm:pb-1 sm:pt-4">
                     <div>
-                      <h3 className="line-clamp-2 text-[13px] sm:text-[17px] font-semibold tracking-[-.04em] text-[#17251f] transition group-hover:text-[#1d4538]">
+                      <h3 className="line-clamp-2 text-sm sm:text-base font-semibold tracking-[-.04em] text-[#17251f] transition group-hover:text-[#1d4538]">
                         {pick(locale, item.name, item.nameAr)}
                       </h3>
-                      <p className="mt-1 line-clamp-2 text-[10px] sm:text-[11px] leading-3.5 sm:leading-4 text-[#5f6e66]">
+                      <p className="mt-1 line-clamp-2 text-xs leading-4 text-[#5f6e66]">
                         {pick(locale, item.specs, item.specsAr)}
                       </p>
                     </div>
 
                     <div className="mt-3 sm:mt-5 flex items-center justify-between gap-1.5 sm:gap-2 border-t border-[#17251f]/10 pt-2.5 sm:pt-3">
                       <div className="min-w-0">
-                        <b className="block truncate font-mono text-[13px] sm:text-[16px] font-bold text-[#17251f]">
+                        <b className="block truncate font-mono text-sm sm:text-base font-bold text-[#17251f]">
                           {fmtDA(item.promoPrice ?? item.price, locale)}
                         </b>
                         {item.promoPrice != null && item.price != null && item.promoPrice < item.price && (
-                          <span className="block truncate font-mono text-[10px] sm:text-xs text-[#9aa39c] line-through">
+                          <span className="block truncate font-mono text-xs text-[#9aa39c] line-through">
                             {fmtDA(item.price, locale)}
                           </span>
                         )}
@@ -652,7 +652,7 @@ export function CatalogueClient({
                           handleAddToCart(item);
                         }}
                         aria-label={t.product.addToCart}
-                        className="inline-flex shrink-0 cursor-pointer items-center gap-1 sm:gap-1.5 rounded-lg bg-[#1d4538] px-2.5 sm:px-3.5 py-1.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-[.08em] text-white shadow-xs transition hover:bg-[#14352b]"
+                        className="inline-flex shrink-0 cursor-pointer items-center gap-1 sm:gap-1.5 rounded-lg bg-[#1d4538] px-2.5 sm:px-3.5 py-1.5 text-xs font-bold uppercase tracking-[.08em] text-white shadow-xs transition hover:bg-[#14352b]"
                       >
                         <Cart className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                         <span className="hidden xs:inline">{t.favorites.addToCart}</span>

@@ -281,7 +281,7 @@ export function NotificationsClient({
                   >
                     {n.message}
                   </p>
-                  <p className="mt-0.5 font-mono text-[10px] text-[#78827b]">
+                  <p className="mt-0.5 font-mono text-xs text-[#78827b]">
                     {frDateTime(n.createdAt)}
                   </p>
                 </button>
@@ -289,7 +289,7 @@ export function NotificationsClient({
                   type="button"
                   onClick={() => open(n)}
                   disabled={busy}
-                  className="shrink-0 cursor-pointer font-mono text-[10px] font-bold uppercase tracking-[.1em] text-[#1d4538] hover:underline"
+                  className="shrink-0 cursor-pointer font-mono text-xs font-bold uppercase tracking-[.1em] text-[#1d4538] hover:underline"
                 >
                   {label}
                 </button>
@@ -298,7 +298,7 @@ export function NotificationsClient({
                     type="button"
                     onClick={() => markReadOnly(n)}
                     disabled={busy}
-                    className={`${ghostBtn} h-8 shrink-0 px-3 py-0 text-[10px]`}
+                    className={`${ghostBtn} h-8 shrink-0 px-3 py-0 text-xs`}
                   >
                     Lu
                   </button>

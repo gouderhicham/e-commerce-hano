@@ -54,7 +54,7 @@ export function PanierClient() {
     <div className="mx-auto max-w-[1360px] px-5 pb-16 pt-6 sm:px-8">
       <div className="mb-8 flex items-center justify-between border-b border-[#17251f]/10 pb-5">
         <div>
-          <span className="block font-mono text-[10px] font-bold uppercase tracking-[.2em] text-[#1d4538]">
+          <span className="block font-mono text-xs font-bold uppercase tracking-[.2em] text-[#1d4538]">
             {t.cart.eyebrow}
           </span>
           <h1 className="mt-1 text-3xl font-semibold tracking-[-.06em] text-[#17251f] sm:text-4xl">
@@ -66,7 +66,7 @@ export function PanierClient() {
         </div>
         <Link
           href="/catalogue"
-          className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[.1em] text-[#1d4538] transition hover:text-[#14352b]"
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.1em] text-[#1d4538] transition hover:text-[#14352b]"
         >
           <Arrow left /> {t.cart.continueShopping}
         </Link>
@@ -94,7 +94,7 @@ export function PanierClient() {
           </p>
           <Link
             href="/catalogue"
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#1d4538] px-7 py-3.5 text-[11px] font-bold uppercase tracking-[.1em] text-white shadow-sm transition hover:bg-[#14352b]"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#1d4538] px-7 py-3.5 text-xs font-bold uppercase tracking-[.1em] text-white shadow-sm transition hover:bg-[#14352b]"
           >
             {t.cart.browseCatalog}
           </Link>
@@ -116,7 +116,7 @@ export function PanierClient() {
                       style={{ backgroundColor: product.tone }}
                     >
                       {product.promoPrice != null && product.price != null && product.promoPrice < product.price && (
-                        <span className="absolute start-1 top-1 z-10 rounded bg-red-600 px-1 py-0.5 font-mono text-[7.5px] font-bold text-white shadow-xs">
+                        <span className="absolute start-1 top-1 z-10 rounded bg-red-600 px-1.5 py-0.5 font-mono text-xs font-bold text-white shadow-xs">
                           PROMO
                         </span>
                       )}
@@ -141,14 +141,14 @@ export function PanierClient() {
                       <div className="mt-1 flex items-baseline gap-1.5 whitespace-nowrap font-mono text-xs font-semibold text-[#1d4538]">
                         <span>{fmtDA(unit, locale)}</span>
                         {product.promoPrice != null && product.price != null && product.promoPrice < product.price && (
-                          <span className="font-mono text-[10.5px] text-[#9ca59e] line-through">
+                          <span className="font-mono text-xs text-[#9aa39c] line-through">
                             {fmtDA(product.price, locale)}
                           </span>
                         )}
-                        <span className="text-[10px] text-[#78827b]">/ {t.cart.perUnit}</span>
+                        <span className="text-xs text-[#78827b]">/ {t.cart.perUnit}</span>
                       </div>
                       {line.qty > product.stock && (
-                        <p className="mt-1 text-[11px] font-semibold text-[#a06b1f]">
+                        <p className="mt-1 text-xs font-semibold text-[#a06b1f]">
                           {interpolate(t.cart.onlyLeftInStock, { n: product.stock })}
                         </p>
                       )}
@@ -188,7 +188,7 @@ export function PanierClient() {
                         {fmtDA(unit * line.qty, locale)}
                       </b>
                       {product.promoPrice != null && product.price != null && product.promoPrice < product.price && (
-                        <span className="block font-mono text-[10.5px] text-[#9ca59e] line-through">
+                        <span className="block font-mono text-xs text-[#9aa39c] line-through">
                           {fmtDA(product.price * line.qty, locale)}
                         </span>
                       )}
@@ -215,7 +215,7 @@ export function PanierClient() {
             <div className="rounded-2xl border border-[#17251f]/10 bg-[#fdfcf8] p-6 shadow-sm">
               <div className="flex items-center justify-between border-b border-[#17251f]/10 pb-4">
                 <div>
-                  <span className="block font-mono text-[10px] font-bold uppercase tracking-[.2em] text-[#1d4538]">
+                  <span className="block font-mono text-xs font-bold uppercase tracking-[.2em] text-[#1d4538]">
                     {t.cart.recapEyebrow}
                   </span>
                   <h2 className="mt-1 text-2xl font-semibold tracking-[-.05em] text-[#17251f]">
@@ -228,17 +228,17 @@ export function PanierClient() {
               </div>
 
               <div className="space-y-3.5 py-5 text-sm">
-                <p className="flex justify-between text-[12px] font-medium uppercase tracking-[.06em] text-[#627269]">
+                <p className="flex justify-between text-xs font-medium uppercase tracking-[.06em] text-[#627269]">
                   <span>
                     {t.cart.subtotal} ({itemCountLabel})
                   </span>
-                  <span className="whitespace-nowrap font-mono text-[13px] font-semibold text-[#17251f]">
+                  <span className="whitespace-nowrap font-mono text-sm font-semibold text-[#17251f]">
                     {fmtDA(subtotal, locale)}
                   </span>
                 </p>
-                <p className="flex items-baseline justify-between gap-3 text-[12px] font-medium uppercase tracking-[.06em] text-[#627269]">
+                <p className="flex items-baseline justify-between gap-3 text-xs font-medium uppercase tracking-[.06em] text-[#627269]">
                   <span>{t.cart.shipping}</span>
-                  <span className="text-end font-mono text-[11px] font-semibold normal-case tracking-normal text-[#627269]">
+                  <span className="text-end font-mono text-xs font-semibold normal-case tracking-normal text-[#627269]">
                     {freeShipping
                       ? t.cart.freeShipping
                       : t.cart.shippingCalculated}
@@ -253,7 +253,7 @@ export function PanierClient() {
                     {fmtDA(total, locale)}
                   </span>
                 </div>
-                <p className="text-[10.5px] leading-4 text-[#78827b]">
+                <p className="text-xs leading-5 text-[#78827b]">
                   {freeShipping
                     ? t.cart.freeShippingNotice
                     : t.cart.shippingNotice}
@@ -262,14 +262,14 @@ export function PanierClient() {
 
               <Link
                 href="/commande"
-                className="mt-2 flex w-full items-center justify-center gap-2.5 rounded-xl bg-[#1d4538] py-4 text-center text-[12px] font-bold uppercase tracking-[.12em] text-white shadow-md transition-all duration-200 hover:bg-[#14352b] hover:shadow-lg active:scale-[0.99]"
+                className="mt-2 flex w-full items-center justify-center gap-2.5 rounded-xl bg-[#1d4538] py-4 text-center text-xs font-bold uppercase tracking-[.12em] text-white shadow-md transition-all duration-200 hover:bg-[#14352b] hover:shadow-lg active:scale-[0.99]"
               >
                 <span>{t.cart.checkoutBtn}</span>
                 <span className={`text-base ${isRTL ? "rotate-180" : ""}`}>→</span>
               </Link>
 
               <div className="mt-5 border-t border-[#17251f]/10 pt-4 text-center">
-                <p className="text-[11px] leading-relaxed text-[#627269]">
+                <p className="text-xs leading-relaxed text-[#627269]">
                   {t.cart.directCheckoutNotice}
                 </p>
               </div>

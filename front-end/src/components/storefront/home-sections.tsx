@@ -51,12 +51,12 @@ export function HeroSection() {
             <br />
             <span className="text-[#789a89]">{t.home.titleAccent}</span>
           </h1>
-          <p className="mt-8 max-w-sm text-[16px] leading-7 text-[#58675f]">
+          <p className="mt-8 max-w-sm text-base leading-7 text-[#58675f]">
             {t.home.text}
           </p>
           <Link
             href="/catalogue"
-            className="mt-7 inline-flex items-center gap-4 rounded-full bg-[#1d4538] px-6 py-4 text-[12px] font-bold uppercase tracking-[.08em] text-white transition hover:bg-[#14352b]"
+            className="mt-7 inline-flex items-center gap-4 rounded-full bg-[#1d4538] px-6 py-4 text-xs font-bold uppercase tracking-[.08em] text-white transition hover:bg-[#14352b]"
           >
             {t.home.ctaCatalog}{" "}
             <span className="rounded-full bg-white/15 p-1">
@@ -64,7 +64,7 @@ export function HeroSection() {
             </span>
           </Link>
         </div>
-        <div className="grid grid-cols-3 gap-4 border-t border-[#17251f]/10 pt-5 text-[11px] text-[#647169]">
+        <div className="grid grid-cols-3 gap-4 border-t border-[#17251f]/10 pt-5 text-xs text-[#647169]">
           {stats.map((stat, i) => (
             <p key={`${stat.label}-${i}`}>
               <b className="block text-xl font-medium tracking-[-.05em] text-[#1d2c26]">
@@ -110,7 +110,7 @@ export function HeroShowcase({ showcase }: { showcase?: Showcase | null }) {
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,37,31,0.3)_0%,rgba(23,37,31,0.15)_40%,rgba(23,37,31,0.75)_100%)]" />
 
         {s.eyebrow && (
-          <span className="absolute start-4 top-4 z-10 font-mono text-[8.5px] uppercase tracking-[.15em] text-white/90 sm:start-7 sm:top-8 sm:text-[10px]">
+          <span className="absolute start-4 top-4 z-10 font-mono text-xs uppercase tracking-[.15em] text-white/90 sm:start-7 sm:top-8">
             {s.eyebrow}
           </span>
         )}
@@ -118,7 +118,7 @@ export function HeroShowcase({ showcase }: { showcase?: Showcase | null }) {
         <div className="absolute bottom-4 start-4 end-4 z-10 flex flex-col gap-3.5 sm:bottom-8 sm:start-8 sm:end-8 sm:gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-[420px] border-s-2 border-[#e4d7ba] ps-3 text-white sm:ps-4">
             {s.title && (
-              <span className="font-mono text-[9px] uppercase tracking-[.16em] text-white/80 sm:text-[10px]">
+              <span className="font-mono text-xs uppercase tracking-[.16em] text-white/80">
                 {s.title}
               </span>
             )}
@@ -128,7 +128,7 @@ export function HeroShowcase({ showcase }: { showcase?: Showcase | null }) {
               </h3>
             )}
             {s.description && (
-              <p className="mt-1 text-[11px] leading-4 text-white/80 sm:mt-2 sm:text-sm sm:leading-5">
+              <p className="mt-1 text-xs leading-5 text-white/80 sm:mt-2 sm:text-sm sm:leading-6">
                 {s.description}
               </p>
             )}
@@ -138,10 +138,10 @@ export function HeroShowcase({ showcase }: { showcase?: Showcase | null }) {
             <div className="grid grid-cols-2 gap-2.5 rounded-xl border border-white/15 bg-[#17251f]/25 p-3 backdrop-blur-md sm:grid-cols-4 sm:rounded-2xl sm:bg-[#17251f]/60 sm:p-5">
               {s.specs.map((spec, i) => (
                 <div key={`${spec.label}-${i}`} className="flex flex-col gap-0.5">
-                  <span className="font-mono text-[8px] uppercase tracking-[.14em] text-white/60 sm:text-[9px]">
+                  <span className="font-mono text-xs uppercase tracking-[.14em] text-white/60">
                     {spec.label}
                   </span>
-                  <span className="text-[10.5px] font-semibold tracking-tight text-white sm:text-sm">
+                  <span className="text-xs font-semibold tracking-tight text-white sm:text-sm">
                     {spec.val}
                   </span>
                 </div>
@@ -165,7 +165,7 @@ export function CategoriesSection({ cards = [] }: { cards?: HomeCategoryCard[] }
     >
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[.18em] text-[#78827b]">
+          <p className="font-mono text-xs uppercase tracking-[.18em] text-[#78827b]">
             {t.home.categoriesEyebrow}
           </p>
           <h2 className="mt-3 text-4xl font-medium tracking-[-.07em] sm:text-5xl">
@@ -173,12 +173,12 @@ export function CategoriesSection({ cards = [] }: { cards?: HomeCategoryCard[] }
           </h2>
         </div>
         <div className="max-w-xs">
-          <p className="text-sm leading-6 text-[#65736b]">
+          <p className="text-base leading-relaxed text-[#65736b]">
             {t.home.categoriesText}
           </p>
           <Link
             href="/catalogue"
-            className="mt-4 inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[.1em] text-[#2c5b48] hover:text-[#1d4538]"
+            className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.1em] text-[#2c5b48] hover:text-[#1d4538]"
           >
             {t.home.categoriesCta} <Arrow />
           </Link>
@@ -201,10 +201,10 @@ export function CategoriesSection({ cards = [] }: { cards?: HomeCategoryCard[] }
             </div>
             <div className="flex items-end justify-between px-1 pb-1 pt-3 sm:pb-2 sm:pt-4">
               <div>
-                <h3 className="text-[14px] sm:text-[17px] font-medium tracking-[-.045em]">
+                <h3 className="text-base sm:text-lg font-medium tracking-[-.045em]">
                   {pick(locale, card.name, card.nameAr)}
                 </h3>
-                <p className="mt-0.5 sm:mt-1 line-clamp-1 text-[10px] sm:text-xs text-[#758078]">
+                <p className="mt-0.5 sm:mt-1 line-clamp-1 text-xs text-[#758078]">
                   {pick(locale, card.detail, card.detailAr)}
                 </p>
               </div>
@@ -229,18 +229,18 @@ export function FavoritesSection({ favorites }: { favorites?: HomeFavorites | nu
       <div className="mx-auto max-w-[1360px] px-4 sm:px-12">
         <div className="grid gap-8 lg:grid-cols-[.38fr_1.62fr]">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[.18em] text-[#78827b]">
+            <p className="font-mono text-xs uppercase tracking-[.18em] text-[#78827b]">
               {t.home.favoritesEyebrow}
             </p>
             <h2 className="mt-3 max-w-xs text-3xl sm:text-5xl font-medium leading-[.92] tracking-[-.07em]">
               {t.home.favoritesTitle}
             </h2>
-            <p className="mt-4 sm:mt-7 max-w-sm text-sm sm:text-[15px] leading-6 sm:leading-7 text-[#5b6962]">
+            <p className="mt-4 sm:mt-7 max-w-sm text-base leading-relaxed text-[#5b6962]">
               {t.home.favoritesText}
             </p>
             <Link
               href="/catalogue"
-              className="mt-5 sm:mt-7 inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[.1em] text-[#2c5b48] hover:text-[#1d4538]"
+              className="mt-5 sm:mt-7 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.1em] text-[#2c5b48] hover:text-[#1d4538]"
             >
               {t.home.favoritesCta} <Arrow />
             </Link>
@@ -258,7 +258,7 @@ export function FavoritesSection({ favorites }: { favorites?: HomeFavorites | nu
               >
                 <div className="relative h-32 xs:h-40 sm:h-48 overflow-hidden rounded-xl bg-[#dce5dd]">
                   {item.promoPrice != null && item.originalPrice != null && item.promoPrice < item.originalPrice && (
-                    <span className="absolute start-2 top-2 z-10 rounded-full bg-red-600 px-2 py-0.5 font-mono text-[9px] sm:text-[10px] font-bold text-white shadow-sm">
+                    <span className="absolute start-2 top-2 z-10 rounded-full bg-red-600 px-2.5 py-0.5 font-mono text-xs font-bold text-white shadow-sm">
                       -{Math.round(((item.originalPrice - item.promoPrice) / item.originalPrice) * 100)}%
                     </span>
                   )}
@@ -270,20 +270,20 @@ export function FavoritesSection({ favorites }: { favorites?: HomeFavorites | nu
                 </div>
                 <div className="flex flex-1 flex-col justify-between px-0.5 pb-0.5 pt-3 sm:px-1 sm:pb-1 sm:pt-4">
                   <div>
-                    <h3 className="line-clamp-2 text-[13px] sm:text-[16px] font-medium tracking-[-.04em] text-[#17251f] transition group-hover:text-[#1d4538]">
+                    <h3 className="line-clamp-2 text-sm sm:text-base font-medium tracking-[-.04em] text-[#17251f] transition group-hover:text-[#1d4538]">
                       {pick(locale, item.name, item.nameAr)}
                     </h3>
-                    <p className="mt-1 line-clamp-2 min-h-7 sm:min-h-9 text-[10px] sm:text-[11px] leading-3.5 sm:leading-4 text-[#718078]">
+                    <p className="mt-1 line-clamp-2 min-h-7 sm:min-h-9 text-xs leading-4 text-[#718078]">
                       {pick(locale, item.spec, item.specAr)}
                     </p>
                   </div>
                   <div className="mt-3 sm:mt-4 flex items-center justify-between border-t border-[#17251f]/10 pt-2.5 sm:pt-3">
                     <div className="flex items-baseline gap-1.5">
-                      <b className="whitespace-nowrap font-mono text-[13px] sm:text-[15px] font-bold text-[#1d2c26]">
+                      <b className="whitespace-nowrap font-mono text-sm sm:text-base font-bold text-[#1d2c26]">
                         {fmtDA(item.price, locale)}
                       </b>
                       {item.promoPrice != null && item.originalPrice != null && item.promoPrice < item.originalPrice && (
-                        <span className="whitespace-nowrap font-mono text-[10px] sm:text-[11px] text-[#9aa39c] line-through">
+                        <span className="whitespace-nowrap font-mono text-xs text-[#9aa39c] line-through">
                           {fmtDA(item.originalPrice, locale)}
                         </span>
                       )}
@@ -322,7 +322,7 @@ export function PromiseSection() {
     >
       <div className="grid gap-12 lg:grid-cols-[.42fr_1.58fr]">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[.18em] text-[#78827b]">
+          <p className="font-mono text-xs uppercase tracking-[.18em] text-[#78827b]">
             {t.home.promisesEyebrow}
           </p>
           <h2 className="mt-3 max-w-lg text-4xl font-medium leading-[.95] tracking-[-.07em] sm:text-5xl">

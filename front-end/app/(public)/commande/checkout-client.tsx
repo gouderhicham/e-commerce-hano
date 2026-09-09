@@ -18,9 +18,9 @@ import type { Order, Wilaya } from "@/lib/data/types";
 const PHONE_RE = /^0[567]\d{8}$/;
 
 const inputCls =
-  "mt-2 w-full border-b border-[#17251f]/20 bg-transparent py-3 text-[14px] font-normal text-[#17251f] outline-none transition placeholder:text-[#9ca59e] focus:border-[#1d4538]";
+  "mt-2 w-full border-b border-[#17251f]/20 bg-transparent py-3 text-base font-normal text-[#17251f] outline-none transition placeholder:text-[#9ca59e] focus:border-[#1d4538]";
 const labelCls =
-  "block text-[11px] font-bold uppercase tracking-[.08em] text-[#33423b]";
+  "block text-xs font-bold uppercase tracking-[.08em] text-[#33423b]";
 
 type Errors = Partial<
   Record<"firstName" | "lastName" | "phone" | "wilaya" | "commune", string>
@@ -153,7 +153,7 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
           <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#dcebdd] text-2xl text-[#2a624b]">
             ✓
           </span>
-          <p className="mt-8 font-mono text-[10px] font-semibold uppercase tracking-[.2em] text-[#1d4538]">
+          <p className="mt-8 font-mono text-xs font-semibold uppercase tracking-[.2em] text-[#1d4538]">
             {t.checkout.successEyebrow}
           </p>
           <h1 className="mt-3 text-4xl font-medium tracking-[-.07em] sm:text-5xl">
@@ -166,7 +166,7 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
           <p className="mt-5 font-mono text-sm font-bold text-[#1d4538]">
             {placed.id}
           </p>
-          <p className="mx-auto mt-4 max-w-md text-[15px] leading-7 text-[#627168]">
+          <p className="mx-auto mt-4 max-w-md text-base leading-7 text-[#627168]">
             {t.checkout.successCallNotice}
           </p>
           <p className="mt-4 font-mono text-sm font-bold text-[#17251f]">
@@ -174,7 +174,7 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
           </p>
           <Link
             href="/catalogue"
-            className="mt-9 inline-flex items-center gap-2 rounded-full bg-[#1d4538] px-7 py-4 text-[11px] font-bold uppercase tracking-[.1em] text-white shadow-sm transition hover:bg-[#14352b]"
+            className="mt-9 inline-flex items-center gap-2 rounded-full bg-[#1d4538] px-7 py-4 text-xs font-bold uppercase tracking-[.1em] text-white shadow-sm transition hover:bg-[#14352b]"
           >
             {t.checkout.backHome} <Arrow />
           </Link>
@@ -192,7 +192,7 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
       <div>
         <Link
           href="/panier"
-          className="mb-6 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[.1em] text-[#1d4538] transition hover:text-[#14352b]"
+          className="mb-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.1em] text-[#1d4538] transition hover:text-[#14352b]"
         >
           <Arrow left /> {t.checkout.backToCart}
         </Link>
@@ -206,14 +206,14 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
         <section className="rounded-2xl border border-[#17251f]/10 bg-[#fdfcf8] p-6 shadow-sm sm:p-8">
           <div className="flex items-end justify-between border-b border-[#17251f]/10 pb-4">
             <div>
-              <span className="block font-mono text-[10px] font-bold uppercase tracking-[.2em] text-[#1d4538]">
+              <span className="block font-mono text-xs font-bold uppercase tracking-[.2em] text-[#1d4538]">
                 {t.checkout.eyebrow}
               </span>
               <h2 className="mt-1 text-2xl font-semibold tracking-[-.05em] text-[#17251f]">
                 {t.checkout.title}
               </h2>
             </div>
-            <p className="text-[11px] font-medium text-[#718078]">
+            <p className="text-xs font-medium text-[#718078]">
               * {t.checkout.requiredFields}
             </p>
           </div>
@@ -229,7 +229,7 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
                 className={inputCls}
               />
               {errors.firstName && (
-                <span className="mt-1 block text-[11px] font-medium normal-case tracking-normal text-red-600">
+                <span className="mt-1 block text-xs font-medium normal-case tracking-normal text-red-600">
                   {errors.firstName}
                 </span>
               )}
@@ -245,7 +245,7 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
                 className={inputCls}
               />
               {errors.lastName && (
-                <span className="mt-1 block text-[11px] font-medium normal-case tracking-normal text-red-600">
+                <span className="mt-1 block text-xs font-medium normal-case tracking-normal text-red-600">
                   {errors.lastName}
                 </span>
               )}
@@ -263,7 +263,7 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
                 className={inputCls}
               />
               {errors.phone && (
-                <span className="mt-1 block text-[11px] font-medium normal-case tracking-normal text-red-600">
+                <span className="mt-1 block text-xs font-medium normal-case tracking-normal text-red-600">
                   {errors.phone}
                 </span>
               )}
@@ -273,7 +273,7 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
 
         <section className="mt-8 rounded-2xl border border-[#17251f]/10 bg-[#fdfcf8] p-6 shadow-sm sm:p-8">
           <div className="border-b border-[#17251f]/10 pb-4">
-            <span className="block font-mono text-[10px] font-bold uppercase tracking-[.2em] text-[#1d4538]">
+            <span className="block font-mono text-xs font-bold uppercase tracking-[.2em] text-[#1d4538]">
               {t.checkout.shipping}
             </span>
             <h2 className="mt-1 text-2xl font-semibold tracking-[-.05em] text-[#17251f]">
@@ -300,7 +300,7 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
                 ))}
               </select>
               {errors.wilaya && (
-                <span className="mt-1 block text-[11px] font-medium normal-case tracking-normal text-red-600">
+                <span className="mt-1 block text-xs font-medium normal-case tracking-normal text-red-600">
                   {errors.wilaya}
                 </span>
               )}
@@ -328,19 +328,19 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
                 ))}
               </select>
               {errors.commune && (
-                <span className="mt-1 block text-[11px] font-medium normal-case tracking-normal text-red-600">
+                <span className="mt-1 block text-xs font-medium normal-case tracking-normal text-red-600">
                   {errors.commune}
                 </span>
               )}
             </label>
-            <p className="text-[11px] leading-5 normal-case tracking-normal text-[#718078] sm:col-span-2">
+            <p className="text-xs leading-5 normal-case tracking-normal text-[#718078] sm:col-span-2">
               {t.checkout.pickupNotice}
             </p>
           </div>
         </section>
 
         <section className="mt-8 rounded-2xl border border-[#1d4538]/15 bg-[#edf3ee] p-6 shadow-sm">
-          <span className="block font-mono text-[10px] font-bold uppercase tracking-[.2em] text-[#1d4538]">
+          <span className="block font-mono text-xs font-bold uppercase tracking-[.2em] text-[#1d4538]">
             {t.checkout.paymentMethod}
           </span>
           <h2 className="mt-2 text-xl font-semibold tracking-[-.04em] text-[#17251f]">
@@ -356,7 +356,7 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
         <div className="cart-scrollbar flex max-h-[calc(100vh-105px)] flex-col overflow-y-auto rounded-2xl border border-[#17251f]/10 bg-[#fdfcf8] p-6 shadow-sm">
           <div className="flex shrink-0 items-center justify-between border-b border-[#17251f]/10 pb-4">
             <div>
-              <span className="block font-mono text-[10px] font-bold uppercase tracking-[.2em] text-[#1d4538]">
+              <span className="block font-mono text-xs font-bold uppercase tracking-[.2em] text-[#1d4538]">
                 {t.checkout.orderSummaryTitle}
               </span>
               <h2 className="mt-1 text-2xl font-semibold tracking-[-.05em] text-[#17251f]">
@@ -405,10 +405,10 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
                       )}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <h3 className="text-[13px] font-bold leading-4 text-[#17251f] transition group-hover:text-[#1d4538]">
+                      <h3 className="text-sm font-bold leading-4 text-[#17251f] transition group-hover:text-[#1d4538]">
                         {pick(locale, product.name, product.nameAr)}
                       </h3>
-                      <p className="mt-1 text-[10.5px] font-normal leading-4 text-[#627269]">
+                      <p className="mt-1 text-xs font-normal leading-4 text-[#627269]">
                         {pick(locale, product.specs, product.specsAr)}
                       </p>
                       <div className="mt-2.5 flex items-center gap-2">
@@ -425,7 +425,7 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
                           >
                             -
                           </button>
-                          <span className="px-2.5 text-[11px] font-bold text-[#17251f]">
+                          <span className="px-2.5 text-xs font-bold text-[#17251f]">
                             {line.qty}
                           </span>
                           <button
@@ -441,11 +441,11 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
                       </div>
                     </div>
                     <div className="text-end">
-                      <b className="whitespace-nowrap font-mono text-[13px] font-bold text-[#17251f]">
+                      <b className="whitespace-nowrap font-mono text-sm font-bold text-[#17251f]">
                         {fmtDA(unit * line.qty, locale)}
                       </b>
                       {product.promoPrice != null && product.price != null && product.promoPrice < product.price && (
-                        <span className="block font-mono text-[10px] text-[#9ca59e] line-through">
+                        <span className="block font-mono text-xs text-[#9ca59e] line-through">
                           {fmtDA(product.price * line.qty, locale)}
                         </span>
                       )}
@@ -457,15 +457,15 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
           </div>
 
           <div className="mt-auto shrink-0 space-y-3.5 border-t border-[#17251f]/10 pt-4 text-sm">
-            <p className="flex justify-between text-[12px] font-medium uppercase tracking-[.06em] text-[#627269]">
+            <p className="flex justify-between text-xs font-medium uppercase tracking-[.06em] text-[#627269]">
               <span>{t.checkout.subtotal}</span>
-              <span className="whitespace-nowrap font-mono text-[13px] font-semibold text-[#17251f]">
+              <span className="whitespace-nowrap font-mono text-sm font-semibold text-[#17251f]">
                 {fmtDA(subtotal, locale)}
               </span>
             </p>
-            <p className="flex justify-between text-[12px] font-medium uppercase tracking-[.06em] text-[#627269]">
+            <p className="flex justify-between text-xs font-medium uppercase tracking-[.06em] text-[#627269]">
               <span>{t.checkout.shipping}</span>
-              <span className="whitespace-nowrap font-mono text-[13px] font-semibold text-[#17251f]">
+              <span className="whitespace-nowrap font-mono text-sm font-semibold text-[#17251f]">
                 {freeShipping ? t.checkout.free : fmtDA(shipping, locale)}
               </span>
             </p>
@@ -482,7 +482,7 @@ export function CheckoutClient({ wilayas = [] }: { wilayas?: Wilaya[] } = {}) {
           <button
             type="submit"
             disabled={rows.length === 0 || submitting}
-            className="mt-6 flex w-full shrink-0 cursor-pointer items-center justify-center gap-2.5 rounded-xl bg-[#1d4538] py-4 text-[12px] font-bold uppercase tracking-[.12em] text-white shadow-md transition-all duration-200 hover:bg-[#14352b] hover:shadow-lg active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-6 flex w-full shrink-0 cursor-pointer items-center justify-center gap-2.5 rounded-xl bg-[#1d4538] py-4 text-xs font-bold uppercase tracking-[.12em] text-white shadow-md transition-all duration-200 hover:bg-[#14352b] hover:shadow-lg active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span>
               {submitting ? t.checkout.placingOrder : t.checkout.placeOrderBtn}

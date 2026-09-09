@@ -15,7 +15,7 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
         type="button"
         onClick={() => setLocale("fr")}
         aria-pressed={locale === "fr"}
-        className={`cursor-pointer rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider transition-all duration-200 ${
+        className={`cursor-pointer rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
           locale === "fr"
             ? "bg-[#1d4538] text-white shadow-xs"
             : "text-[#58675f] hover:text-[#17251f]"
@@ -27,7 +27,7 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
         type="button"
         onClick={() => setLocale("ar")}
         aria-pressed={locale === "ar"}
-        className={`cursor-pointer rounded-full px-2.5 py-1 text-[11px] font-bold transition-all duration-200 ${
+        className={`cursor-pointer rounded-full px-2.5 py-1 text-xs font-bold transition-all duration-200 ${
           locale === "ar"
             ? "bg-[#1d4538] text-white shadow-xs"
             : "text-[#58675f] hover:text-[#17251f]"

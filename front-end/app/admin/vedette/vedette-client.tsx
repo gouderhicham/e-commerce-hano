@@ -313,7 +313,7 @@ export function VedetteClient({ initial = defaultShowcase }: { initial?: Showcas
                     { label: "Spec", labelAr: "مواصفة", val: "Valeur", valAr: "قيمة" },
                   ])
                 }
-                className="inline-flex cursor-pointer items-center gap-1 font-mono text-[9.5px] font-bold uppercase text-[#1d4538] hover:underline"
+                className="inline-flex cursor-pointer items-center gap-1 font-mono text-xs font-bold uppercase text-[#1d4538] hover:underline"
               >
                 <Plus className="h-3 w-3" />
                 <span>Ajouter Spec</span>
@@ -338,7 +338,7 @@ export function VedetteClient({ initial = defaultShowcase }: { initial?: Showcas
                   className="space-y-2 rounded-xl border border-[#17251f]/10 bg-[#f4f7f3] p-3"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-[9px] font-bold uppercase text-[#78827b]">
+                    <span className="font-mono text-xs font-bold uppercase text-[#78827b]">
                       Spécification {index + 1}
                     </span>
                     <button
@@ -419,10 +419,10 @@ export function VedetteClient({ initial = defaultShowcase }: { initial?: Showcas
         {/* Live preview with language toggle */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="block font-mono text-[10px] font-bold uppercase tracking-[.15em] text-[#78827b]">
+            <span className="block font-mono text-xs font-bold uppercase tracking-[.15em] text-[#78827b]">
               Rendu Visuel (Hero Showcase Landing Page)
             </span>
-            <div className="inline-flex rounded-xl border border-[#17251f]/15 bg-white p-0.5 text-[10px] font-bold shadow-2xs">
+            <div className="inline-flex rounded-xl border border-[#17251f]/15 bg-white p-0.5 text-xs font-bold shadow-2xs">
               <button
                 type="button"
                 onClick={() => setPreviewLang("fr")}
@@ -462,7 +462,7 @@ export function VedetteClient({ initial = defaultShowcase }: { initial?: Showcas
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(23,37,31,0.3)_0%,rgba(23,37,31,0.15)_40%,rgba(23,37,31,0.75)_100%)]" />
 
             {previewData.eyebrow && (
-              <span className="absolute start-4 top-4 z-10 font-mono text-[9px] uppercase tracking-[.15em] text-white/90">
+              <span className="absolute start-4 top-4 z-10 font-mono text-xs uppercase tracking-[.15em] text-white/90">
                 {previewData.eyebrow}
               </span>
             )}
@@ -470,7 +470,7 @@ export function VedetteClient({ initial = defaultShowcase }: { initial?: Showcas
             <div className="absolute bottom-4 start-4 end-4 z-10 flex flex-col gap-3.5">
               <div className="max-w-[420px] border-s-2 border-[#e4d7ba] ps-3 text-white">
                 {previewData.title && (
-                  <span className="font-mono text-[9px] uppercase tracking-[.16em] text-white/80">
+                  <span className="font-mono text-xs uppercase tracking-[.16em] text-white/80">
                     {previewData.title}
                   </span>
                 )}
@@ -480,7 +480,7 @@ export function VedetteClient({ initial = defaultShowcase }: { initial?: Showcas
                   </h3>
                 )}
                 {previewData.description && (
-                  <p className="mt-1 text-[11px] leading-4 text-white/80">
+                  <p className="mt-1 text-xs leading-relaxed text-white/80">
                     {previewData.description}
                   </p>
                 )}
@@ -490,10 +490,10 @@ export function VedetteClient({ initial = defaultShowcase }: { initial?: Showcas
                 <div className="grid grid-cols-2 gap-2.5 rounded-xl border border-white/15 bg-[#17251f]/60 p-3 backdrop-blur-md">
                   {previewData.specs.map((spec, idx) => (
                     <div key={idx} className="flex flex-col gap-0.5">
-                      <span className="font-mono text-[8px] uppercase tracking-[.14em] text-white/60">
+                      <span className="font-mono text-xs uppercase tracking-[.14em] text-white/60">
                         {spec.label}
                       </span>
-                      <span className="truncate text-[10.5px] font-semibold tracking-tight text-white">
+                      <span className="truncate text-xs font-semibold tracking-tight text-white">
                         {spec.val}
                       </span>
                     </div>
@@ -503,7 +503,7 @@ export function VedetteClient({ initial = defaultShowcase }: { initial?: Showcas
             </div>
           </div>
 
-          <p className="rounded-xl border border-[#17251f]/10 bg-[#fdfcf8] p-3 text-[10px] leading-4 text-[#627269]">
+          <p className="rounded-xl border border-[#17251f]/10 bg-[#fdfcf8] p-3 text-xs leading-relaxed text-[#627269]">
             Sur desktop, le frontoffice affiche le texte à gauche et les 4 specs
             alignées à droite en une seule rangée (ou inversé en Arabe).
           </p>

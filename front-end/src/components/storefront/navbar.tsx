@@ -12,7 +12,7 @@ import { LanguageSwitcher } from "./language-switcher";
 function Bubble({ count }: { count: number }) {
   if (count <= 0) return null;
   return (
-    <span className="absolute -end-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#1d4538] px-1 font-mono text-[9px] font-bold leading-none text-white">
+    <span className="absolute -end-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#1d4538] px-1.5 font-mono text-xs font-bold leading-none text-white">
       {count > 99 ? "99+" : count}
     </span>
   );
@@ -42,18 +42,18 @@ export function SiteHeader() {
             className="h-9 w-9 rounded-full border border-[#1d4538]/20 object-cover shadow-sm transition duration-300 group-hover:scale-105"
           />
           <div className="hidden flex-col justify-center leading-none sm:flex">
-            <div className="flex items-baseline gap-1 font-mono text-[16px] font-extrabold uppercase tracking-[.18em] text-[#17251f]">
+            <div className="flex items-baseline gap-1 font-mono text-base font-extrabold uppercase tracking-[.18em] text-[#17251f]">
               <span>pc store</span>
               <span className="font-black text-[#1d4538]">.39</span>
             </div>
-            <span className="mt-0.5 font-mono text-[8px] font-semibold uppercase tracking-[.25em] text-[#78827b]">
+            <span className="mt-0.5 font-mono text-xs font-semibold uppercase tracking-[.25em] text-[#78827b]">
               {t.nav.tagline}
             </span>
           </div>
         </Link>
 
         {/* Desktop navigation */}
-        <div className="hidden items-center gap-8 text-[12px] font-medium uppercase tracking-[.12em] text-[#4e5d56] md:flex">
+        <div className="hidden items-center gap-8 text-xs font-semibold uppercase tracking-[.12em] text-[#4e5d56] md:flex">
           <Link href="/catalogue" className="transition hover:text-[#1d4538]">
             {t.nav.boutique}
           </Link>
@@ -115,7 +115,7 @@ export function SiteHeader() {
       >
         <div className="flex flex-col gap-6 pt-2">
           <div className="flex items-center justify-between border-b border-[#17251f]/10 pb-3">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[.2em] text-[#1d4538]">
+            <span className="font-mono text-xs font-bold uppercase tracking-[.2em] text-[#1d4538]">
               {t.nav.boutique}
             </span>
             <LanguageSwitcher />
@@ -173,7 +173,7 @@ export function SiteHeader() {
             {t.home.seeAll}
           </Link>
 
-          <p className="text-center font-mono text-[9px] uppercase tracking-[.18em] text-[#78827b]">
+          <p className="text-center font-mono text-xs uppercase tracking-[.18em] text-[#78827b]">
             pc store .39 · {t.nav.tagline}
           </p>
         </div>

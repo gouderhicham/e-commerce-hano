@@ -62,7 +62,7 @@ export function ProductDetailModal({
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-[#17251f]/10 bg-white px-6 py-4">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="rounded-md bg-[#edf3ee] px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-[#1d4538]">
+            <span className="rounded-md bg-[#edf3ee] px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-wider text-[#1d4538]">
               {categoryName}
             </span>
             <span className="font-mono text-xs font-bold text-[#78827b]">
@@ -78,7 +78,7 @@ export function ProductDetailModal({
               colors={AVAILABILITY_PILLS[product.availability]}
             />
             {!product.active && (
-              <span className="rounded-full bg-gray-200 px-2.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-gray-700">
+              <span className="rounded-full bg-gray-200 px-2.5 py-0.5 font-mono text-xs font-bold uppercase tracking-wider text-gray-700">
                 Inactif
               </span>
             )}
@@ -188,7 +188,7 @@ export function ProductDetailModal({
             {/* Price & Primary Details Column */}
             <div className="flex flex-col justify-between" dir={lang === "ar" ? "rtl" : "ltr"}>
               <div>
-                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-[#78827b]">
+                <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-[#78827b]">
                   <span>
                     {pick(lang, product.condition, product.conditionAr)}
                   </span>
@@ -271,7 +271,7 @@ export function ProductDetailModal({
                     key={key}
                     className="flex items-center justify-between rounded-lg border border-[#17251f]/10 bg-[#fbfcfb] px-3 py-2 text-xs"
                   >
-                    <span className="font-mono text-[10px] font-medium uppercase text-[#78827b]">
+                    <span className="font-mono text-xs font-medium uppercase text-[#78827b]">
                       {key}
                     </span>
                     <span className="font-mono text-xs font-semibold text-[#17251f]">
@@ -329,7 +329,7 @@ export function ProductDetailModal({
                           {label}
                         </span>
                         {sub && (
-                          <span className={`mx-2 font-mono text-[11px] text-[#58675f] ${lang === "ar" ? "font-arabic" : ""}`}>
+                          <span className={`mx-2 font-mono text-xs text-[#58675f] ${lang === "ar" ? "font-arabic" : ""}`}>
                             ({sub})
                           </span>
                         )}
@@ -340,7 +340,7 @@ export function ProductDetailModal({
                             {fmtDA(cfgPrice, lang)}
                           </span>
                           {isDiscounted && (
-                            <span className="font-mono text-[10px] text-[#78827b] line-through whitespace-nowrap">
+                            <span className="font-mono text-xs text-[#78827b] line-through whitespace-nowrap">
                               {fmtDA(product.price, lang)}
                             </span>
                           )}
@@ -381,7 +381,7 @@ export function ProductDetailModal({
                         <span className={`font-mono text-xs font-bold text-[#1d4538] ${lang === "ar" ? "font-arabic" : ""}`}>
                           {title}
                         </span>
-                        <p className={`mt-1 text-[11px] text-[#58675f] ${lang === "ar" ? "font-arabic" : ""}`}>{text}</p>
+                        <p className={`mt-1 text-xs text-[#58675f] ${lang === "ar" ? "font-arabic" : ""}`}>{text}</p>
                       </div>
                     );
                   })}
@@ -394,7 +394,7 @@ export function ProductDetailModal({
 
         {/* Modal Footer */}
         <div className="flex items-center justify-between border-t border-[#17251f]/10 bg-white px-6 py-3.5">
-          <span className="font-mono text-[10px] text-[#78827b]">
+          <span className="font-mono text-xs text-[#78827b]">
             Créé le {new Date(product.createdAt).toLocaleDateString("fr-FR")}
           </span>
           <button

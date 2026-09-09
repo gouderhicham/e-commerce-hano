@@ -392,7 +392,7 @@ export function LivraisonClient({
               className="w-full bg-transparent text-xs font-medium outline-none"
             />
           </div>
-          <span className="font-mono text-[10px] uppercase tracking-[.14em] text-[#78827b]">
+          <span className="font-mono text-xs uppercase tracking-[.14em] text-[#78827b]">
             {term
               ? `${rows.length} résultat${rows.length > 1 ? "s" : ""}`
               : `${rows.length} commune${rows.length > 1 ? "s" : ""}`}
@@ -435,7 +435,7 @@ export function LivraisonClient({
                       {row.communeName}
                     </span>
                     {term && (
-                      <span className="font-mono text-[10px] text-[#78827b]">
+                      <span className="font-mono text-xs text-[#78827b]">
                         {String(row.wilayaCode).padStart(2, "0")} —{" "}
                         {row.wilayaName}
                       </span>
@@ -459,8 +459,8 @@ export function LivraisonClient({
                   <span
                     className={
                       value === ""
-                        ? "font-mono text-[11px] text-[#78827b]"
-                        : "font-mono text-[12px] font-bold text-[#17251f]"
+                        ? "font-mono text-xs text-[#78827b]"
+                        : "font-mono text-xs font-bold text-[#17251f]"
                     }
                   >
                     {fmtDA(applied)}
@@ -489,7 +489,7 @@ export function LivraisonClient({
               </div>
             )}
             {hidden > 0 && (
-              <div className="border-t border-[#17251f]/5 p-3 text-center font-mono text-[10px] uppercase tracking-[.14em] text-[#78827b]">
+              <div className="border-t border-[#17251f]/5 p-3 text-center font-mono text-xs uppercase tracking-[.14em] text-[#78827b]">
                 {hidden} autre{hidden > 1 ? "s" : ""} résultat
                 {hidden > 1 ? "s" : ""} — affinez la recherche
               </div>
@@ -498,8 +498,8 @@ export function LivraisonClient({
         </div>
       </Card>
 
-      <Card className="space-y-2 p-5 text-[11px] leading-5 text-[#627269]">
-        <p className="font-mono text-[9.5px] font-bold uppercase tracking-[.14em] text-[#1d4538]">
+      <Card className="space-y-2 p-5 text-xs leading-5 text-[#627269]">
+        <p className="font-mono text-xs font-bold uppercase tracking-[.14em] text-[#1d4538]">
           Modification en masse par Excel
         </p>
         <p>

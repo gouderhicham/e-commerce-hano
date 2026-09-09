@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+:root {
+  /* Master single-value typography anchor: smallest font size across the entire application */
+  --font-base: 14px;
+}
+
 @theme {
   /* ===== pc store .39 design tokens =====
      The storefront markup mostly spells these out as arbitrary values
@@ -35,6 +40,34 @@
   --font-sans: var(--font-dm-sans), "DM Sans", "Segoe UI", Tahoma, Arial, sans-serif;
   --font-mono: var(--font-dm-mono), "DM Mono", ui-monospace, monospace;
   --font-arabic: var(--font-cairo), "Cairo", "Segoe UI", Tahoma, sans-serif;
+
+  /* Single-source dynamic typography scale (anchored to --font-base: 14px) */
+  --text-xs: var(--font-base); /* 14px - smallest font size: badges, pills, meta, timestamps, eyebrows */
+  --text-xs--line-height: 1.4;
+
+  --text-sm: calc(var(--font-base) * 1.071); /* ~15px - compact text, secondary hints */
+  --text-sm--line-height: 1.45;
+
+  --text-base: calc(var(--font-base) * 1.143); /* ~16px - standard body, inputs, buttons, descriptions */
+  --text-base--line-height: 1.5;
+
+  --text-lg: calc(var(--font-base) * 1.286); /* ~18px - card titles, strong emphasis, prices */
+  --text-lg--line-height: 1.4;
+
+  --text-xl: calc(var(--font-base) * 1.429); /* ~20px - large titles, modal headings, subheadings */
+  --text-xl--line-height: 1.35;
+
+  --text-2xl: calc(var(--font-base) * 1.714); /* ~24px - H3 section headers */
+  --text-2xl--line-height: 1.3;
+
+  --text-3xl: calc(var(--font-base) * 2); /* 28px - H2 section titles */
+  --text-3xl--line-height: 1.25;
+
+  --text-4xl: calc(var(--font-base) * 2.571); /* ~36px - page titles, H1 */
+  --text-4xl--line-height: 1.2;
+
+  --text-5xl: calc(var(--font-base) * 3.429); /* ~48px - hero display headers */
+  --text-5xl--line-height: 1.15;
 }
 
 html {
@@ -46,6 +79,8 @@ body {
   background: #f8f7f2;
   color: #17251f;
   font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.5;
   overflow-x: clip;
 }
 
