@@ -99,6 +99,13 @@ const cachedProductsById = new Map<
   { data: ProductPublicWithRelations; timestamp: number }
 >();
 
+const cachedProductLists = new Map<
+  string,
+  { data: ProductListResult; timestamp: number }
+>();
+const PRODUCT_LIST_CACHE_TTL_MS = 30_000;
+const MAX_CACHED_PRODUCT_LISTS = 100;
+
 export function invalidateCatalogCache() {
   cachedWilayas = null;
   cachedTagGroups = null;
@@ -106,6 +113,7 @@ export function invalidateCatalogCache() {
   cachedHome = null;
   cachedHomeTime = 0;
   cachedProductsById.clear();
+  cachedProductLists.clear();
 }
 
 /** Active categories with active product count. */
@@ -185,6 +193,33 @@ export async function products(
   prisma: PrismaClient,
   query: ProductQuery,
 ): Promise<ProductListResult> {
+  const cacheKey = JSON.stringify({
+    page: query.page ?? 1,
+    category: query.category ?? "",
+    q: query.q ?? "",
+    availability: query.availability ?? "",
+    attrs: query.attrs ?? "",
+    priceMin: query.priceMin ?? 0,
+    priceMax: query.priceMax ?? 0,
+    sort: query.sort ?? "",
+    locale: query.locale ?? "fr",
+  });
+
+  const now = Date.now();
+  const cached = cachedProductLists.get(cacheKey);
+  if (cached && now - cached.timestamp < PRODUCT_LIST_CACHE_TTL_MS) {
+    return cached.data;
+  }
+
+  function saveAndReturn(result: ProductListResult): ProductListResult {
+    if (cachedProductLists.size >= MAX_CACHED_PRODUCT_LISTS) {
+      const oldestKey = cachedProductLists.keys().next().value;
+      if (oldestKey) cachedProductLists.delete(oldestKey);
+    }
+    cachedProductLists.set(cacheKey, { data: result, timestamp: now });
+    return result;
+  }
+
   const page = query.page ?? 1;
   const facets = parseFacets(query.attrs);
   const where = buildWhere(query);
@@ -227,12 +262,12 @@ export async function products(
       images: imagesByProduct.get(p.id) ?? [],
     }));
 
-    return {
+    return saveAndReturn({
       items: fullRows.map((p) => toProductPublic(p)),
       total,
       page,
       pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE_CATALOGUE)),
-    };
+    });
   }
 
   // When attribute facets are active, filter in JS and fetch images ONLY for the active page slice.
@@ -270,12 +305,12 @@ export async function products(
     images: imagesByProduct.get(p.id) ?? [],
   }));
 
-  return {
+  return saveAndReturn({
     items: fullPageRows.map((p) => toProductPublic(p)),
     total,
     page,
     pageCount: Math.max(1, Math.ceil(total / PAGE_SIZE_CATALOGUE)),
-  };
+  });
 }
 
 /** Top-5 autocomplete matches. */
